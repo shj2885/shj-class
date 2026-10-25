@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>말랑 그림판 · 코딩도깨비</title>
+  <meta name="description" content="연필·크레파스·스프레이·물감·도장으로 그림을 그리고 내 컴퓨터에 저장하는 그림판">
+  <meta name="theme-color" content="#F6F5F0">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="/games/paint/paint.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/">
+      <img src="/logo.png" alt="" width="44" height="44">
+      <span>말랑 그림판</span>
+    </a>
+    <a class="back" href="/">← 코딩도깨비로</a>
+  </header>
+
+  <div class="bar" role="toolbar" aria-label="종이와 저장">
+    <label class="page">
+      <span>📄 종이</span>
+      <select id="page">
+        <option value="1200x800">가로</option>
+        <option value="800x1200">세로</option>
+        <option value="1000x1000">네모</option>
+      </select>
+    </label>
+    <button class="pill" id="undo" title="되돌리기 (Ctrl+Z)">↶<span class="t"> 되돌리기</span></button>
+    <button class="pill" id="redo" title="다시 하기 (Ctrl+Y)">↷<span class="t"> 다시 하기</span></button>
+    <button class="pill" id="clear">🧹<span class="t"> 새로 그리기</span></button>
+    <button class="pill" id="open">📂<span class="t"> 불러오기</span></button>
+    <input type="file" id="file" accept="image/*" hidden>
+    <button class="pill save" id="save">💾 저장</button>
+  </div>
+
+  <main class="studio">
+    <section class="board" id="board">
+      <div class="paper" id="paper">
+        <canvas id="canvas" aria-label="그림 그리는 종이"></canvas>
+        <canvas id="ghost" aria-hidden="true"></canvas>
+        <div class="grid" id="grid" hidden></div>
+      </div>
+    </section>
+
+    <aside class="toolbox" aria-label="도구 상자">
+      <h2>도구</h2>
+      <div class="tools" id="tools">
+        <button class="tool" data-tool="pencil" aria-pressed="true"><b>✏️</b>연필</button>
+        <button class="tool" data-tool="crayon"><b>🖍️</b>크레파스</button>
+        <button class="tool" data-tool="spray"><b>💨</b>스프레이</button>
+        <button class="tool" data-tool="fill"><b>🪣</b>물감</button>
+        <button class="tool" data-tool="shape"><b>🔷</b>도형</button>
+        <button class="tool" data-tool="stamp"><b>❤️</b>도장</button>
+        <button class="tool" data-tool="eraser"><b>🧽</b>지우개</button>
+        <button class="tool" id="gridBtn" aria-pressed="false" title="줄 바탕은 저장되지 않아요"><b>▦</b>격자</button>
+      </div>
+
+      <div class="options" id="shapeOpts" hidden>
+        <div class="chips" id="shapes">
+          <button class="chip" data-shape="rect" aria-pressed="true" aria-label="네모">⬜</button>
+          <button class="chip" data-shape="circle" aria-label="동그라미">⚪</button>
+          <button class="chip" data-shape="tri" aria-label="세모">🔺</button>
+          <button class="chip" data-shape="star" aria-label="별">⭐</button>
+          <button class="chip" data-shape="line" aria-label="선">➖</button>
+        </div>
+        <label class="check"><input type="checkbox" id="shapeFill"> 속까지 칠하기</label>
+      </div>
+
+      <div class="options" id="stampOpts" hidden>
+        <div class="chips" id="stamps"></div>
+      </div>
+
+      <h2>색 <i class="now" id="now"></i></h2>
+      <div class="colors" id="colors"></div>
+      <label class="more-color">🎨 다른 색 <input type="color" id="picker" value="#141414"></label>
+
+      <h2>굵기</h2>
+      <div class="size">
+        <input type="range" id="size" min="1" max="10" value="3" aria-label="굵기">
+        <span class="dot-wrap"><i class="dot" id="dot"></i></span>
+      </div>
+    </aside>
+  </main>
+
+  <dialog id="ask">
+    <p id="askText"></p>
+    <div class="ask-btns">
+      <button class="pill" id="askNo">아니요</button>
+      <button class="pill danger" id="askYes">네</button>
+    </div>
+  </dialog>
+
+  <script src="/games/paint/paint.js"></script>
+</body>
+</html>
