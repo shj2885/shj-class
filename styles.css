@@ -101,7 +101,10 @@ a { color: inherit; }
 }
 .brand { gap: 12px; }
 .brand-text { display: grid; line-height: 1.15; }
-.brand-name { font-size: 24px; font-weight: 900; letter-spacing: -0.05em; }
+.brand-line { display: inline-flex; align-items: baseline; gap: 5px; white-space: nowrap; }
+.brand-owner { font-size: 14px; font-weight: 800; letter-spacing: -0.03em; color: var(--ink-soft); }
+.brand-name { font-size: 26px; font-weight: 900; letter-spacing: -0.05em; }
+.foot .brand-owner { font-size: 15px; color: var(--lime); }
 .brand-sub { font-size: 14px; font-weight: 600; letter-spacing: -0.03em; color: var(--ink-soft); }
 .logo { display: block; flex: none; width: 48px; height: 48px; transition: transform .4s var(--ease); }
 .brand:hover .logo { transform: rotate(-10deg) scale(1.06); }

@@ -33,6 +33,7 @@ body {
   padding: 14px 16px; border-bottom: 2px solid var(--ink);
 }
 .brand { font-weight: 900; letter-spacing: -0.04em; text-decoration: none; color: inherit; }
+.brand small { font-size: 13px; font-weight: 700; color: var(--ink-soft); }
 .brand span { font-weight: 600; font-size: 14px; color: var(--ink-soft); margin-left: 6px; text-decoration: underline; text-underline-offset: 3px; }
 
 main { max-width: 720px; margin: 0 auto; padding: 24px 16px 96px; }
