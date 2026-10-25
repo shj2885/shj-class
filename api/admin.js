@@ -11,7 +11,7 @@ const same = (a, b) => {
   const h = (s) => crypto.createHash('sha256').update(String(s)).digest();
   return crypto.timingSafeEqual(h(a), h(b));
 };
-const CATEGORIES = ['ai', 'design', 'class', 'collab'];
+const MENUS = require('../menus.js');
 const validId = (id) => Number.isInteger(id) && id > 0;
 
 function cleanUrl(raw) {
@@ -28,21 +28,30 @@ function cleanUrl(raw) {
 // 받은 값 중 허용된 칸만 골라 검사한다. partial이면 빠진 칸은 그대로 둔다.
 function pick(b, partial) {
   const row = {};
+  if (!partial || 'url' in b) {
+    const url = cleanUrl(b.url);
+    if (!url) return { error: '주소를 확인해 주세요. 예: https://playentry.org' };
+    row.url = url;
+  }
   if (!partial || 'name' in b) {
-    const name = String(b.name ?? '').trim().slice(0, 60);
+    let name = String(b.name ?? '').trim().slice(0, 60);
+    // 새로 넣을 때 이름을 비우면 주소에서 따온다 (예: playentry.org)
+    if (!name && !partial && row.url) name = new URL(row.url).hostname.replace(/^www\./, '').slice(0, 60);
     if (!name) return { error: '사이트 이름을 적어 주세요.' };
     row.name = name;
   }
-  if (!partial || 'url' in b) {
-    const url = cleanUrl(b.url);
-    if (!url) return { error: '주소를 확인해 주세요. 예: https://claude.ai' };
-    row.url = url;
-  }
   if (!partial || 'category' in b) {
-    if (!CATEGORIES.includes(b.category)) return { error: '묶음을 골라 주세요.' };
-    row.category = b.category;
+    const menu = MENUS.find((m) => m.key === b.category);
+    if (!menu) return { error: '메뉴를 골라 주세요.' };
+    row.category = menu.key;
+    // 펼침 메뉴는 고르지 않아도 된다(빈 값 → '그 밖의 사이트')
+    const sub = String(b.sub ?? '').trim();
+    if (sub && !menu.subs.includes(sub)) return { error: '펼침 메뉴를 다시 골라 주세요.' };
+    row.sub = sub || null;
   }
   if ('today' in b) row.today = b.today === true;
+  // 선생님용은 학생 화면에 안 나오니 '오늘'로 올리지 않는다
+  if (row.category && MENUS.find((m) => m.key === row.category).hidden) row.today = false;
   if ('sort' in b) {
     const sort = Number(b.sort);
     if (!Number.isInteger(sort)) return { error: '잘못된 요청이에요.' };

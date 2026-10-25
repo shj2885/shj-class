@@ -10,7 +10,8 @@ module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'GET') return res.status(405).json({ error: 'GET만 가능해요' });
   if (!SB_URL || !SB_KEY) return res.status(500).json({ error: 'Supabase 연결 정보가 없어요.' });
-  const r = await fetch(`${SB_URL}/rest/v1/links?select=id,name,url,category,today,sort&order=sort.asc,id.asc&limit=500`, { headers: sbHeaders() });
+  // 선생님용(teacher)은 첫 화면에 내보내지 않는다
+  const r = await fetch(`${SB_URL}/rest/v1/links?select=id,name,url,category,sub,today,sort&category=neq.teacher&order=sort.asc,id.asc&limit=500`, { headers: sbHeaders() });
   if (!r.ok) return res.status(500).json({ error: '목록을 불러오지 못했어요.' });
   return res.status(200).json({ links: await r.json() });
 };
