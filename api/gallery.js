@@ -23,6 +23,11 @@ function body(req) {
 }
 // 별명·제목: 줄바꿈·꺾쇠 같은 것은 빼고 짧게
 const cleanText = (s, max) => String(s ?? '').replace(/[\u0000-\u001f<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, max);
+const tokenHash = (t) => crypto.createHash('sha256').update(t).digest('hex');
+const same = (a, b) => {
+  const h = (s) => crypto.createHash('sha256').update(String(s)).digest();
+  return crypto.timingSafeEqual(h(a), h(b));
+};
 // 진짜 IP는 저장하지 않고, 서버 키로 섞은 값만 남긴다
 function ipHash(req) {
   const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket?.remoteAddress || '';
@@ -75,15 +80,33 @@ module.exports = async (req, res) => {
     if ((await mine.json()).length >= PER_IP) return res.status(429).json({ error: '그림이 너무 많이 올라왔어요. 10분 뒤에 다시 올려 주세요.' });
     if ((await recent.json()).length >= PER_HOUR) return res.status(429).json({ error: '그림이 너무 많이 올라왔어요. 조금 뒤에 다시 올려 주세요.' });
 
+    // 올린 사람만 지울 수 있게: 열쇠(token)는 올린 브라우저에만 주고, 서버에는 섞은 값만 둔다
+    const token = crypto.randomBytes(24).toString('hex');
     const row = {
       nickname: cleanText(b.nickname, 12) || null,
       title: cleanText(b.title, 20) || null,
       image: m[1],
       status: 'approved',
       ip_hash,
+      owner_hash: tokenHash(token),
     };
-    const r = await fetch(base, { method: 'POST', headers: { ...sbHeaders(), Prefer: 'return=minimal' }, body: JSON.stringify(row) });
+    const r = await fetch(`${base}?select=id`, { method: 'POST', headers: { ...sbHeaders(), Prefer: 'return=representation' }, body: JSON.stringify(row) });
     if (!r.ok) return res.status(500).json({ error: '올리지 못했어요. 잠시 뒤 다시 해 보세요.' });
+    const [made] = await r.json();
+    return res.status(200).json({ ok: true, id: made.id, token });
+  }
+
+  if (req.method === 'DELETE') {
+    // 학생이 자기 그림 지우기: 그림을 올린 브라우저에만 있는 열쇠가 맞아야 한다
+    const id = Number(q.get('id'));
+    const token = String(req.headers['x-owner-token'] || '');
+    if (!validId(id) || !/^[0-9a-f]{48}$/.test(token)) return res.status(400).json({ error: '잘못된 요청이에요.' });
+    const r = await fetch(`${base}?select=owner_hash&id=eq.${id}`, { headers: sbHeaders() });
+    const row = r.ok ? (await r.json())[0] : null;
+    if (!row) return res.status(404).json({ error: '이미 지워진 그림이에요.' });
+    if (!row.owner_hash || !same(row.owner_hash, tokenHash(token))) return res.status(403).json({ error: '내가 올린 그림만 지울 수 있어요.' });
+    const d = await fetch(`${base}?id=eq.${id}`, { method: 'DELETE', headers: { ...sbHeaders(), Prefer: 'return=minimal' } });
+    if (!d.ok) return res.status(500).json({ error: '지우지 못했어요. 잠시 뒤 다시 해 보세요.' });
     return res.status(200).json({ ok: true });
   }
 

@@ -286,3 +286,10 @@ dialog input:not([type="checkbox"]) {
   .bar .pill.share { font-size: 15px; }
 }
 .pick-dlg input[type="range"] { min-height: 0; padding: 0; border: 0; background: none; }
+
+/* 내가 올린 그림 · 지우기 */
+.art.mine .art-img { border-color: var(--ink); }
+.del-mine { width: 100%; }
+#delDlg .sub { margin: -10px 0 14px; font-size: 16px; font-weight: 500; color: var(--ink-soft); }
+#delDlg .err { color: #C42B20; font-size: 15px; margin: 8px 0 0; }
+#delDlg .ask-btns { margin-top: 16px; }

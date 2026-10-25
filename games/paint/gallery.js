@@ -1,5 +1,6 @@
 // 친구들 작품 전시판: 올린 그림은 바로 전시되고, 선생님은 숨기거나 지울 수 있다.
 // 선생님 비밀번호는 첫 화면·관리자 화면과 같은 sessionStorage 칸(탭을 닫으면 사라짐)에만 둔다.
+// 내가 올린 그림의 '열쇠'는 이 브라우저(localStorage)에만 두고, 지울 때 보낸다.
 (function () {
   const $ = (id) => document.getElementById(id);
   const PW_KEY = "admin-pw";
@@ -13,6 +14,10 @@
     document.body.appendChild(t);
     setTimeout(() => t.remove(), 2400);
   }
+  const MINE_KEY = "malang-mine";
+  const getMine = () => { try { return JSON.parse(localStorage.getItem(MINE_KEY) || "{}") || {}; } catch { return {}; } };
+  const setMine = (m) => { try { localStorage.setItem(MINE_KEY, JSON.stringify(m)); } catch {} };
+
   function el(tag, cls, text) {
     const n = document.createElement(tag);
     if (cls) n.className = cls;
@@ -34,7 +39,18 @@
       $("empty").textContent = "전시판을 불러오지 못했어요. 잠시 뒤 다시 열어 보세요.";
       return;
     }
-    data.items.forEach((it) => $("cards").appendChild(card(it, `/api/gallery?img=${it.id}`)));
+    const mine = getMine();
+    data.items.forEach((it) => {
+      const c = card(it, `/api/gallery?img=${it.id}`);
+      if (mine[it.id]) {
+        // 이 브라우저에서 올린 그림에만 지우기 버튼을 단다
+        c.classList.add("mine");
+        const b = el("button", "pill small del-mine", "🗑️ 내 그림 지우기");
+        b.addEventListener("click", () => askDelete(it.id));
+        c.appendChild(b);
+      }
+      $("cards").appendChild(c);
+    });
     offset += data.items.length;
     $("empty").hidden = offset > 0;
     $("more").hidden = !data.more;
@@ -101,6 +117,7 @@
       });
       const data = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(data.error || "올리지 못했어요. 잠시 뒤 다시 해 보세요.");
+      if (data.id && data.token) setMine({ ...getMine(), [data.id]: data.token });
       shareDlg.close();
       f.title.value = "";
       toast("전시판에 올렸어요! 🎉");
@@ -111,6 +128,34 @@
       $("shareGo").disabled = false;
     } finally {
       $("shareGo").textContent = "올리기";
+    }
+  });
+
+  // ---------- 내 그림 지우기 (올린 사람만) ----------
+  const delDlg = $("delDlg");
+  let delId = null;
+  function askDelete(id) {
+    delId = id;
+    $("delErr").hidden = true; $("delGo").disabled = false;
+    delDlg.showModal();
+  }
+  $("delNo").addEventListener("click", () => delDlg.close());
+  $("delGo").addEventListener("click", async () => {
+    $("delGo").disabled = true;
+    try {
+      const r = await fetch(`/api/gallery?id=${delId}`, {
+        method: "DELETE",
+        headers: { "x-owner-token": getMine()[delId] || "" },
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(data.error || "지우지 못했어요.");
+      const m = getMine(); delete m[delId]; setMine(m);
+      delDlg.close();
+      toast("내 그림을 지웠어요 🗑️");
+      refresh();
+    } catch (e) {
+      $("delErr").textContent = e.message; $("delErr").hidden = false;
+      $("delGo").disabled = false;
     }
   });
 
