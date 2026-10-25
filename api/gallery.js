@@ -1,4 +1,4 @@
-// 친구들 작품 전시판(누구나): 선생님이 승인한 그림만 보여 주고, 학생이 올린 그림은 '기다리는 그림'으로 받는다.
+// 친구들 작품 전시판(누구나): 학생이 올린 그림은 바로 전시된다. 선생님은 /api/gallery-admin으로 숨기거나 지울 수 있다.
 // 서버 키는 여기(서버)에서만 쓰고 브라우저로 보내지 않는다.
 const crypto = require('node:crypto');
 const SB_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -13,7 +13,7 @@ const validId = (id) => Number.isInteger(id) && id > 0;
 const PAGE = 24;
 const MAX_B64 = 700000;          // 그림 한 장 최대 약 500KB
 const PER_IP = 40;               // 한 곳(교실 하나)에서 10분에 올릴 수 있는 그림 수
-const MAX_PENDING = 200;         // 선생님이 아직 확인하지 않은 그림이 이만큼 쌓이면 잠깐 막는다
+const PER_HOUR = 300;            // 사이트 전체에서 1시간에 올라올 수 있는 그림 수 (장난 막기)
 
 function body(req) {
   let b;
@@ -66,18 +66,20 @@ module.exports = async (req, res) => {
 
     const ip_hash = ipHash(req);
     const since = new Date(Date.now() - 10 * 60 * 1000).toISOString();
-    const [mine, waiting] = await Promise.all([
+    const hourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const [mine, recent] = await Promise.all([
       fetch(`${base}?select=id&ip_hash=eq.${ip_hash}&created_at=gte.${since}&limit=${PER_IP}`, { headers: sbHeaders() }),
-      fetch(`${base}?select=id&status=eq.pending&limit=${MAX_PENDING}`, { headers: sbHeaders() }),
+      fetch(`${base}?select=id&created_at=gte.${hourAgo}&limit=${PER_HOUR}`, { headers: sbHeaders() }),
     ]);
-    if (!mine.ok || !waiting.ok) return res.status(500).json({ error: '올리지 못했어요. 잠시 뒤 다시 해 보세요.' });
+    if (!mine.ok || !recent.ok) return res.status(500).json({ error: '올리지 못했어요. 잠시 뒤 다시 해 보세요.' });
     if ((await mine.json()).length >= PER_IP) return res.status(429).json({ error: '그림이 너무 많이 올라왔어요. 10분 뒤에 다시 올려 주세요.' });
-    if ((await waiting.json()).length >= MAX_PENDING) return res.status(429).json({ error: '선생님이 확인할 그림이 많이 쌓였어요. 조금 뒤에 다시 올려 주세요.' });
+    if ((await recent.json()).length >= PER_HOUR) return res.status(429).json({ error: '그림이 너무 많이 올라왔어요. 조금 뒤에 다시 올려 주세요.' });
 
     const row = {
       nickname: cleanText(b.nickname, 12) || null,
       title: cleanText(b.title, 20) || null,
       image: m[1],
+      status: 'approved',
       ip_hash,
     };
     const r = await fetch(base, { method: 'POST', headers: { ...sbHeaders(), Prefer: 'return=minimal' }, body: JSON.stringify(row) });

@@ -73,6 +73,7 @@ button { cursor: pointer; }
   padding: 0 var(--gut) var(--gut);
 }
 .toolbox {
+  overflow-x: hidden;
   order: -1; overflow-y: auto; min-height: 0;
   padding: 14px; background: var(--card); border: 1.5px solid var(--line); border-radius: 24px;
 }
@@ -97,7 +98,7 @@ button { cursor: pointer; }
 .chips { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
 #shapes { grid-template-columns: repeat(5, 1fr); }
 .chip {
-  aspect-ratio: 1; width: 100%; min-height: 32px; padding: 0; border-radius: 10px;
+  aspect-ratio: 1; width: 100%; min-width: 0; padding: 0; border-radius: 10px;
   border: 1.5px solid transparent; background: var(--card); font-size: 18px; line-height: 1;
 }
 .chip[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 2px var(--lime) inset; }
@@ -123,6 +124,26 @@ button { cursor: pointer; }
 .dot-wrap { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--bg); flex: none; }
 .dot { display: block; border-radius: 50%; background: var(--c, #141414); }
 
+/* 도장 묶음 · 글자 · 픽셀판 · 진하기 · 대칭 */
+.cats { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+.cat {
+  min-height: 30px; padding: 0 9px; border-radius: 999px; border: 1.5px solid transparent;
+  background: var(--card); font-size: 12.5px; font-weight: 700; white-space: nowrap;
+}
+.cat[aria-pressed="true"] { background: var(--ink); color: #fff; }
+#textInput {
+  width: 100%; min-height: 44px; padding: 0 12px; border: 1.5px solid var(--line); border-radius: 12px;
+  background: var(--card); font-size: 17px; font-weight: 700; -webkit-user-select: text; user-select: text;
+}
+.hint { margin: 6px 2px 0; font-size: 13px; color: var(--ink-soft); line-height: 1.45; }
+#pixelOpts .hint { margin: 0 2px 8px; }
+.pill.small { min-height: 40px; padding: 0 12px; font-size: 14px; }
+.pill.small[aria-pressed="true"] { background: var(--lime); border-color: var(--ink); }
+.sym { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.alpha-val { display: grid; place-items: center; width: 48px; height: 32px; border-radius: 999px; background: var(--bg); font-weight: 800; font-size: 15px; flex: none; }
+.colors.mine { margin-top: 6px; padding-top: 6px; border-top: 1.5px dashed var(--line); }
+#underOpts .pill { width: 100%; margin-top: 6px; }
+
 /* ---------- 종이 ---------- */
 .board {
   min-width: 0; min-height: 0; display: grid; place-items: center;
@@ -134,7 +155,11 @@ button { cursor: pointer; }
 }
 .paper canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 #canvas { touch-action: none; cursor: crosshair; }
-#ghost, .grid { pointer-events: none; }
+#under, #ghost, .grid, .guide { pointer-events: none; }
+/* 대칭 그리기 안내선 (저장되지 않는다) */
+.guide { position: absolute; }
+.guide.gv { top: 0; bottom: 0; left: 50%; border-left: 2px dashed rgba(56, 120, 255, .55); }
+.guide.gh { left: 0; right: 0; top: 50%; border-top: 2px dashed rgba(56, 120, 255, .55); }
 .grid {
   position: absolute; inset: 0;
   background-image:
@@ -163,7 +188,7 @@ dialog p { margin: 0 0 20px; font-size: 21px; font-weight: 700; line-height: 1.4
   .studio { display: flex; flex-direction: column; height: auto; }
   .toolbox { order: 0; overflow: visible; }
   .board { padding: 8px; }
-  .tools { grid-template-columns: repeat(8, 1fr); }
+  .tools { grid-template-columns: repeat(6, 1fr); }
 }
 @media (max-width: 560px) {
   body { font-size: 16px; }
@@ -225,6 +250,16 @@ dialog p { margin: 0 0 20px; font-size: 21px; font-weight: 700; line-height: 1.4
 .teach-btns .pill { min-height: 38px; padding: 0 10px; font-size: 14px; }
 .teach-btns .ok { background: var(--lime); border-color: var(--ink); }
 
+/* 달력 · 픽셀판 고르기 */
+.pick-dlg { width: min(420px, calc(100vw - 32px)); max-width: none; }
+.pick-dlg h3 { margin: 0 0 14px; font-size: 22px; }
+.year { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 14px; font-size: 22px; }
+.months { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 14px; }
+.months .pill { padding: 0; }
+.pick-dlg label { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: 14px; font-weight: 700; text-align: left; }
+.pick-dlg label input { width: 100%; margin-top: 6px; accent-color: var(--ink); }
+.pick-dlg form { display: inline; }
+
 /* 올리기 · 크게 보기 · 비밀번호 상자 */
 .share-dlg { width: min(440px, calc(100vw - 32px)); max-width: none; text-align: left; }
 .share-dlg h3 { margin: 0 0 12px; font-size: 22px; }
@@ -250,3 +285,4 @@ dialog input:not([type="checkbox"]) {
   .gallery { border-radius: 20px; }
   .bar .pill.share { font-size: 15px; }
 }
+.pick-dlg input[type="range"] { min-height: 0; padding: 0; border: 0; background: none; }

@@ -33,7 +33,7 @@
     <button class="pill" id="undo" title="되돌리기 (Ctrl+Z)">↶<span class="t"> 되돌리기</span></button>
     <button class="pill" id="redo" title="다시 하기 (Ctrl+Y)">↷<span class="t"> 다시 하기</span></button>
     <button class="pill" id="clear">🧹<span class="t"> 새로 그리기</span></button>
-    <button class="pill" id="open">📂<span class="t"> 불러오기</span></button>
+    <button class="pill" id="open" title="색칠할 그림(도안)을 종이 밑에 깔아요">📂<span class="t"> 도안 불러오기</span></button>
     <input type="file" id="file" accept="image/*" hidden>
     <button class="pill save" id="save">💾 저장</button>
     <button class="pill share" id="share">🖼️ 전시판에 올리기</button>
@@ -42,9 +42,12 @@
   <main class="studio">
     <section class="board" id="board">
       <div class="paper" id="paper">
+        <canvas id="under" aria-hidden="true"></canvas>
         <canvas id="canvas" aria-label="그림 그리는 종이"></canvas>
         <canvas id="ghost" aria-hidden="true"></canvas>
         <div class="grid" id="grid" hidden></div>
+        <div class="guide gv" id="guideV" hidden></div>
+        <div class="guide gh" id="guideH" hidden></div>
       </div>
     </section>
 
@@ -53,11 +56,15 @@
       <div class="tools" id="tools">
         <button class="tool" data-tool="pencil" aria-pressed="true"><b>✏️</b>연필</button>
         <button class="tool" data-tool="crayon"><b>🖍️</b>크레파스</button>
+        <button class="tool" data-tool="water"><b>🖌️</b>수채화</button>
         <button class="tool" data-tool="spray"><b>💨</b>스프레이</button>
         <button class="tool" data-tool="fill"><b>🪣</b>물감</button>
         <button class="tool" data-tool="shape"><b>🔷</b>도형</button>
         <button class="tool" data-tool="stamp"><b>❤️</b>도장</button>
+        <button class="tool" data-tool="text"><b>🔤</b>글자</button>
         <button class="tool" data-tool="eraser"><b>🧽</b>지우개</button>
+        <button class="tool" data-tool="pixel"><b>🧱</b>픽셀판</button>
+        <button class="tool" id="calBtn"><b>📅</b>달력</button>
         <button class="tool" id="gridBtn" aria-pressed="false" title="줄 바탕은 저장되지 않아요"><b>▦</b>격자</button>
       </div>
 
@@ -73,17 +80,50 @@
       </div>
 
       <div class="options" id="stampOpts" hidden>
+        <div class="cats" id="stampCats"></div>
         <div class="chips" id="stamps"></div>
+      </div>
+
+      <div class="options" id="textOpts" hidden>
+        <input id="textInput" maxlength="30" placeholder="쓸 글자를 적어요" autocomplete="off" aria-label="쓸 글자">
+        <p class="hint">글자를 적고 종이를 누르면 그 자리에 찍혀요. 크기는 '굵기'로 바꿔요.</p>
+      </div>
+
+      <div class="options" id="pixelOpts" hidden>
+        <p class="hint">칸을 누르거나 문지르면 색이 채워져요.</p>
+        <button class="pill small" id="pixelNew">🧱 칸 수 다시 정하기</button>
       </div>
 
       <h2>색 <i class="now" id="now"></i></h2>
       <div class="colors" id="colors"></div>
+      <div class="colors mine" id="myColors" hidden></div>
       <label class="more-color">🎨 다른 색 <input type="color" id="picker" value="#141414"></label>
 
       <h2>굵기</h2>
       <div class="size">
         <input type="range" id="size" min="1" max="10" value="3" aria-label="굵기">
         <span class="dot-wrap"><i class="dot" id="dot"></i></span>
+      </div>
+
+      <h2>진하기</h2>
+      <div class="size">
+        <input type="range" id="alpha" min="1" max="10" value="10" aria-label="진하기">
+        <span class="alpha-val" id="alphaVal">10</span>
+      </div>
+
+      <h2>대칭 그리기</h2>
+      <div class="sym">
+        <button class="pill small" id="symV" aria-pressed="false">↔ 좌우</button>
+        <button class="pill small" id="symH" aria-pressed="false">↕ 위아래</button>
+      </div>
+
+      <div id="underOpts" hidden>
+        <h2>도안</h2>
+        <div class="size">
+          <input type="range" id="underAlpha" min="10" max="100" value="100" aria-label="도안 투명도">
+          <span class="alpha-val" id="underVal">100</span>
+        </div>
+        <button class="pill small" id="underOff">🗑️ 도안 빼기</button>
       </div>
     </aside>
   </main>
@@ -93,13 +133,12 @@
       <h2 id="galleryTitle">🖼️ 친구들 작품</h2>
       <button class="pill lock" id="teacher">🔒 선생님</button>
     </div>
-    <p class="gallery-note">선생님이 확인한 그림만 여기에 나와요.</p>
+    <p class="gallery-note">친구들이 올린 그림이에요. 그림을 누르면 크게 보여요.</p>
 
     <!-- 선생님 모드: 비밀번호를 넣은 뒤에만 보인다 -->
     <div class="teach" id="teach" hidden>
       <div class="tabs" role="tablist">
-        <button class="pill" data-status="pending" aria-pressed="true">⏳ 기다리는 그림 <b data-count="pending">0</b></button>
-        <button class="pill" data-status="approved" aria-pressed="false">✅ 전시 중 <b data-count="approved">0</b></button>
+        <button class="pill" data-status="approved" aria-pressed="true">✅ 전시 중 <b data-count="approved">0</b></button>
         <button class="pill" data-status="hidden" aria-pressed="false">🙈 숨긴 그림 <b data-count="hidden">0</b></button>
         <button class="pill" id="teachOff">끝내기</button>
       </div>
@@ -116,13 +155,13 @@
     <form method="dialog" id="shareForm">
       <h3>🖼️ 전시판에 올리기</h3>
       <img id="shareThumb" alt="올릴 그림">
-      <label>별명 <small>(안 써도 돼요)</small>
-        <input name="nickname" maxlength="12" placeholder="예: 그림왕 도깨비" autocomplete="off">
+      <label>이름 <small>(성은 빼고 이름만 · 안 써도 돼요)</small>
+        <input name="nickname" maxlength="12" placeholder="예: 민지 (김민지 ✕)" autocomplete="off">
       </label>
       <label>그림 제목 <small>(안 써도 돼요)</small>
         <input name="title" maxlength="20" placeholder="예: 우리 집" autocomplete="off">
       </label>
-      <p class="warn">⚠️ <b>진짜 이름</b>, <b>얼굴 사진</b>, 학교·전화번호는 넣지 않아요.<br>선생님이 확인한 뒤에 전시판에 나와요.</p>
+      <p class="warn">⚠️ <b>얼굴 사진</b>, 학교·전화번호·주소는 넣지 않아요.<br>올리면 <b>바로</b> 전시판에 나와요.</p>
       <div class="ask-btns">
         <button class="pill" value="cancel" formnovalidate>그만두기</button>
         <button class="pill save" id="shareGo" type="button">올리기</button>
@@ -134,6 +173,27 @@
     <img id="viewImg" alt="">
     <p id="viewCap"></p>
     <form method="dialog"><button class="pill">닫기</button></form>
+  </dialog>
+
+  <dialog id="calDlg" class="pick-dlg">
+    <h3>📅 달력 만들기</h3>
+    <div class="year">
+      <button class="pill" id="yearPrev" aria-label="작년">◀</button>
+      <b id="yearVal"></b>
+      <button class="pill" id="yearNext" aria-label="내년">▶</button>
+    </div>
+    <div class="months" id="months"></div>
+    <form method="dialog"><button class="pill">그만두기</button></form>
+  </dialog>
+
+  <dialog id="pixDlg" class="pick-dlg">
+    <h3>🧱 픽셀판 만들기</h3>
+    <label>가로 칸 <b id="pixWVal">16</b><input type="range" id="pixW" min="5" max="40" value="16"></label>
+    <label>세로 칸 <b id="pixHVal">16</b><input type="range" id="pixH" min="5" max="40" value="16"></label>
+    <div class="ask-btns">
+      <form method="dialog"><button class="pill">그만두기</button></form>
+      <button class="pill save" id="pixGo">만들기 🚀</button>
+    </div>
   </dialog>
 
   <dialog id="pwDlg">

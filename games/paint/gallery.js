@@ -1,4 +1,4 @@
-// 친구들 작품 전시판: 그림을 선생님께 보내고(승인 전에는 아무도 못 봄), 승인된 그림을 모아 보여 준다.
+// 친구들 작품 전시판: 올린 그림은 바로 전시되고, 선생님은 숨기거나 지울 수 있다.
 // 선생님 비밀번호는 첫 화면·관리자 화면과 같은 sessionStorage 칸(탭을 닫으면 사라짐)에만 둔다.
 (function () {
   const $ = (id) => document.getElementById(id);
@@ -57,12 +57,12 @@
     });
     const cap = el("figcaption");
     cap.appendChild(el("b", null, it.title || "제목 없음"));
-    cap.appendChild(el("span", null, it.nickname ? `🎨 ${it.nickname}` : "🎨 익명 작가"));
+    cap.appendChild(el("span", null, it.nickname ? `🎨 ${it.nickname}` : "🎨 이름 없음"));
     c.append(b, cap);
     c._img = img;
     return c;
   }
-  const caption = (it) => `${it.title || "제목 없음"} · ${it.nickname || "익명 작가"}`;
+  const caption = (it) => `${it.title || "제목 없음"} · ${it.nickname || "이름 없음"}`;
 
   // ---------- 전시판에 올리기 ----------
   const shareDlg = $("shareDlg");
@@ -70,7 +70,7 @@
 
   // 큰 종이는 줄여서 JPEG로 만든다(흰 바탕이라 JPEG로 충분)
   function snapshot() {
-    const src = $("canvas");
+    const src = window.malangExport ? window.malangExport() : $("canvas");
     const s = Math.min(1, 1000 / Math.max(src.width, src.height));
     const c = document.createElement("canvas");
     c.width = Math.round(src.width * s); c.height = Math.round(src.height * s);
@@ -103,8 +103,9 @@
       if (!r.ok) throw new Error(data.error || "올리지 못했어요. 잠시 뒤 다시 해 보세요.");
       shareDlg.close();
       f.title.value = "";
-      toast("선생님께 보냈어요! 확인하면 전시판에 나와요 🎉");
-      if (teaching) loadTeach();
+      toast("전시판에 올렸어요! 🎉");
+      refresh();
+      $("gallery").scrollIntoView({ behavior: "smooth" });
     } catch (e) {
       toast(e.message);
       $("shareGo").disabled = false;
@@ -115,7 +116,7 @@
 
   // ---------- 선생님 모드 ----------
   let teaching = false;
-  let tab = "pending";
+  let tab = "approved";
   const pwDlg = $("pwDlg");
 
   async function admin(method, { query = "", body } = {}) {
@@ -139,7 +140,7 @@
   async function tryPw() {
     setPw($("pwInput").value);
     try {
-      await admin("GET", { query: "?status=pending" });
+      await admin("GET", { query: "?status=approved" });
       pwDlg.close();
       startTeach();
     } catch (e) {
@@ -207,7 +208,7 @@
       refresh();
     } catch (e) { toast(e.message); }
   }
-  function refresh() { loadTeach(); loadGallery(true); }
+  function refresh() { if (teaching) loadTeach(); loadGallery(true); }
 
   loadGallery(true);
 })();
