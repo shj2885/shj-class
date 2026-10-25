@@ -66,11 +66,11 @@
   /* ---------- 돈: 지폐 3장 + 동전 4개 (그림은 money/ 폴더) ---------- */
   const MONEY = [
     { v: 10000, bill: true }, { v: 5000, bill: true }, { v: 1000, bill: true },
-    { v: 500, s: 64 }, { v: 100, s: 58 }, { v: 50, s: 52 }, { v: 10, s: 54 },
+    { v: 500, s: 76 }, { v: 100, s: 70 }, { v: 50, s: 62 }, { v: 10, s: 62 },
   ];
-  function cashEl(m) {
-    const b = el('button', 'cash ' + (m.bill ? 'bill' : 'coin'));
-    b.type = 'button';
+  function cashEl(m, tag = 'button') {
+    const b = el(tag, 'cash ' + (m.bill ? 'bill' : 'coin'));
+    if (tag === 'button') b.type = 'button';
     if (!m.bill) b.style.setProperty('--s', m.s + 'px');
     const img = el('img');
     img.src = '/games/market/money/' + m.v + '.png';
@@ -100,12 +100,14 @@
       api.total = sum;
       if (onChange) onChange(sum);
     }
+    // 돈 칸: 그림 + 아래 금액, 칸 전체를 누르면 낸다
     MONEY.forEach((m) => {
-      const cell = el('div', 'moneyCell');
-      const b = cashEl(m);
-      b.onclick = () => { count[m.v] = (count[m.v] || 0) + 1; clink(); draw(); };
-      cell.append(b, el('small', '', won(m.v)));
-      moneyEl.append(cell);
+      const tile = el('button', 'moneyTile');
+      tile.type = 'button';
+      tile.setAttribute('aria-label', won(m.v) + ' 내기');
+      tile.onclick = () => { count[m.v] = (count[m.v] || 0) + 1; clink(); draw(); };
+      tile.append(cashEl(m, 'span'), el('b', '', won(m.v)));
+      moneyEl.append(tile);
     });
     const api = { total: 0, reset() { MONEY.forEach((m) => { count[m.v] = 0; }); draw(); } };
     api.reset();
@@ -149,6 +151,7 @@
     q = { lv, items, total, answer: lv.change ? lv.change - total : total };
 
     const goods = $('#goods'); goods.textContent = '';
+    goods.dataset.n = items.length; // 물건이 적을수록 그림을 크게
     items.forEach((it, i) => { const g = el('div', 'good', it.em); g.style.animationDelay = i * 0.08 + 's'; goods.append(g); });
     const prices = $('#prices'); prices.textContent = '';
     items.forEach((it) => {
