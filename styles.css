@@ -99,14 +99,15 @@ a { color: inherit; }
   display: inline-flex; align-items: center; gap: 10px;
   font-weight: 900; font-size: 20px; letter-spacing: -0.04em; text-decoration: none;
 }
-.brand { gap: 12px; }
-.brand-text { display: grid; line-height: 1.15; }
+/* 로고 글자: 혜정쌤의(작게) / 코딩도깨비(크게) / 부제(띄어서) 세 줄, 모두 검정 */
+.brand { gap: 14px; color: var(--ink); }
+.brand-text { display: grid; justify-items: start; white-space: nowrap; }
+.brand-owner { font-size: 15px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; color: var(--ink); }
+.brand-name { font-size: 38px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.05; color: var(--ink); }
+.brand-sub { margin-top: 3px; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; line-height: 1.2; color: var(--ink); }
 .brand-line { display: inline-flex; align-items: baseline; gap: 5px; white-space: nowrap; }
-.brand-owner { font-size: 14px; font-weight: 800; letter-spacing: -0.03em; color: var(--ink-soft); }
-.brand-name { font-size: 34px; font-weight: 900; letter-spacing: -0.055em; line-height: 1.05; }
-.foot .brand-owner { font-size: 15px; color: var(--lime); }
-.brand-sub { font-size: 14px; font-weight: 600; letter-spacing: -0.03em; color: var(--ink-soft); }
-.logo { display: block; flex: none; width: 48px; height: 48px; transition: transform .4s var(--ease); }
+.foot .brand-owner { font-size: 15px; color: #fff; }
+.logo { display: block; flex: none; width: 64px; height: 64px; transition: transform .4s var(--ease); }
 .brand:hover .logo { transform: rotate(-10deg) scale(1.06); }
 
 /* ---------- hero ---------- */
@@ -360,7 +361,7 @@ body.teacher { padding-bottom: 76px; } /* 아래 띠에 가리지 않게 */
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
 }
 /* 바닥은 검정이라 아이콘 뒤에 연두 동그라미를 깐다 */
-.foot .logo { width: 40px; height: 40px; padding: 4px; border-radius: 50%; background: var(--lime); }
+.foot .logo { width: 48px; height: 48px; padding: 4px; border-radius: 50%; background: var(--lime); }
 .foot-brand { margin: 0; font-size: 26px; }
 .foot-sub { margin: 6px 0 0; font-size: 16px; font-weight: 700; color: var(--lime); letter-spacing: -0.03em; }
 .foot-note { margin: 0; max-width: 28em; font-size: 16px; opacity: .75; }
@@ -402,10 +403,10 @@ body.teacher { padding-bottom: 76px; } /* 아래 띠에 가리지 않게 */
 @media (max-width: 520px) {
   .nav { gap: 8px; }
   .brand { gap: 8px; min-width: 0; }
-  .logo { width: 40px; height: 40px; }
-  .brand-name { font-size: 25px; }
+  .logo { width: 50px; height: 50px; }
+  .brand-name { font-size: 27px; }
   .brand-owner { font-size: 12px; }
-  .brand-sub { font-size: 12px; }
+  .brand-sub { font-size: 10.5px; letter-spacing: 0.06em; }
   .tb-text, .mt-text { display: none; }
   .teacher-btn { min-height: 42px; width: 42px; padding: 0; justify-content: center; display: inline-flex; align-items: center; }
   .menu-toggle { padding: 0 12px; }
