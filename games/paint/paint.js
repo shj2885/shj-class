@@ -386,6 +386,7 @@
   }
 
   function toast(text) {
+    document.querySelectorAll(".toast").forEach((x) => x.remove());
     const t = document.createElement("div");
     t.className = "toast"; t.textContent = text;
     document.body.appendChild(t);

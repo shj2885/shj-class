@@ -36,6 +36,7 @@
     <button class="pill" id="open">📂<span class="t"> 불러오기</span></button>
     <input type="file" id="file" accept="image/*" hidden>
     <button class="pill save" id="save">💾 저장</button>
+    <button class="pill share" id="share">🖼️ 전시판에 올리기</button>
   </div>
 
   <main class="studio">
@@ -87,6 +88,66 @@
     </aside>
   </main>
 
+  <section class="gallery" id="gallery" aria-labelledby="galleryTitle">
+    <div class="gallery-head">
+      <h2 id="galleryTitle">🖼️ 친구들 작품</h2>
+      <button class="pill lock" id="teacher">🔒 선생님</button>
+    </div>
+    <p class="gallery-note">선생님이 확인한 그림만 여기에 나와요.</p>
+
+    <!-- 선생님 모드: 비밀번호를 넣은 뒤에만 보인다 -->
+    <div class="teach" id="teach" hidden>
+      <div class="tabs" role="tablist">
+        <button class="pill" data-status="pending" aria-pressed="true">⏳ 기다리는 그림 <b data-count="pending">0</b></button>
+        <button class="pill" data-status="approved" aria-pressed="false">✅ 전시 중 <b data-count="approved">0</b></button>
+        <button class="pill" data-status="hidden" aria-pressed="false">🙈 숨긴 그림 <b data-count="hidden">0</b></button>
+        <button class="pill" id="teachOff">끝내기</button>
+      </div>
+      <div class="cards" id="teachCards"></div>
+      <p class="empty" id="teachEmpty" hidden>여기에는 그림이 없어요.</p>
+    </div>
+
+    <div class="cards" id="cards"></div>
+    <p class="empty" id="empty" hidden>아직 전시된 그림이 없어요. 첫 번째 작가가 되어 볼까요? ✨</p>
+    <button class="pill more" id="more" hidden>더 보기</button>
+  </section>
+
+  <dialog id="shareDlg" class="share-dlg">
+    <form method="dialog" id="shareForm">
+      <h3>🖼️ 전시판에 올리기</h3>
+      <img id="shareThumb" alt="올릴 그림">
+      <label>별명 <small>(안 써도 돼요)</small>
+        <input name="nickname" maxlength="12" placeholder="예: 그림왕 도깨비" autocomplete="off">
+      </label>
+      <label>그림 제목 <small>(안 써도 돼요)</small>
+        <input name="title" maxlength="20" placeholder="예: 우리 집" autocomplete="off">
+      </label>
+      <p class="warn">⚠️ <b>진짜 이름</b>, <b>얼굴 사진</b>, 학교·전화번호는 넣지 않아요.<br>선생님이 확인한 뒤에 전시판에 나와요.</p>
+      <div class="ask-btns">
+        <button class="pill" value="cancel" formnovalidate>그만두기</button>
+        <button class="pill save" id="shareGo" type="button">올리기</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="viewDlg" class="view-dlg">
+    <img id="viewImg" alt="">
+    <p id="viewCap"></p>
+    <form method="dialog"><button class="pill">닫기</button></form>
+  </dialog>
+
+  <dialog id="pwDlg">
+    <form method="dialog" id="pwForm">
+      <p>선생님 비밀번호</p>
+      <input type="password" id="pwInput" autocomplete="current-password" aria-label="선생님 비밀번호">
+      <p class="err" id="pwErr" hidden></p>
+      <div class="ask-btns">
+        <button class="pill" value="cancel" formnovalidate>그만두기</button>
+        <button class="pill save" id="pwGo" type="button">들어가기</button>
+      </div>
+    </form>
+  </dialog>
+
   <dialog id="ask">
     <p id="askText"></p>
     <div class="ask-btns">
@@ -96,5 +157,6 @@
   </dialog>
 
   <script src="/games/paint/paint.js"></script>
+  <script src="/games/paint/gallery.js"></script>
 </body>
 </html>

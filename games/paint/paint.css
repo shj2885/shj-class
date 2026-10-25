@@ -181,3 +181,72 @@ dialog p { margin: 0 0 20px; font-size: 21px; font-weight: 700; line-height: 1.4
   .board { border-radius: 18px; padding: 6px; }
   .toolbox { border-radius: 18px; padding: 12px; }
 }
+
+/* ---------- 전시판에 올리기 버튼 ---------- */
+.pill.share { background: var(--lime); border-color: var(--ink); }
+.pill.share:hover:not(:disabled) { background: #B9E52A; }
+
+/* ---------- 친구들 작품 전시판 ---------- */
+.gallery {
+  margin: 0 var(--gut) var(--gut); padding: clamp(16px, 2.4vw, 28px);
+  background: var(--card); border: 1.5px solid var(--line); border-radius: 28px;
+}
+.gallery-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.gallery-head h2 { margin: 0; font-size: clamp(24px, 3vw, 32px); font-weight: 800; letter-spacing: -0.03em; }
+.gallery-note { margin: 4px 0 18px; color: var(--ink-soft); font-size: 15px; }
+.pill.lock { font-size: 15px; }
+.pill.lock[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+.art { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.art-img {
+  display: block; width: 100%; aspect-ratio: 4 / 3; padding: 6px; overflow: hidden;
+  background: var(--bg); border: 1.5px solid var(--line); border-radius: 18px;
+  transition: transform .2s, box-shadow .2s;
+}
+.art-img:hover { transform: translateY(-3px); box-shadow: 0 14px 28px -16px rgba(20, 20, 20, .4); }
+.art-img img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; background: #fff; display: block; }
+.art figcaption { display: flex; flex-direction: column; padding: 0 4px; line-height: 1.3; }
+.art figcaption b { font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.art figcaption span { font-size: 14px; color: var(--ink-soft); }
+.empty { margin: 8px 0; padding: 28px; text-align: center; color: var(--ink-soft); background: var(--bg); border-radius: 18px; }
+.more { display: block; margin: 18px auto 0; }
+
+/* 선생님 모드 */
+.teach { margin-bottom: 24px; padding: 14px; background: var(--lime-soft); border-radius: 22px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.tabs .pill { font-size: 15px; }
+.tabs .pill b { display: inline-block; min-width: 24px; margin-left: 4px; padding: 0 6px; border-radius: 999px; background: var(--bg); font-size: 13px; }
+.tabs .pill[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+.tabs .pill[aria-pressed="true"] b { background: var(--lime); color: var(--ink); }
+#teachOff { margin-left: auto; }
+.teach .empty { background: var(--card); }
+.teach-btns { display: flex; flex-wrap: wrap; gap: 4px; }
+.teach-btns .pill { min-height: 38px; padding: 0 10px; font-size: 14px; }
+.teach-btns .ok { background: var(--lime); border-color: var(--ink); }
+
+/* 올리기 · 크게 보기 · 비밀번호 상자 */
+.share-dlg { width: min(440px, calc(100vw - 32px)); max-width: none; text-align: left; }
+.share-dlg h3 { margin: 0 0 12px; font-size: 22px; }
+.share-dlg img { display: block; width: 100%; max-height: 200px; object-fit: contain; background: var(--bg); border-radius: 14px; margin-bottom: 12px; }
+.share-dlg label { display: block; margin-bottom: 10px; font-weight: 700; font-size: 16px; }
+.share-dlg small { color: var(--ink-soft); font-weight: 500; }
+dialog input:not([type="checkbox"]) {
+  display: block; width: 100%; margin-top: 4px; min-height: 46px; padding: 0 14px;
+  border: 1.5px solid var(--line); border-radius: 14px; background: var(--bg); font-size: 17px;
+  -webkit-user-select: text; user-select: text;
+}
+.share-dlg .warn { margin: 6px 0 16px; padding: 10px 12px; background: #FFF4E5; border-radius: 14px; font-size: 14px; font-weight: 500; line-height: 1.5; text-align: left; }
+.share-dlg .ask-btns { justify-content: flex-end; }
+.view-dlg { width: min(960px, calc(100vw - 24px)); max-width: none; padding: 14px; }
+.view-dlg img { display: block; width: 100%; max-height: 72vh; object-fit: contain; background: #fff; border-radius: 14px; }
+.view-dlg p { margin: 12px 0; font-size: 18px; }
+#pwDlg p { margin-bottom: 12px; }
+#pwDlg .err { color: #C42B20; font-size: 15px; margin: 8px 0 0; }
+#pwDlg .ask-btns { margin-top: 16px; }
+
+@media (max-width: 560px) {
+  .cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .gallery { border-radius: 20px; }
+  .bar .pill.share { font-size: 15px; }
+}
