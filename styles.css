@@ -83,6 +83,13 @@ a { color: inherit; }
 }
 .dropdown a:hover, .dropdown a:focus-visible { background: var(--lime-soft); }
 .dropdown .drop-all { font-weight: 800; }
+.dropdown { max-height: min(70vh, 520px); overflow-y: auto; }
+.drop-head {
+  margin: 8px 0 2px; padding: 0 14px;
+  font-size: 13px; font-weight: 800; color: var(--ink-soft); letter-spacing: -0.01em;
+}
+.dropdown .drop-site .go { width: 16px; height: 16px; opacity: .4; flex: none; }
+.dropdown .drop-site:hover .go { opacity: 1; }
 .dropdown .count {
   min-width: 26px; padding: 1px 8px; border-radius: 999px; text-align: center;
   background: var(--bg); color: var(--ink-soft); font-size: 13px; font-weight: 700;

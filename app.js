@@ -81,6 +81,17 @@ function groupsOf(menu, links) {
 }
 
 /* ---------- 위쪽 펼침 메뉴 ---------- */
+function dropSite(item) {
+  const u = safeUrl(item.url);
+  if (!u) return null;
+  const a = el('a', {
+    class: 'drop-site', href: u.href, target: '_blank', rel: 'noopener noreferrer',
+    'aria-label': `${item.name} 새 탭에서 열기`,
+  }, [el('span', { text: item.name })]);
+  a.insertAdjacentHTML('beforeend', ARROW);
+  return el('li', {}, [a]);
+}
+
 function renderMenubar(links) {
   const list = document.getElementById('menu-list');
   const home = el('li', { class: 'menu' }, [
@@ -94,13 +105,18 @@ function renderMenubar(links) {
       document.createTextNode(menu.ko),
     ]);
     btn.insertAdjacentHTML('beforeend', CARET);
+    // 펼침 메뉴에서 사이트를 누르면 바로 새 탭으로 열린다. 펼침 메뉴 이름은 작은 제목으로만 둔다.
     const drop = el('ul', { class: 'dropdown', id: dropId }, [
       el('li', {}, [el('a', { href: `#${menu.key}`, class: 'drop-all', text: `${menu.ko} 전체 보기` })]),
       ...(groups.length
-        ? groups.map((g) => el('li', {}, [el('a', { href: `#${g.id}` }, [
-          document.createTextNode(g.title),
-          el('span', { class: 'count', text: String(g.items.length) }),
-        ])]))
+        ? groups.flatMap((g) => {
+          // 사이트가 하나뿐이고 이름이 펼침 메뉴와 같으면(예: 엔트리 > 엔트리) 제목은 생략
+          const same = g.items.length === 1 && g.items[0].name.trim() === g.title;
+          return [
+            same ? null : el('li', { class: 'drop-head', text: g.title }),
+            ...g.items.map(dropSite),
+          ].filter(Boolean);
+        })
         : [el('li', { class: 'drop-empty', text: '아직 사이트가 없어요' })]),
     ]);
     return el('li', { class: 'menu' }, [btn, drop]);
