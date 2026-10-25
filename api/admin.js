@@ -12,6 +12,7 @@ const same = (a, b) => {
   return crypto.timingSafeEqual(h(a), h(b));
 };
 const CATEGORIES = ['ai', 'design', 'class', 'collab'];
+const validId = (id) => Number.isInteger(id) && id > 0;
 
 function cleanUrl(raw) {
   let s = String(raw ?? '').trim();
@@ -51,9 +52,10 @@ function pick(b, partial) {
 }
 
 function body(req) {
-  let b = req.body || {};
+  let b;
+  try { b = req.body || {}; } catch { b = {}; } // 잘못된 JSON이면 Vercel이 읽는 순간 오류를 낸다
   if (typeof b === 'string') { try { b = JSON.parse(b); } catch { b = {}; } }
-  return b;
+  return b && typeof b === 'object' ? b : {};
 }
 
 module.exports = async (req, res) => {
@@ -83,7 +85,7 @@ module.exports = async (req, res) => {
   if (req.method === 'PATCH') {
     const b = body(req);
     const id = Number(b.id);
-    if (!Number.isInteger(id)) return res.status(400).json({ error: '잘못된 요청이에요.' });
+    if (!validId(id)) return res.status(400).json({ error: '잘못된 요청이에요.' });
     const { row, error } = pick(b, true);
     if (error) return res.status(400).json({ error });
     if (!Object.keys(row).length) return res.status(400).json({ error: '바꿀 내용이 없어요.' });
@@ -95,7 +97,7 @@ module.exports = async (req, res) => {
 
   if (req.method === 'DELETE') {
     const id = Number(new URL(req.url, 'http://x').searchParams.get('id'));
-    if (!Number.isInteger(id)) return res.status(400).json({ error: '잘못된 요청이에요.' });
+    if (!validId(id)) return res.status(400).json({ error: '잘못된 요청이에요.' });
     const r = await fetch(`${base}?id=eq.${id}`, { method: 'DELETE', headers: { ...sbHeaders(), Prefer: 'return=minimal' } });
     if (!r.ok) return res.status(500).json({ error: '빼지 못했어요.' });
     return res.status(200).json({ ok: true });
