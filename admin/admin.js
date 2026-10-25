@@ -310,16 +310,11 @@ $('add-form').addEventListener('submit', async (e) => {
 });
 $('form-cancel').addEventListener('click', stopEdit);
 
-// 이 컴퓨터에서 관리자로 들어온 적이 있다는 표시만 남긴다(비밀번호는 저장하지 않음).
-// 첫 화면은 이 표시가 있을 때만 '+ 사이트 추가' 버튼을 보여 준다.
-const ADMIN_FLAG = 'kd-admin';
-function setAdminFlag(on) { try { on ? localStorage.setItem(ADMIN_FLAG, '1') : localStorage.removeItem(ADMIN_FLAG); } catch {} }
-
 function showPanel(on) {
   $('login-form').hidden = on;
   $('panel').hidden = !on;
   $('logout').hidden = !on;
-  if (on) { setAdminFlag(true); jumpToTarget(); }
+  if (on) jumpToTarget();
 }
 
 // 첫 화면의 '+ 사이트 추가'에서 왔으면(/admin?menu=block&sub=엔트리) 그 칸을 열고 주소 칸에 커서를 둔다
@@ -345,7 +340,7 @@ function jumpToTarget() {
 
 function logout(msg) {
   setPw('');
-  setAdminFlag(false);
+  try { localStorage.removeItem('kd-admin'); } catch {} // 예전 버전이 남긴 표시 정리
   showPanel(false);
   $('login-msg').textContent = msg || '';
   $('pw').value = '';

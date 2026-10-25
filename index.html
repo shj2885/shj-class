@@ -19,9 +19,12 @@
       <img class="logo" src="/logo.svg" alt="" width="48" height="48">
       <span class="brand-text"><span class="brand-line"><span class="brand-owner">혜정쌤의</span> <span class="brand-name">코딩도깨비</span></span><span class="brand-sub">내 손으로 뚝딱! 상상력은 쑥쑥!</span></span>
     </a>
-    <button type="button" class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="menubar">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>메뉴
-    </button>
+    <div class="nav-actions">
+      <button type="button" class="teacher-btn" id="teacher-btn" aria-label="선생님 모드"><span class="tb-icon" aria-hidden="true">🔒</span><span class="tb-text">선생님</span></button>
+      <button type="button" class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="menubar" aria-label="메뉴">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span class="mt-text">메뉴</span>
+      </button>
+    </div>
   </header>
   <nav class="menubar" id="menubar" aria-label="메뉴">
     <ul class="menu-list" id="menu-list"></ul>
@@ -31,6 +34,7 @@
     <section class="hero" id="today" aria-labelledby="today-title">
       <h1 id="today-title"><span class="hl">오늘 수업</span></h1>
       <p class="lede">오늘 수업에 쓸 사이트, 여기서 바로 들어가세요. 누르면 새 탭에서 열려요.</p>
+      <p class="teacher-only hero-admin"><button type="button" class="tool add-btn" id="hero-add">+ 오늘 수업에 사이트 추가</button></p>
       <ul class="today-list" id="today-list" aria-live="polite"></ul>
       <p class="today-empty" id="today-empty" hidden></p>
     </section>
@@ -46,6 +50,50 @@
     </div>
     <p class="foot-note">사이트는 모두 새 탭에서 열려요.<br>이 화면은 그대로 남아 있으니 언제든 돌아오세요.</p>
   </footer>
+
+  <!-- 선생님 모드: 비밀번호 확인 -->
+  <dialog class="dlg" id="login-dlg" aria-labelledby="login-title">
+    <form method="dialog" id="login-form" autocomplete="off">
+      <h2 id="login-title">선생님 모드</h2>
+      <p class="dlg-note">비밀번호를 넣으면 이 화면에서 바로 사이트를 추가하고 고칠 수 있어요.</p>
+      <label>관리자 비밀번호<input id="login-pw" type="password" required autocomplete="current-password"></label>
+      <p class="dlg-msg" id="login-msg" role="alert"></p>
+      <div class="dlg-row">
+        <button type="button" class="dlg-ghost" data-close>닫기</button>
+        <button type="submit" class="dlg-solid">들어가기</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- 선생님 모드: 사이트 추가·고치기 -->
+  <dialog class="dlg" id="edit-dlg" aria-labelledby="edit-title">
+    <form method="dialog" id="edit-form" autocomplete="off">
+      <h2 id="edit-title">사이트 추가</h2>
+      <label>주소<input name="url" required inputmode="url" placeholder="예: https://playentry.org"></label>
+      <label>사이트 이름<input name="name" maxlength="60" placeholder="비우면 주소에서 따와요"></label>
+      <div class="dlg-pair">
+        <label>메뉴<select name="category" id="edit-menu" required></select></label>
+        <label>펼침 메뉴<select name="sub" id="edit-sub"></select></label>
+      </div>
+      <label class="dlg-check" id="edit-today-row"><input type="checkbox" name="today"> 오늘 수업에 올리기</label>
+      <p class="dlg-msg" id="edit-msg" role="alert"></p>
+      <div class="dlg-row">
+        <button type="button" class="dlg-ghost" data-close>닫기</button>
+        <button type="submit" class="dlg-solid" id="edit-submit">추가하기</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- 선생님 모드가 켜져 있을 때 아래에 붙는 띠 -->
+  <div class="teacher-bar" id="teacher-bar" hidden>
+    <span>✏️ 선생님 모드 · 이 화면에서 바로 추가하고 고칠 수 있어요</span>
+    <span class="teacher-bar-actions">
+      <button type="button" id="bar-add">+ 사이트 추가</button>
+      <a href="/admin">관리자 화면</a>
+      <button type="button" id="bar-off">끄기</button>
+    </span>
+  </div>
+  <p class="toast" id="toast" role="status" aria-live="polite"></p>
 
   <script src="/menus.js" defer></script>
   <script src="/app.js" defer></script>

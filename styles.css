@@ -243,17 +243,95 @@ a { color: inherit; }
 .sub-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
 .sub-head h3 { margin-bottom: 0; }
 
-/* 관리자로 들어간 적 있는 컴퓨터에서만 보이는 '+ 추가' 버튼 */
-.add-btn {
-  display: inline-flex; align-items: center; min-height: 34px; padding: 0 14px;
-  border: 1.5px dashed var(--ink); border-radius: 999px;
-  font-size: 14px; font-weight: 800; letter-spacing: -0.02em; text-decoration: none; white-space: nowrap;
-  transition: background-color .2s, border-color .2s;
+/* ---------- 선생님 모드 ---------- */
+.nav-actions { display: flex; align-items: center; gap: 8px; }
+.teacher-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 42px; padding: 0 14px; border: 1.5px solid var(--line); border-radius: 999px;
+  background: var(--card); color: var(--ink-soft); cursor: pointer;
+  font: inherit; font-size: 14px; font-weight: 700; white-space: nowrap;
 }
+.teacher-btn:hover { border-color: var(--ink); color: var(--ink); }
+body.teacher .teacher-btn { background: var(--lime); border-color: var(--lime); color: var(--ink); }
+
+.teacher-only { display: none; }
+body.teacher .teacher-only { display: block; }
+body.teacher { padding-bottom: 76px; } /* 아래 띠에 가리지 않게 */
+
+/* 추가 버튼과 사이트별 도구 */
+.tool {
+  display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px;
+  border: 1.5px solid var(--line); border-radius: 999px; background: var(--card); color: var(--ink); cursor: pointer;
+  font: inherit; font-size: 13px; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap;
+}
+.tool:hover, .tool:focus-visible { border-color: var(--ink); }
+.tool.on { background: var(--lime-soft); border-color: var(--lime); }
+.tool.danger { color: #B3261E; }
+.tool.danger:hover { border-color: #B3261E; }
+.add-btn { border: 1.5px dashed var(--ink); font-weight: 800; }
 .add-btn:hover, .add-btn:focus-visible { background: var(--lime); border-style: solid; }
 .hero-admin { margin: 18px 0 0; }
-.cat-head .add-btn { margin-left: auto; min-height: 40px; font-size: 15px; }
-.sub-head .add-btn { min-height: 28px; padding: 0 10px; font-size: 13px; }
+.hero-admin .add-btn { min-height: 44px; padding: 0 18px; font-size: 15px; }
+.cat-head .add-btn { margin-left: auto; min-height: 40px; padding: 0 16px; font-size: 15px; }
+.sub-head .add-btn { min-height: 28px; padding: 0 10px; }
+.tools { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.today-list .tools { margin-top: 8px; padding: 0 6px; }
+
+/* 아래에 붙는 '선생님 모드' 띠 */
+.teacher-bar {
+  position: fixed; left: 50%; bottom: 14px; z-index: 40; transform: translateX(-50%);
+  width: min(calc(100% - 24px), 860px);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px;
+  padding: 10px 12px 10px 18px; border-radius: 22px;
+  background: var(--ink); color: #fff; box-shadow: 0 16px 40px -16px rgba(0, 0, 0, .5);
+  font-size: 14px; font-weight: 700;
+}
+.teacher-bar[hidden] { display: none; }
+.teacher-bar-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.teacher-bar button, .teacher-bar a {
+  min-height: 38px; padding: 0 14px; border: 0; border-radius: 999px; cursor: pointer;
+  display: inline-flex; align-items: center;
+  font: inherit; font-size: 14px; font-weight: 800; text-decoration: none;
+  background: #2A2A2A; color: #fff;
+}
+.teacher-bar #bar-add { background: var(--lime); color: var(--ink); }
+
+/* 추가·고치기 창 */
+.dlg {
+  width: min(calc(100% - 32px), 460px); padding: 0; border: 0; border-radius: 28px;
+  background: var(--card); color: var(--ink); box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .45);
+}
+.dlg::backdrop { background: rgba(20, 20, 20, .45); }
+.dlg form { display: grid; gap: 14px; padding: 26px; }
+.dlg h2 { margin: 0; font-size: 22px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.25; }
+.dlg-note { margin: -4px 0 0; font-size: 15px; color: var(--ink-soft); }
+.dlg label { display: grid; gap: 6px; font-size: 14px; font-weight: 800; }
+.dlg input:not([type="checkbox"]), .dlg select {
+  width: 100%; min-height: 48px; padding: 0 14px; border: 1.5px solid #CFCCC3; border-radius: 14px;
+  background: #fff; color: var(--ink); font: inherit; font-size: 16px;
+}
+.dlg input:focus, .dlg select:focus { outline: 3px solid var(--lime); border-color: var(--ink); }
+.dlg-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.dlg .dlg-check { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+.dlg .dlg-check[hidden] { display: none; }
+.dlg-check input { width: 22px; height: 22px; accent-color: var(--ink); }
+.dlg-msg { margin: 0; min-height: 1.2em; font-size: 14px; font-weight: 700; color: #B3261E; }
+.dlg-row { display: flex; justify-content: flex-end; gap: 8px; }
+.dlg-row button {
+  min-height: 46px; padding: 0 20px; border-radius: 999px; cursor: pointer; font: inherit; font-size: 15px; font-weight: 800;
+}
+.dlg-ghost { border: 1.5px solid #CFCCC3; background: transparent; color: var(--ink); }
+.dlg-solid { border: 0; background: var(--ink); color: var(--lime); }
+.dlg-solid:disabled { opacity: .5; }
+@media (max-width: 480px) { .dlg-pair { grid-template-columns: 1fr; } }
+
+.toast {
+  position: fixed; left: 50%; bottom: 96px; z-index: 50; transform: translate(-50%, 40px);
+  margin: 0; padding: 12px 18px; border-radius: 999px; max-width: calc(100% - 32px);
+  background: var(--ink); color: var(--lime); font-weight: 800; font-size: 15px;
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .35s var(--ease);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 .sub-count {
   min-width: 22px; padding: 0 7px; border-radius: 999px; text-align: center;
@@ -333,6 +411,21 @@ a { color: inherit; }
     opacity: 1; visibility: visible; transform: none; box-shadow: none; transition: none;
   }
   .menu-btn[aria-expanded="true"] + .dropdown { display: block; }
+}
+
+/* 좁은 휴대폰: 버튼은 아이콘만, 이름은 조금 작게 */
+@media (max-width: 520px) {
+  .nav { gap: 8px; }
+  .brand { gap: 8px; min-width: 0; }
+  .logo { width: 40px; height: 40px; }
+  .brand-name { font-size: 21px; }
+  .brand-owner { font-size: 12px; }
+  .brand-sub { font-size: 12px; }
+  .tb-text, .mt-text { display: none; }
+  .teacher-btn { min-height: 42px; width: 42px; padding: 0; justify-content: center; display: inline-flex; align-items: center; }
+  .menu-toggle { padding: 0 12px; }
+  .teacher-bar > span:first-child { display: none; }
+  .teacher-bar { justify-content: center; }
 }
 
 @media (prefers-reduced-motion: reduce) {
