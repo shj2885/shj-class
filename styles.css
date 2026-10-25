@@ -103,7 +103,7 @@ a { color: inherit; }
 .brand-text { display: grid; line-height: 1.15; }
 .brand-line { display: inline-flex; align-items: baseline; gap: 5px; white-space: nowrap; }
 .brand-owner { font-size: 14px; font-weight: 800; letter-spacing: -0.03em; color: var(--ink-soft); }
-.brand-name { font-size: 26px; font-weight: 900; letter-spacing: -0.05em; }
+.brand-name { font-size: 34px; font-weight: 900; letter-spacing: -0.055em; line-height: 1.05; }
 .foot .brand-owner { font-size: 15px; color: var(--lime); }
 .brand-sub { font-size: 14px; font-weight: 600; letter-spacing: -0.03em; color: var(--ink-soft); }
 .logo { display: block; flex: none; width: 48px; height: 48px; transition: transform .4s var(--ease); }
@@ -202,12 +202,6 @@ a { color: inherit; }
   background: var(--card); border: 1.5px solid var(--line);
 }
 .cat-head h2 { margin: 0; font-weight: 900; font-size: clamp(28px, 3.2vw, 40px); letter-spacing: -0.05em; line-height: 1.1; }
-.sub h3 {
-  display: inline-flex; align-items: center; gap: 8px;
-  margin: 0 0 12px; padding: 3px 6px 3px 14px; border-radius: 999px;
-  background: var(--ink); color: var(--lime);
-  font-size: 15px; font-weight: 800; letter-spacing: -0.02em;
-}
 
 .link-grid {
   list-style: none; margin: 0; padding: 0;
@@ -237,11 +231,6 @@ a { color: inherit; }
   color: var(--ink-soft); font-weight: 600;
 }
 
-/* 펼침 메뉴는 위아래로, 그 안의 사이트는 작은 카드로 가로로 흐른다.
-   카드 너비(--card)는 사이트 수(data-density)에 따라 좁아진다 */
-.subs { display: grid; gap: 22px; }
-.sub-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
-.sub-head h3 { margin-bottom: 0; }
 
 /* ---------- 선생님 모드 ---------- */
 .nav-actions { display: flex; align-items: center; gap: 8px; }
@@ -273,7 +262,6 @@ body.teacher { padding-bottom: 76px; } /* 아래 띠에 가리지 않게 */
 .hero-admin { margin: 18px 0 0; }
 .hero-admin .add-btn { min-height: 44px; padding: 0 18px; font-size: 15px; }
 .cat-head .add-btn { margin-left: auto; min-height: 40px; padding: 0 16px; font-size: 15px; }
-.sub-head .add-btn { min-height: 28px; padding: 0 10px; }
 .tools { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
 .today-list .tools { margin-top: 8px; padding: 0 6px; }
 
@@ -333,30 +321,27 @@ body.teacher { padding-bottom: 76px; } /* 아래 띠에 가리지 않게 */
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-.sub-count {
-  min-width: 22px; padding: 0 7px; border-radius: 999px; text-align: center;
-  background: var(--lime); color: var(--ink); font-size: 12px; line-height: 20px;
-}
-.sub .link-grid {
+/* 메뉴 안 사이트는 작은 카드로 가로로 흐른다. 카드 너비(--card)는 사이트 수(data-density)에 따라 좁아진다 */
+.cat .link-grid {
   --card: 230px;
   gap: 10px;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card)), 1fr));
 }
-.sub .link-item { min-height: 64px; padding: 10px 14px; gap: 10px; border-radius: 18px; }
-.sub .link-item .mark { width: 38px; height: 38px; font-size: 16px; }
-.sub .link-item .name { font-size: 17px; }
-.sub .link-item .meta { font-size: 12px; }
-.sub .link-item .go { width: 18px; height: 18px; }
+.cat .link-item { min-height: 64px; padding: 10px 14px; gap: 10px; border-radius: 18px; }
+.cat .link-item .mark { width: 38px; height: 38px; font-size: 16px; }
+.cat .link-item .name { font-size: 17px; }
+.cat .link-item .meta { font-size: 12px; }
+.cat .link-item .go { width: 18px; height: 18px; }
 
 /* 사이트가 7개 넘으면: 조금 더 작게 */
-.cat[data-density="compact"] .sub .link-grid { --card: 190px; gap: 8px; }
+.cat[data-density="compact"] .link-grid { --card: 190px; gap: 8px; }
 .cat[data-density="compact"] .link-item { min-height: 56px; padding: 8px 12px; border-radius: 16px; }
 .cat[data-density="compact"] .link-item .mark { width: 32px; height: 32px; font-size: 14px; }
 .cat[data-density="compact"] .link-item .name { font-size: 15px; }
 .cat[data-density="compact"] .link-item .meta { font-size: 11px; }
 
 /* 사이트가 15개 넘으면: 한 줄짜리 작은 버튼 */
-.cat[data-density="mini"] .sub .link-grid { --card: 160px; gap: 6px; }
+.cat[data-density="mini"] .link-grid { --card: 160px; gap: 6px; }
 .cat[data-density="mini"] .link-item { grid-template-columns: auto 1fr; min-height: 44px; padding: 6px 12px 6px 6px; gap: 8px; border-radius: 999px; }
 .cat[data-density="mini"] .link-item .mark { width: 30px; height: 30px; font-size: 13px; }
 .cat[data-density="mini"] .link-item .name { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -418,7 +403,7 @@ body.teacher { padding-bottom: 76px; } /* 아래 띠에 가리지 않게 */
   .nav { gap: 8px; }
   .brand { gap: 8px; min-width: 0; }
   .logo { width: 40px; height: 40px; }
-  .brand-name { font-size: 21px; }
+  .brand-name { font-size: 25px; }
   .brand-owner { font-size: 12px; }
   .brand-sub { font-size: 12px; }
   .tb-text, .mt-text { display: none; }

@@ -235,14 +235,10 @@ function render(links) {
     // 펼침 메뉴는 옆으로 나란히. 사이트가 많아질수록 카드가 자동으로 작아진다.
     const total = groups.reduce((n, g) => n + g.items.length, 0);
     const density = total <= 6 ? 'roomy' : total <= 14 ? 'compact' : 'mini';
-    const body = groups.length
-      ? [el('div', { class: 'subs' }, groups.map((g) => el('div', { class: 'sub', id: g.id }, [
-        el('div', { class: 'sub-head' }, [
-          el('h3', {}, [el('span', { text: g.title }), el('span', { class: 'sub-count', text: String(g.items.length) })]),
-          TEACHER && menu.subs.includes(g.title) ? addBtn(menu, g.title, '+ 추가') : null,
-        ]),
-        el('ul', { class: 'link-grid' }, g.items.map((l) => linkNode(l, 'link-item')).filter(Boolean)),
-      ])))]
+    // 펼침 메뉴 이름표 없이 한 묶음으로 보여 준다(순서는 펼침 메뉴 순서 → 그 안의 순서)
+    const items = groups.flatMap((g) => g.items);
+    const body = items.length
+      ? [el('ul', { class: 'link-grid' }, items.map((l) => linkNode(l, 'link-item')).filter(Boolean))]
       : [el('p', { class: 'cat-empty', text: '이 메뉴에는 아직 사이트가 없어요.' })];
     return el('section', { class: 'cat', id: menu.key, 'data-density': density, 'aria-labelledby': `${menu.key}-title` }, [
       el('div', { class: 'cat-head' }, [
