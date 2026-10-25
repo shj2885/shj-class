@@ -44,6 +44,11 @@ a { color: inherit; }
   display: inline-flex; align-items: center; gap: 10px;
   font-weight: 900; font-size: 20px; letter-spacing: -0.04em; text-decoration: none;
 }
+.brand { gap: 12px; }
+.brand .brand-mark { width: 38px; height: 38px; border-radius: 12px; }
+.brand-text { display: grid; line-height: 1.15; }
+.brand-name { font-size: 24px; font-weight: 900; letter-spacing: -0.05em; }
+.brand-sub { font-size: 14px; font-weight: 600; letter-spacing: -0.03em; color: var(--ink-soft); }
 .brand-mark {
   width: 26px; height: 26px; border-radius: 9px; background: var(--ink); position: relative; flex: none;
 }
@@ -198,6 +203,7 @@ a { color: inherit; }
 .foot .brand-mark { background: var(--lime); }
 .foot .brand-mark::after { background: #fff; border-color: var(--ink); }
 .foot-brand { margin: 0; font-size: 26px; }
+.foot-sub { margin: 6px 0 0; font-size: 16px; font-weight: 700; color: var(--lime); letter-spacing: -0.03em; }
 .foot-note { margin: 0; max-width: 28em; font-size: 16px; opacity: .75; }
 
 @media (max-width: 760px) {
