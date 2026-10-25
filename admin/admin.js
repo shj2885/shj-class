@@ -147,7 +147,7 @@ function menuSection(menu) {
 function subBlock(menu, sub, title, subItems) {
   const have = new Set(links.filter((l) => l.category === menu.key && (l.sub || '') === sub).map((l) => hostOf(l.url)));
   const recs = ((RECOMMEND[menu.key] || {})[sub] || []).filter(([, url]) => !have.has(hostOf(url)));
-  return el('div', { class: 'subgroup' }, [
+  return el('div', { class: 'subgroup', 'data-sub': sub }, [
     el('h3', {}, [el('span', { text: title }), el('span', { class: 'sub-count', text: String(subItems.length) })]),
     subItems.length
       ? el('ul', { class: 'items' }, subItems.map((l, i) => itemNode(l, subItems, i)))
@@ -310,14 +310,42 @@ $('add-form').addEventListener('submit', async (e) => {
 });
 $('form-cancel').addEventListener('click', stopEdit);
 
+// 이 컴퓨터에서 관리자로 들어온 적이 있다는 표시만 남긴다(비밀번호는 저장하지 않음).
+// 첫 화면은 이 표시가 있을 때만 '+ 사이트 추가' 버튼을 보여 준다.
+const ADMIN_FLAG = 'kd-admin';
+function setAdminFlag(on) { try { on ? localStorage.setItem(ADMIN_FLAG, '1') : localStorage.removeItem(ADMIN_FLAG); } catch {} }
+
 function showPanel(on) {
   $('login-form').hidden = on;
   $('panel').hidden = !on;
   $('logout').hidden = !on;
+  if (on) { setAdminFlag(true); jumpToTarget(); }
+}
+
+// 첫 화면의 '+ 사이트 추가'에서 왔으면(/admin?menu=block&sub=엔트리) 그 칸을 열고 주소 칸에 커서를 둔다
+let jumped = false;
+function jumpToTarget() {
+  if (jumped) return;
+  jumped = true;
+  const q = new URLSearchParams(location.search);
+  const menu = MENUS.find((m) => m.key === q.get('menu'));
+  if (!menu) return;
+  openMenus.add(menu.key);
+  const box = $(`menu-${menu.key}`);
+  if (!box) return;
+  box.open = true;
+  const sub = q.get('sub') || '';
+  const block = [...box.querySelectorAll('.subgroup')].find((s) => s.dataset.sub === sub) || box.querySelector('.subgroup');
+  const target = block || box;
+  target.scrollIntoView({ block: 'start' });
+  target.classList.add('flash');
+  setTimeout(() => target.classList.remove('flash'), 1600);
+  block?.querySelector('form.quick input[name="url"]')?.focus({ preventScroll: true });
 }
 
 function logout(msg) {
   setPw('');
+  setAdminFlag(false);
   showPanel(false);
   $('login-msg').textContent = msg || '';
   $('pw').value = '';

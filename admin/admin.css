@@ -74,7 +74,8 @@ details.group[open] > summary { border-bottom: 2px solid var(--ink); background:
 .sum-note { font-size: 13px; font-weight: 700; padding: 1px 8px; background: var(--ink); color: var(--paper); }
 .loose { font-size: 20px; margin: 0 0 6px; }
 
-.subgroup { padding: 14px 16px 16px; }
+.subgroup { padding: 14px 16px 16px; scroll-margin-top: 16px; transition: background-color .6s; }
+.subgroup.flash { background: color-mix(in srgb, var(--cat) 30%, var(--card)); }
 .subgroup + .subgroup { border-top: 1.5px dashed var(--line); }
 .subgroup h3 { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; font-size: 17px; font-weight: 800; }
 .sub-count { min-width: 24px; padding: 0 7px; text-align: center; font-size: 13px; background: var(--paper); border: 1.5px solid var(--line); }

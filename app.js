@@ -25,6 +25,16 @@ function safeUrl(raw) {
 }
 
 const initial = (name) => [...name.trim()][0]?.toUpperCase() || '·';
+
+// 이 컴퓨터에서 관리자로 들어간 적이 있으면 '+ 사이트 추가' 버튼을 보여 준다(학생 컴퓨터에는 안 보임).
+// 버튼은 관리자 화면의 그 칸으로 데려갈 뿐이고, 추가하려면 여전히 비밀번호가 필요하다.
+const IS_ADMIN = (() => { try { return localStorage.getItem('kd-admin') === '1'; } catch { return false; } })();
+const addLink = (menu, sub, label) => el('a', {
+  class: 'add-btn',
+  href: `/admin?menu=${encodeURIComponent(menu.key)}${sub ? `&sub=${encodeURIComponent(sub)}` : ''}`,
+  'aria-label': sub ? `${menu.ko} > ${sub}에 사이트 추가` : `${menu.ko}에 사이트 추가`,
+  text: label,
+});
 const menuOf = (key) => MENUS.find((m) => m.key === key);
 // 펼침 메뉴 이름이 목록에 없으면(예전 데이터) '그 밖의 사이트'로 모은다
 const subIndex = (menu, sub) => (menu && sub ? menu.subs.indexOf(sub) : -1);
@@ -185,7 +195,10 @@ function render(links) {
     const density = total <= 6 ? 'roomy' : total <= 14 ? 'compact' : 'mini';
     const body = groups.length
       ? [el('div', { class: 'subs' }, groups.map((g) => el('div', { class: 'sub', id: g.id }, [
-        el('h3', {}, [el('span', { text: g.title }), el('span', { class: 'sub-count', text: String(g.items.length) })]),
+        el('div', { class: 'sub-head' }, [
+          el('h3', {}, [el('span', { text: g.title }), el('span', { class: 'sub-count', text: String(g.items.length) })]),
+          IS_ADMIN && menu.subs.includes(g.title) ? addLink(menu, g.title, '+ 추가') : null,
+        ]),
         el('ul', { class: 'link-grid' }, g.items.map((l) => linkNode(l, 'link-item')).filter(Boolean)),
       ])))]
       : [el('p', { class: 'cat-empty', text: '이 메뉴에는 아직 사이트가 없어요.' })];
@@ -193,6 +206,7 @@ function render(links) {
       el('div', { class: 'cat-head' }, [
         el('span', { class: 'cat-emoji', 'aria-hidden': 'true', text: menu.emoji }),
         el('h2', { id: `${menu.key}-title`, text: menu.ko }),
+        IS_ADMIN ? addLink(menu, '', '+ 사이트 추가') : null,
       ]),
       ...body,
     ]);
@@ -212,6 +226,11 @@ async function load() {
   }
 }
 
+if (IS_ADMIN) {
+  document.querySelector('.lede').after(el('p', { class: 'hero-admin' }, [
+    el('a', { class: 'add-btn', href: '/admin', text: '+ 사이트 추가 · 오늘 수업 바꾸기' }),
+  ]));
+}
 setupMenubar();
 renderMenubar([]);
 load();
