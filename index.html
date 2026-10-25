@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>수업 링크</title>
   <meta name="description" content="수업에 필요한 사이트를 한곳에 모았어요. 누르면 바로 열려요.">
-  <meta name="theme-color" content="#EEEBE4">
+  <meta name="theme-color" content="#F6F5F0">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <link rel="stylesheet" href="/styles.css">
 </head>
@@ -17,27 +15,14 @@
   <a class="skip" href="#today">오늘 쓸 사이트로 바로 가기</a>
 
   <header class="nav">
-    <a class="brand" href="/">수업 링크</a>
-    <nav class="nav-links" aria-label="묶음으로 이동">
-      <a href="#ai" data-cat="ai">AI 도구</a>
-      <a href="#design" data-cat="design">디자인·이미지</a>
-      <a href="#class" data-cat="class">수업 자료·과제</a>
-      <a href="#collab" data-cat="collab">협업·저장</a>
-    </nav>
+    <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>수업 링크</a>
   </header>
 
   <main>
     <section class="hero" id="today" aria-labelledby="today-title">
-      <div class="blobs" aria-hidden="true">
-        <span class="blob blob-a"></span>
-        <span class="blob blob-b"></span>
-        <span class="blob blob-c"></span>
-      </div>
-      <p class="mega" aria-hidden="true"><span>TO</span><span>DAY</span></p>
-      <div class="hero-copy">
-        <h1 id="today-title">오늘 쓸 사이트</h1>
-        <p class="lede">오늘 수업에 쓸 사이트, 여기서 바로 들어가세요.<br>누르면 새 탭에서 열려요.</p>
-      </div>
+      <h1 id="today-title"><span class="hl">오늘 쓸 사이트</span></h1>
+      <p class="lede">오늘 수업에 쓸 사이트, 여기서 바로 들어가세요. 누르면 새 탭에서 열려요.</p>
+      <nav class="chips" id="chips" aria-label="묶음으로 이동"></nav>
       <ul class="today-list" id="today-list" aria-live="polite"></ul>
       <p class="today-empty" id="today-empty" hidden></p>
     </section>
@@ -47,11 +32,8 @@
   </main>
 
   <footer class="foot">
-    <div class="foot-row">
-      <p class="foot-brand">수업 링크</p>
-      <p class="foot-note">사이트는 모두 새 탭에서 열려요.<br>이 화면은 그대로 남아 있으니 언제든 돌아오세요.</p>
-    </div>
-    <p class="foot-year" aria-hidden="true" id="foot-year"></p>
+    <p class="foot-brand"><span class="brand-mark" aria-hidden="true"></span>수업 링크</p>
+    <p class="foot-note">사이트는 모두 새 탭에서 열려요.<br>이 화면은 그대로 남아 있으니 언제든 돌아오세요.</p>
   </footer>
 
   <script src="/app.js" defer></script>

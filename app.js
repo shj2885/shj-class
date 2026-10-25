@@ -1,9 +1,9 @@
 // 첫 화면: /api/links 에서 링크를 받아 '오늘 쓸 사이트'와 네 묶음으로 그린다.
 const CATS = [
-  { key: 'ai', word: 'AI', ko: 'AI 도구' },
-  { key: 'design', word: 'DESIGN', ko: '디자인·이미지 도구' },
-  { key: 'class', word: 'CLASS', ko: '수업 자료·과제' },
-  { key: 'collab', word: 'SHARE', ko: '협업·저장 도구' },
+  { key: 'ai', emoji: '🤖', ko: 'AI 도구' },
+  { key: 'design', emoji: '🎨', ko: '디자인·이미지 도구' },
+  { key: 'class', emoji: '📚', ko: '수업 자료·과제' },
+  { key: 'collab', emoji: '🤝', ko: '협업·저장 도구' },
 ];
 
 const ARROW = '<svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
@@ -26,17 +26,40 @@ function safeUrl(raw) {
   } catch { return null; }
 }
 
+const OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+
+const initial = (name) => [...name.trim()][0]?.toUpperCase() || '·';
+
 function linkNode(item, cls) {
   const u = safeUrl(item.url);
   if (!u) return null;
   const host = u.hostname.replace(/^www\./, '');
-  const a = el('a', {
+  const cat = CATS.find((c) => c.key === item.category);
+  const attrs = {
     class: cls, href: u.href, target: '_blank', rel: 'noopener noreferrer',
     'data-cat': item.category,
-    title: CATS.find((c) => c.key === item.category)?.ko || '',
     'aria-label': `${item.name} (${host}) 새 탭에서 열기`,
-  }, [
-    el('span', { class: 'mark', 'aria-hidden': 'true', text: [...item.name.trim()][0]?.toUpperCase() || '·' }),
+  };
+
+  if (cls === 'today-card') {
+    const a = el('a', attrs, [
+      el('span', { class: 'panel' }, [
+        el('span', {}, [
+          el('span', { class: 'tag', text: cat?.ko || '' }),
+          el('span', { class: 'name' }, [el('span', { text: item.name })]),
+          el('span', { class: 'meta', text: host }),
+        ]),
+        el('span', { class: 'badge', 'aria-hidden': 'true', text: initial(item.name) }, [
+          el('span', { class: 'emoji', text: cat?.emoji || '' }),
+        ]),
+      ]),
+      el('span', { class: 'open', 'aria-hidden': 'true', html: `<span>눌러서 들어가기</span>${OPEN}` }),
+    ]);
+    return el('li', {}, [a]);
+  }
+
+  const a = el('a', attrs, [
+    el('span', { class: 'mark', 'aria-hidden': 'true', text: initial(item.name) }),
     el('span', {}, [
       el('span', { class: 'name', text: item.name }),
       el('span', { class: 'meta', text: host }),
@@ -46,7 +69,19 @@ function linkNode(item, cls) {
   return el('li', {}, [a]);
 }
 
+function renderChips(links) {
+  document.getElementById('chips').replaceChildren(...CATS.map((cat) => {
+    const n = links.filter((l) => l.category === cat.key).length;
+    return el('a', { class: 'chip', href: `#${cat.key}` }, [
+      el('span', { 'aria-hidden': 'true', text: cat.emoji }),
+      el('strong', { text: cat.ko }),
+      el('span', { class: 'count', text: `${n}개` }),
+    ]);
+  }));
+}
+
 function render(links) {
+  renderChips(links);
   const today = links.filter((l) => l.today);
   const todayList = document.getElementById('today-list');
   const todayEmpty = document.getElementById('today-empty');
@@ -68,7 +103,7 @@ function render(links) {
       : el('p', { class: 'cat-empty', text: '이 묶음에는 아직 사이트가 없어요.' });
     return el('section', { class: 'cat', id: cat.key, 'data-cat': cat.key, 'aria-labelledby': `${cat.key}-title` }, [
       el('div', { class: 'cat-head' }, [
-        el('p', { class: 'cat-word', 'aria-hidden': 'true', text: cat.word }),
+        el('span', { class: 'cat-emoji', 'aria-hidden': 'true', text: cat.emoji }),
         el('h2', { id: `${cat.key}-title`, text: cat.ko }),
       ]),
       list,
@@ -89,5 +124,4 @@ async function load() {
   }
 }
 
-document.getElementById('foot-year').textContent = String(new Date().getFullYear());
 load();
