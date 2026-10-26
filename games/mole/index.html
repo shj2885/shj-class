@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>도깨비 두더지 잡기 · 코딩도깨비</title>
+  <meta name="description" content="두더지를 콕, 콕콕, 끌어서 바구니에! 클릭·더블클릭·드래그를 연습하는 마우스 게임">
+  <meta name="theme-color" content="#E9F7D9">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="/games/mole/mole.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/games/mole/">
+      <img src="/logo.png" alt="" width="44" height="44">
+      <span>도깨비 두더지 잡기</span>
+    </a>
+    <a class="back" href="/">← 코딩도깨비로</a>
+  </header>
+
+  <!-- 준비: 단계와 시간 고르기 -->
+  <main class="setup" id="setup">
+    <section class="step">
+      <h2><i>1</i> 어떻게 잡을까요?</h2>
+      <div class="modes" id="modes"></div>
+    </section>
+
+    <section class="step">
+      <h2><i>2</i> 얼마나 할까요?</h2>
+      <div class="times" id="times"></div>
+    </section>
+
+    <button class="big go" id="start">🐹 시작!</button>
+  </main>
+
+  <!-- 두더지 잡기 -->
+  <main class="game" id="game" hidden>
+    <div class="bar">
+      <button class="pill" id="stop">🏠 그만하기</button>
+      <span class="chip time">⏱️ <b id="time">0:30</b></span>
+      <span class="chip score">⭐ <b id="score">0</b></span>
+      <span class="chip level">🚀 <b id="level">1</b>단계</span>
+      <button class="pill" id="sound" aria-pressed="true">🔊 소리</button>
+    </div>
+    <div class="field" id="field">
+      <div class="yard" id="yard"></div>
+      <div class="basket" id="basket" hidden>
+        <b class="basketFace">🧺</b>
+        <span>여기에 담아요</span>
+        <strong id="basketCount">0</strong>
+      </div>
+    </div>
+    <p class="tip" id="tip"></p>
+  </main>
+
+  <!-- 3, 2, 1 -->
+  <div class="count" id="count" hidden><b id="countNum">3</b></div>
+
+  <!-- 끝났을 때 -->
+  <div class="pop" id="pop" hidden>
+    <div class="popBox" role="dialog" aria-modal="true" aria-labelledby="popTitle">
+      <b class="popFace" id="popStars">⭐⭐⭐</b>
+      <h3 id="popTitle">잘했어요!</h3>
+      <div class="stats" id="stats"></div>
+      <p id="popMsg"></p>
+      <div class="acts">
+        <button class="big go" id="again">🔁 한 번 더</button>
+        <button class="big soft" id="other">🏠 다른 놀이</button>
+      </div>
+    </div>
+  </div>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <script src="/games/mole/mole.js"></script>
+</body>
+</html>
