@@ -1,4 +1,4 @@
-// 관리자용: 비밀번호(ADMIN_PASSWORD) 확인 뒤 링크를 보고·더하고·고치고·뺀다. 서버 키는 이 함수 안에서만 쓴다.
+// 관리자용: 비밀번호(ADMIN_PASSWORD) 확인 뒤 링크를 보고·더하고·고치고·뺀다. 메뉴 순서도 여기서 저장한다. 서버 키는 이 함수 안에서만 쓴다.
 const crypto = require('node:crypto');
 const SB_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
@@ -79,7 +79,25 @@ module.exports = async (req, res) => {
   if (req.method === 'GET') {
     const r = await fetch(`${base}?select=*&order=sort.asc,id.asc&limit=500`, { headers: sbHeaders() });
     if (!r.ok) return res.status(500).json({ error: '목록을 불러오지 못했어요.' });
-    return res.status(200).json({ links: await r.json() });
+    const s = await fetch(`${SB_URL}/rest/v1/settings?select=value&key=eq.menu_order`, { headers: sbHeaders() }).catch(() => null);
+    const rows = s && s.ok ? await s.json() : [];
+    return res.status(200).json({ links: await r.json(), menuOrder: Array.isArray(rows[0]?.value) ? rows[0].value : null });
+  }
+
+  // 메뉴 순서 저장: { menuOrder: ['genai', 'block', ...] } — menus.js에 있는 key를 빠짐없이 한 번씩
+  if (req.method === 'PUT') {
+    const order = body(req).menuOrder;
+    const keys = MENUS.map((m) => m.key);
+    if (!Array.isArray(order) || order.length !== keys.length || new Set(order).size !== keys.length || !order.every((k) => keys.includes(k))) {
+      return res.status(400).json({ error: '메뉴 순서가 올바르지 않아요.' });
+    }
+    const r = await fetch(`${SB_URL}/rest/v1/settings?on_conflict=key`, {
+      method: 'POST',
+      headers: { ...sbHeaders(), Prefer: 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify({ key: 'menu_order', value: order, updated_at: new Date().toISOString() }),
+    });
+    if (!r.ok) return res.status(500).json({ error: '메뉴 순서를 저장하지 못했어요.' });
+    return res.status(200).json({ ok: true });
   }
 
   if (req.method === 'POST') {

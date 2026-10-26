@@ -218,6 +218,7 @@ function itemNode(l, items, i) {
 async function refresh() {
   const data = await api('GET');
   links = data.links || [];
+  window.sortMenus(MENUS, data.menuOrder); // 첫 화면에서 끌어서 바꾼 메뉴 순서를 여기도 따른다
   render();
 }
 

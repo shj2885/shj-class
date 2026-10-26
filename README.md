@@ -17,7 +17,7 @@
 | `api/links.js` | 첫 화면용 링크 목록(읽기만) |
 | `api/admin.js` | 관리자용. `ADMIN_PASSWORD`를 확인한 뒤 링크를 바꾼다 |
 
-링크는 Supabase `links` 표에 저장돼요. 키와 비밀번호는 Vercel 환경변수에만 있고, 이 저장소에는 없어요.
+링크는 Supabase `links` 표에, 선생님 모드에서 끌어서 바꾼 위쪽 메뉴 순서는 `settings` 표(`key = 'menu_order'`)에 저장돼요. 키와 비밀번호는 Vercel 환경변수에만 있고, 이 저장소에는 없어요.
 
 ## 배포
 

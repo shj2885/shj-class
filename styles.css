@@ -245,6 +245,14 @@ a { color: inherit; }
 body.teacher .teacher-btn { background: var(--lime); border-color: var(--lime); color: var(--ink); }
 
 .teacher-only { display: none; }
+/* 선생님 모드에서는 위쪽 메뉴를 끌어서 순서를 바꾼다 */
+body.teacher .menu[data-key] > .menu-btn { cursor: grab; touch-action: none; }
+.menu-btn .grip { margin-right: -1px; color: var(--ink-soft); font-size: .95em; line-height: 1; }
+.menu-list.sorting { -webkit-user-select: none; user-select: none; }
+.menu-list.sorting .menu-btn { cursor: grabbing; }
+.menu.dragging > .menu-btn {
+  background: var(--lime); box-shadow: 0 10px 22px -10px rgba(20, 20, 20, .45); transform: translateY(-2px);
+}
 body.teacher .teacher-only { display: block; }
 body.teacher { padding-bottom: 76px; } /* 아래 띠에 가리지 않게 */
 

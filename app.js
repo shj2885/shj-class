@@ -1,5 +1,5 @@
 // 첫 화면: /api/links 에서 링크를 받아 '오늘 수업'과 메뉴별 목록, 위쪽 펼침 메뉴를 그린다.
-// 메뉴 목록은 menus.js(window.MENUS)에 있다.
+// 메뉴 목록은 menus.js(window.MENUS)에 있고, 순서는 서버에 저장된 순서(선생님이 끌어서 바꾼 순서)를 따른다.
 const MENUS = window.MENUS.filter((m) => !m.hidden);
 
 const ARROW = '<svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
@@ -152,6 +152,7 @@ function renderMenubar(links) {
     const groups = groupsOf(menu, links);
     const dropId = `drop-${menu.key}`;
     const btn = el('button', { type: 'button', class: 'menu-btn', 'aria-expanded': 'false', 'aria-controls': dropId }, [
+      TEACHER ? el('span', { class: 'grip', 'aria-hidden': 'true', title: '끌어서 순서 바꾸기', text: '⠿' }) : null,
       el('span', { class: 'menu-emoji', 'aria-hidden': 'true', text: menu.emoji }),
       document.createTextNode(menu.ko),
     ]);
@@ -170,7 +171,7 @@ function renderMenubar(links) {
         })
         : [el('li', { class: 'drop-empty', text: '아직 사이트가 없어요' })]),
     ]);
-    return el('li', { class: 'menu' }, [btn, drop]);
+    return el('li', { class: 'menu', 'data-key': menu.key }, [btn, drop]);
   }));
 }
 
@@ -210,6 +211,70 @@ function setupMenubar() {
     closeMenus();
     if (openBtn) openBtn.focus();
   });
+}
+
+/* ---------- 선생님 모드: 위쪽 메뉴를 끌어서 순서 바꾸기 ----------
+   메뉴 버튼을 누른 채 옆(휴대폰에서는 위아래)으로 끌면 자리가 바뀌고, 놓으면 서버에 저장된다.
+   조금(6px)이라도 움직여야 끌기가 시작되므로 그냥 누르면 예전처럼 펼침 메뉴가 열린다. */
+function setupMenuDrag() {
+  const list = document.getElementById('menu-list');
+  let drag = null;
+  let justDragged = false;
+
+  list.addEventListener('pointerdown', (e) => {
+    if (!TEACHER || e.button !== 0) return;
+    const li = e.target.closest('.menu-btn')?.closest('li.menu[data-key]');
+    if (!li) return;
+    e.preventDefault(); // 끄는 동안 주변 글자가 선택되지 않게 (눌러서 펼치는 click은 그대로 온다)
+    drag = { li, id: e.pointerId, x: e.clientX, y: e.clientY, on: false };
+  });
+  window.addEventListener('pointermove', (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    if (!drag.on) {
+      if (Math.hypot(e.clientX - drag.x, e.clientY - drag.y) < 6) return;
+      drag.on = true;
+      closeMenus();
+      drag.li.classList.add('dragging');
+      list.classList.add('sorting');
+    }
+    e.preventDefault();
+    const over = document.elementFromPoint(e.clientX, e.clientY)?.closest('#menu-list li.menu[data-key]');
+    if (!over || over === drag.li) return;
+    const r = over.getBoundingClientRect();
+    const column = getComputedStyle(list).flexDirection === 'column';
+    const before = column ? e.clientY < r.top + r.height / 2 : e.clientX < r.left + r.width / 2;
+    list.insertBefore(drag.li, before ? over : over.nextSibling);
+  });
+  const end = (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const was = drag.on;
+    drag.li.classList.remove('dragging');
+    list.classList.remove('sorting');
+    drag = null;
+    if (!was) return;
+    justDragged = true; // 끌기를 마친 뒤 따라오는 click으로 펼침 메뉴가 열리지 않게
+    setTimeout(() => { justDragged = false; }, 0);
+    saveMenuOrder([...list.querySelectorAll('li.menu[data-key]')].map((li) => li.dataset.key));
+  };
+  window.addEventListener('pointerup', end);
+  window.addEventListener('pointercancel', end);
+  list.addEventListener('click', (e) => { if (justDragged) { e.preventDefault(); e.stopPropagation(); } }, true);
+}
+
+async function saveMenuOrder(order) {
+  if (order.join() === MENUS.map((m) => m.key).join()) return;
+  // 선생님용처럼 화면에 없는 메뉴는 뒤에 붙여서 함께 저장한다
+  const full = [...order, ...ALL_MENUS.filter((m) => !order.includes(m.key)).map((m) => m.key)];
+  try {
+    await adminApi('PUT', { body: { menuOrder: full } });
+    window.sortMenus(ALL_MENUS, full);
+    window.sortMenus(MENUS, full);
+    render(current);
+    toast('메뉴 순서를 바꿨어요');
+  } catch (e) {
+    render(current); // 저장하지 못했으면 원래 순서로 되돌린다
+    if (e.message !== '401') toast(e.message);
+  }
 }
 
 /* ---------- 본문 ---------- */
@@ -254,16 +319,18 @@ function render(links) {
 async function load() {
   document.getElementById('load-error').hidden = true;
   try {
-    let links;
+    let data;
     if (TEACHER) {
       // 선생님 모드는 관리자 목록을 그대로 쓴다(선생님용은 MENUS에서 빠져 있어 화면에는 안 나온다)
-      ({ links } = await adminApi('GET'));
+      data = await adminApi('GET');
     } else {
       const r = await fetch('/api/links', { cache: 'no-store' });
       if (!r.ok) throw new Error(String(r.status));
-      ({ links } = await r.json());
+      data = await r.json();
     }
-    render(Array.isArray(links) ? links : []);
+    window.sortMenus(ALL_MENUS, data.menuOrder);
+    window.sortMenus(MENUS, data.menuOrder);
+    render(Array.isArray(data.links) ? data.links : []);
   } catch (e) {
     if (e.message === '401') return;
     render([]);
@@ -411,6 +478,7 @@ async function removeItem(item) {
 }
 
 setupMenubar();
+setupMenuDrag();
 setupTeacher();
 renderMenubar([]);
 if (!getPw()) load();
