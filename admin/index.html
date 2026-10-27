@@ -29,10 +29,10 @@
         <h2>🔑 입장 비밀번호</h2>
         <p class="hint" id="gate-now"></p>
         <div class="row">
-          <input name="pw" id="gate-pw" maxlength="40" placeholder="예: 1234" aria-label="새 입장 비밀번호">
+          <input name="pw" id="gate-pw" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required placeholder="숫자 4자리" aria-label="새 입장 비밀번호 (숫자 4자리)">
           <button type="submit" class="solid">바꾸기</button>
         </div>
-        <p class="hint">사이트에 처음 들어올 때 넣는 비밀번호예요. 비워 두고 바꾸면 누구나 들어와요.</p>
+        <p class="hint">사이트에 들어올 때 넣는 숫자 4자리예요. 바꾸면 모두가 새 비밀번호를 한 번 넣어야 들어올 수 있어요.</p>
         <p class="msg" id="gate-msg" role="alert"></p>
       </form>
 

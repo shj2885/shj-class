@@ -314,18 +314,19 @@ $('form-cancel').addEventListener('click', stopEdit);
 
 /* ---------- 입장 비밀번호 ---------- */
 function showGate(pw) {
-  $('gate-now').textContent = pw ? `지금 비밀번호: 「${pw}」` : '지금은 비밀번호 없이 누구나 들어올 수 있어요.';
+  $('gate-now').textContent = pw ? `지금 비밀번호: 「${pw}」` : '아직 비밀번호가 없어서 아무도 들어올 수 없어요. 숫자 4자리로 정해 주세요.';
   if (document.activeElement !== $('gate-pw')) $('gate-pw').value = pw;
 }
 $('gate-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const pw = $('gate-pw').value.trim();
   $('gate-msg').textContent = '';
+  if (!/^\d{4}$/.test(pw)) { $('gate-msg').textContent = '숫자 4자리로 넣어 주세요.'; return; }
   try {
     await api('PUT', { body: { sitePassword: pw } });
     $('gate-pw').blur();
     showGate(pw);
-    toast(pw ? `입장 비밀번호를 「${pw}」(으)로 바꿨어요` : '이제 비밀번호 없이 누구나 들어와요');
+    toast(`입장 비밀번호를 「${pw}」(으)로 바꿨어요`);
   } catch (err) {
     if (err.message !== '401') $('gate-msg').textContent = err.message;
   }

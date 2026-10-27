@@ -1,5 +1,5 @@
 // 입장 비밀번호 문지기: 쿠키(ek)가 없거나 비밀번호가 바뀌었으면 /enter(비밀번호 넣는 화면)로 보낸다.
-// 비밀번호는 settings 표의 site_password에 있고, 비어 있으면 아무도 막지 않는다.
+// 비밀번호(숫자 4자리)는 settings 표의 site_password에 있다. 비밀번호를 넣지 않으면 누구도 내용을 볼 수 없다.
 // 관리자 화면(/admin)은 막지 않는다. 입장 비밀번호를 잊어도 관리자 비밀번호로 들어가 바꿀 수 있게.
 export const config = {
   matcher: ['/((?!enter|api/enter|admin|api/admin|favicon\\.png|apple-touch-icon\\.png|logo\\.png|menus\\.js).*)'],
@@ -28,11 +28,10 @@ async function token(pw) {
 }
 
 export default async function middleware(req) {
-  let pw;
-  try { pw = await sitePassword(); } catch { return; } // 비밀번호를 읽지 못하면 막지 않는다
-  if (!pw) return;
+  let pw = '';
+  try { pw = await sitePassword(); } catch {} // 비밀번호를 읽지 못해도 열어 주지 않는다
   const got = (req.headers.get('cookie') || '').match(/(?:^|;\s*)ek=([0-9a-f]{64})/)?.[1];
-  if (got && got === await token(pw)) return;
+  if (pw && got && got === await token(pw)) return;
 
   const url = new URL(req.url);
   if (url.pathname.startsWith('/api/')) {

@@ -397,7 +397,7 @@ function setupTeacher() {
   document.getElementById('bar-gate').addEventListener('click', () => {
     document.getElementById('gate-now').textContent = sitePassword
       ? `지금 비밀번호는 「${sitePassword}」예요.`
-      : '지금은 비밀번호 없이 누구나 들어올 수 있어요.';
+      : '아직 비밀번호가 없어서 아무도 들어올 수 없어요. 숫자 4자리로 정해 주세요.';
     document.getElementById('gate-pw').value = sitePassword;
     document.getElementById('gate-msg').textContent = '';
     gateDlg.showModal();
@@ -406,13 +406,14 @@ function setupTeacher() {
   document.getElementById('gate-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const pw = document.getElementById('gate-pw').value.trim();
+    if (!/^\d{4}$/.test(pw)) { document.getElementById('gate-msg').textContent = '숫자 4자리로 넣어 주세요.'; return; }
     const btn = document.getElementById('gate-submit');
     btn.disabled = true;
     try {
       await adminApi('PUT', { body: { sitePassword: pw } });
       sitePassword = pw;
       gateDlg.close();
-      toast(pw ? `입장 비밀번호를 「${pw}」(으)로 바꿨어요` : '이제 비밀번호 없이 누구나 들어와요');
+      toast(`입장 비밀번호를 「${pw}」(으)로 바꿨어요`);
     } catch (err) {
       if (err.message !== '401') document.getElementById('gate-msg').textContent = err.message;
       else gateDlg.close();

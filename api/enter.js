@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
   const typed = String(b.password ?? '').trim();
   let pw;
   try { pw = await readSitePassword(); } catch { return res.status(500).json({ error: '확인하지 못했어요. 잠시 뒤 다시 해 보세요.' }); }
-  if (pw && !same(typed, pw)) {
+  if (!pw || !same(typed, pw)) {
     await new Promise((r) => setTimeout(r, 600)); // 마구 넣어 보기 어렵게 조금 늦춘다
     return res.status(401).json({ error: '비밀번호가 맞지 않아요.' });
   }

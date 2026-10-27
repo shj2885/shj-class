@@ -12,7 +12,7 @@ const same = (a, b) => {
   return crypto.timingSafeEqual(h(a), h(b));
 };
 const MENUS = require('../menus.js');
-const { cookie: gateCookie } = require('./_gate.js');
+const { valid: validGate } = require('./_gate.js');
 const validId = (id) => Number.isInteger(id) && id > 0;
 
 function cleanUrl(raw) {
@@ -93,17 +93,16 @@ module.exports = async (req, res) => {
   if (req.method === 'PUT') {
     const b = body(req);
 
-    // 입장 비밀번호 바꾸기: { sitePassword: '1234' } — 비우면 누구나 들어온다
+    // 입장 비밀번호 바꾸기: { sitePassword: '1234' } — 숫자 4자리만
     if ('sitePassword' in b) {
       const pw = String(b.sitePassword ?? '').trim();
-      if (pw.length > 40) return res.status(400).json({ error: '비밀번호는 40자까지 쓸 수 있어요.' });
+      if (!validGate(pw)) return res.status(400).json({ error: '입장 비밀번호는 숫자 4자리로 넣어 주세요.' });
       const r = await fetch(`${SB_URL}/rest/v1/settings?on_conflict=key`, {
         method: 'POST',
         headers: { ...sbHeaders(), Prefer: 'resolution=merge-duplicates,return=minimal' },
         body: JSON.stringify({ key: 'site_password', value: pw, updated_at: new Date().toISOString() }),
       });
       if (!r.ok) return res.status(500).json({ error: '입장 비밀번호를 저장하지 못했어요.' });
-      res.setHeader('Set-Cookie', gateCookie(pw)); // 바꾼 선생님은 새 비밀번호를 다시 넣지 않아도 된다
       return res.status(200).json({ ok: true, sitePassword: pw });
     }
 

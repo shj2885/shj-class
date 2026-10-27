@@ -35,9 +35,9 @@
     form { display: grid; gap: 12px; }
     label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
     input {
-      width: 100%; min-height: 64px; padding: 0 18px; border: 2px solid var(--ink); border-radius: 20px;
+      width: 100%; min-height: 72px; padding: 0 18px; border: 2px solid var(--ink); border-radius: 20px;
       background: #fff; color: var(--ink); text-align: center;
-      font: inherit; font-size: 26px; font-weight: 800; letter-spacing: .08em;
+      font: inherit; font-size: 34px; font-weight: 800; letter-spacing: .4em; text-indent: .4em;
     }
     input::placeholder { color: #B4B1A8; letter-spacing: 0; font-size: 19px; font-weight: 700; }
     input:focus { outline: 4px solid var(--lime); outline-offset: 0; }
@@ -58,10 +58,10 @@
     <img class="logo" src="/logo.png" alt="" width="96" height="96">
     <p class="owner">혜정쌤의</p>
     <h1><span>에듀깨비</span></h1>
-    <p class="lede">수업 비밀번호를 넣고 들어오세요.</p>
+    <p class="lede">숫자 4자리 수업 비밀번호를 넣고 들어오세요.</p>
     <form id="form" autocomplete="off">
       <label for="pw">수업 비밀번호</label>
-      <input id="pw" type="password" inputmode="text" placeholder="비밀번호" required autofocus>
+      <input id="pw" type="password" inputmode="numeric" placeholder="숫자 4자리" required autofocus>
       <button type="submit" id="go">들어가기</button>
       <p class="msg" id="msg" role="alert"></p>
     </form>
@@ -74,8 +74,14 @@
       // 들어오려던 주소로 돌려보낸다. 이 사이트 안의 주소만.
       const next = new URLSearchParams(location.search).get('next') || '/';
       const target = /^\/(?!\/)/.test(next) ? next : '/';
+      // 숫자만 들어가게 하고, 4자리를 다 넣으면 바로 확인한다
+      pw.addEventListener('input', () => {
+        pw.value = pw.value.replace(/\D/g, '').slice(0, 4);
+        if (pw.value.length === 4 && !go.disabled) form.requestSubmit();
+      });
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (!/^\d{4}$/.test(pw.value)) { msg.textContent = '숫자 4자리를 넣어 주세요.'; pw.focus(); return; }
         go.disabled = true; msg.textContent = '';
         try {
           const r = await fetch('/api/enter', {
@@ -87,7 +93,7 @@
           msg.textContent = data.error || '확인하지 못했어요. 잠시 뒤 다시 해 보세요.';
           if (r.status === 401) {
             form.classList.remove('shake'); void form.offsetWidth; form.classList.add('shake');
-            pw.select();
+            pw.value = ''; pw.focus();
           }
         } catch {
           msg.textContent = '확인하지 못했어요. 인터넷 연결을 확인해 주세요.';
