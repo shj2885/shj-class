@@ -89,11 +89,27 @@
     </form>
   </dialog>
 
+  <!-- 선생님 모드: 입장 비밀번호 바꾸기 -->
+  <dialog class="dlg" id="gate-dlg" aria-labelledby="gate-title">
+    <form method="dialog" id="gate-form" autocomplete="off">
+      <h2 id="gate-title">🔑 입장 비밀번호</h2>
+      <p class="dlg-note" id="gate-now"></p>
+      <label>새 비밀번호<input name="pw" id="gate-pw" maxlength="40" placeholder="예: 1234" autocomplete="off"></label>
+      <p class="dlg-note">바꾸면 다른 사람들은 새 비밀번호를 한 번 넣어야 들어올 수 있어요. 비워 두고 저장하면 비밀번호 없이 누구나 들어와요.</p>
+      <p class="dlg-msg" id="gate-msg" role="alert"></p>
+      <div class="dlg-row">
+        <button type="button" class="dlg-ghost" data-close>닫기</button>
+        <button type="submit" class="dlg-solid" id="gate-submit">저장하기</button>
+      </div>
+    </form>
+  </dialog>
+
   <!-- 선생님 모드가 켜져 있을 때 아래에 붙는 띠 -->
   <div class="teacher-bar" id="teacher-bar" hidden>
     <span>✏️ 선생님 모드 · 바로 추가하고 고칠 수 있어요 · 위 메뉴는 끌어서 순서를 바꿔요</span>
     <span class="teacher-bar-actions">
       <button type="button" id="bar-add">+ 사이트 추가</button>
+      <button type="button" id="bar-gate">🔑 입장 비밀번호</button>
       <a href="/admin">관리자 화면</a>
       <button type="button" id="bar-off">끄기</button>
     </span>

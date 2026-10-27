@@ -25,6 +25,17 @@
     </form>
 
     <div id="panel" hidden>
+      <form class="add gate" id="gate-form" autocomplete="off">
+        <h2>🔑 입장 비밀번호</h2>
+        <p class="hint" id="gate-now"></p>
+        <div class="row">
+          <input name="pw" id="gate-pw" maxlength="40" placeholder="예: 1234" aria-label="새 입장 비밀번호">
+          <button type="submit" class="solid">바꾸기</button>
+        </div>
+        <p class="hint">사이트에 처음 들어올 때 넣는 비밀번호예요. 비워 두고 바꾸면 누구나 들어와요.</p>
+        <p class="msg" id="gate-msg" role="alert"></p>
+      </form>
+
       <section class="summary">
         <p class="count"><strong id="today-count">0</strong>개</p>
         <p>오늘 쓸 사이트로 첫 화면 맨 위에 보여요.</p>

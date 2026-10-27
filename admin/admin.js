@@ -219,6 +219,7 @@ async function refresh() {
   const data = await api('GET');
   links = data.links || [];
   window.sortMenus(MENUS, data.menuOrder); // 첫 화면에서 끌어서 바꾼 메뉴 순서를 여기도 따른다
+  showGate(data.sitePassword || '');
   render();
 }
 
@@ -310,6 +311,25 @@ $('add-form').addEventListener('submit', async (e) => {
   }
 });
 $('form-cancel').addEventListener('click', stopEdit);
+
+/* ---------- 입장 비밀번호 ---------- */
+function showGate(pw) {
+  $('gate-now').textContent = pw ? `지금 비밀번호: 「${pw}」` : '지금은 비밀번호 없이 누구나 들어올 수 있어요.';
+  if (document.activeElement !== $('gate-pw')) $('gate-pw').value = pw;
+}
+$('gate-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const pw = $('gate-pw').value.trim();
+  $('gate-msg').textContent = '';
+  try {
+    await api('PUT', { body: { sitePassword: pw } });
+    $('gate-pw').blur();
+    showGate(pw);
+    toast(pw ? `입장 비밀번호를 「${pw}」(으)로 바꿨어요` : '이제 비밀번호 없이 누구나 들어와요');
+  } catch (err) {
+    if (err.message !== '401') $('gate-msg').textContent = err.message;
+  }
+});
 
 function showPanel(on) {
   $('login-form').hidden = on;

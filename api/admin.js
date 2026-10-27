@@ -1,4 +1,4 @@
-// 관리자용: 비밀번호(ADMIN_PASSWORD) 확인 뒤 링크를 보고·더하고·고치고·뺀다. 메뉴 순서도 여기서 저장한다. 서버 키는 이 함수 안에서만 쓴다.
+// 관리자용: 비밀번호(ADMIN_PASSWORD) 확인 뒤 링크를 보고·더하고·고치고·뺀다. 메뉴 순서와 입장 비밀번호도 여기서 저장한다. 서버 키는 이 함수 안에서만 쓴다.
 const crypto = require('node:crypto');
 const SB_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
@@ -12,6 +12,7 @@ const same = (a, b) => {
   return crypto.timingSafeEqual(h(a), h(b));
 };
 const MENUS = require('../menus.js');
+const { cookie: gateCookie } = require('./_gate.js');
 const validId = (id) => Number.isInteger(id) && id > 0;
 
 function cleanUrl(raw) {
@@ -79,14 +80,35 @@ module.exports = async (req, res) => {
   if (req.method === 'GET') {
     const r = await fetch(`${base}?select=*&order=sort.asc,id.asc&limit=500`, { headers: sbHeaders() });
     if (!r.ok) return res.status(500).json({ error: '목록을 불러오지 못했어요.' });
-    const s = await fetch(`${SB_URL}/rest/v1/settings?select=value&key=eq.menu_order`, { headers: sbHeaders() }).catch(() => null);
+    const s = await fetch(`${SB_URL}/rest/v1/settings?select=key,value&key=in.(menu_order,site_password)`, { headers: sbHeaders() }).catch(() => null);
     const rows = s && s.ok ? await s.json() : [];
-    return res.status(200).json({ links: await r.json(), menuOrder: Array.isArray(rows[0]?.value) ? rows[0].value : null });
+    const val = (k) => rows.find((x) => x.key === k)?.value;
+    return res.status(200).json({
+      links: await r.json(),
+      menuOrder: Array.isArray(val('menu_order')) ? val('menu_order') : null,
+      sitePassword: typeof val('site_password') === 'string' ? val('site_password') : '',
+    });
   }
 
-  // 메뉴 순서 저장: { menuOrder: ['genai', 'block', ...] } — menus.js에 있는 key를 빠짐없이 한 번씩
   if (req.method === 'PUT') {
-    const order = body(req).menuOrder;
+    const b = body(req);
+
+    // 입장 비밀번호 바꾸기: { sitePassword: '1234' } — 비우면 누구나 들어온다
+    if ('sitePassword' in b) {
+      const pw = String(b.sitePassword ?? '').trim();
+      if (pw.length > 40) return res.status(400).json({ error: '비밀번호는 40자까지 쓸 수 있어요.' });
+      const r = await fetch(`${SB_URL}/rest/v1/settings?on_conflict=key`, {
+        method: 'POST',
+        headers: { ...sbHeaders(), Prefer: 'resolution=merge-duplicates,return=minimal' },
+        body: JSON.stringify({ key: 'site_password', value: pw, updated_at: new Date().toISOString() }),
+      });
+      if (!r.ok) return res.status(500).json({ error: '입장 비밀번호를 저장하지 못했어요.' });
+      res.setHeader('Set-Cookie', gateCookie(pw)); // 바꾼 선생님은 새 비밀번호를 다시 넣지 않아도 된다
+      return res.status(200).json({ ok: true, sitePassword: pw });
+    }
+
+    // 메뉴 순서 저장: { menuOrder: ['genai', 'block', ...] } — menus.js에 있는 key를 빠짐없이 한 번씩
+    const order = b.menuOrder;
     const keys = MENUS.map((m) => m.key);
     if (!Array.isArray(order) || order.length !== keys.length || new Set(order).size !== keys.length || !order.every((k) => keys.includes(k))) {
       return res.status(400).json({ error: '메뉴 순서가 올바르지 않아요.' });

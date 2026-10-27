@@ -33,6 +33,7 @@ const PW_KEY = 'admin-pw';
 const ALL_MENUS = window.MENUS; // 선생님용 포함 (추가 창의 메뉴 고르기용)
 let TEACHER = false;
 let current = []; // 지금 화면에 그린 링크
+let sitePassword = ''; // 입장 비밀번호 (선생님 모드에서만 받아 온다)
 
 function getPw() { try { return sessionStorage.getItem(PW_KEY) || ''; } catch { return ''; } }
 function setPw(v) { try { v ? sessionStorage.setItem(PW_KEY, v) : sessionStorage.removeItem(PW_KEY); } catch {} }
@@ -323,6 +324,7 @@ async function load() {
     if (TEACHER) {
       // 선생님 모드는 관리자 목록을 그대로 쓴다(선생님용은 MENUS에서 빠져 있어 화면에는 안 나온다)
       data = await adminApi('GET');
+      sitePassword = data.sitePassword || '';
     } else {
       const r = await fetch('/api/links', { cache: 'no-store' });
       if (!r.ok) throw new Error(String(r.status));
@@ -389,6 +391,35 @@ function setupTeacher() {
   document.getElementById('bar-off').addEventListener('click', () => { teacherOff(); toast('선생님 모드를 껐어요'); });
   document.getElementById('bar-add').addEventListener('click', () => openEdit({ category: MENUS[0].key, sub: '' }));
   document.getElementById('hero-add').addEventListener('click', () => openEdit({ category: MENUS[0].key, sub: '', today: true }));
+
+  // 입장 비밀번호: 지금 비밀번호를 보여 주고, 새로 넣고 저장하면 바로 바뀐다
+  const gateDlg = document.getElementById('gate-dlg');
+  document.getElementById('bar-gate').addEventListener('click', () => {
+    document.getElementById('gate-now').textContent = sitePassword
+      ? `지금 비밀번호는 「${sitePassword}」예요.`
+      : '지금은 비밀번호 없이 누구나 들어올 수 있어요.';
+    document.getElementById('gate-pw').value = sitePassword;
+    document.getElementById('gate-msg').textContent = '';
+    gateDlg.showModal();
+    document.getElementById('gate-pw').select();
+  });
+  document.getElementById('gate-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const pw = document.getElementById('gate-pw').value.trim();
+    const btn = document.getElementById('gate-submit');
+    btn.disabled = true;
+    try {
+      await adminApi('PUT', { body: { sitePassword: pw } });
+      sitePassword = pw;
+      gateDlg.close();
+      toast(pw ? `입장 비밀번호를 「${pw}」(으)로 바꿨어요` : '이제 비밀번호 없이 누구나 들어와요');
+    } catch (err) {
+      if (err.message !== '401') document.getElementById('gate-msg').textContent = err.message;
+      else gateDlg.close();
+    } finally {
+      btn.disabled = false;
+    }
+  });
 
   // 추가·고치기 창
   const menuSel = document.getElementById('edit-menu');

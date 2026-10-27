@@ -142,3 +142,7 @@ details.group[open] > summary { border-bottom: 2px solid var(--ink); background:
 .toast.show { transform: translate(-50%, 0); }
 
 @media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+
+/* 입장 비밀번호 */
+.gate { margin-bottom: 24px; }
+.gate .row input { flex: 1 1 200px; min-width: 0; font-size: 20px; font-weight: 700; letter-spacing: .04em; }
