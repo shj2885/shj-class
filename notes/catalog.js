@@ -3,6 +3,7 @@
 (function (root) {
   const NOTES = [
     { slug: 'flow-video-kit', emoji: '🎬', tag: '9회 · 10/27', title: '구글 플로우 영상 키트', sub: '구글 플로우로 60초 영상 만들기 · 이신영 (리더플AI)' },
+    { slug: 'site-admin-lab', emoji: '📝', tag: '10/25 사이트만들기', title: '클로드로 내 사이트 + 관리자 페이지', sub: '실습 프롬프트 · 설계도부터 관리자 페이지, 검색 등록까지 · 이신영 (리더플AI)' },
     { slug: 'motion-graphics-kit', emoji: '🎁', tag: '8회 · 10/20', title: '모션그래픽 스타터 키트', sub: '클로드로 모션그래픽 만들기 · 이신영 (리더플AI)' },
     { slug: 'higgsfield-prompts', emoji: '🎁', tag: '7회 · 10/13', title: '클로드 × 힉스필드 사례별 프롬프트 & 유의사항', sub: '7회 후기 선물 · 프롬프트 10개와 유의사항 · 이신영 (리더플AI)' },
     { slug: 'chatgpt-feature-map', emoji: '🗺️', tag: '2회 · 9/7', title: '챗GPT 기능 지도', sub: '채팅 · 예약 · GPTs · 프로젝트 · 워크 · 플러그인 · 코덱스 · 이신영 (리더플AI)' },
