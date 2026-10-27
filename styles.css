@@ -99,7 +99,7 @@ a { color: inherit; }
   display: inline-flex; align-items: center; gap: 10px;
   font-weight: 900; font-size: 20px; letter-spacing: -0.04em; text-decoration: none;
 }
-/* 로고 글자: 혜정쌤의(작게) / 코딩도깨비(크게) / 부제(띄어서) 세 줄, 모두 검정 */
+/* 로고 글자: 혜정쌤의(작게) / 에듀깨비(크게) / 부제(띄어서) 세 줄, 모두 검정 */
 .brand { gap: 14px; color: var(--ink); }
 .brand-text { display: grid; justify-items: start; white-space: nowrap; }
 .brand-owner { font-size: 15px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; color: var(--ink); }
