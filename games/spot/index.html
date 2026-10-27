@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>도깨비 다른그림찾기 · 에듀깨비</title>
+  <meta name="description" content="두 그림에서 다른 곳을 찾아 콕! 그림 6장, 3·5·7군데 찾기">
+  <meta name="theme-color" content="#FFF6E5">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="/games/spot/spot.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/games/spot/">
+      <img src="/logo.png" alt="" width="44" height="44">
+      <span>도깨비 다른그림찾기</span>
+    </a>
+    <a class="back" href="/">← 에듀깨비로</a>
+  </header>
+
+  <!-- 준비: 그림과 찾을 개수 고르기 -->
+  <main class="setup" id="setup">
+    <section class="step">
+      <h2><i>1</i> 어떤 그림에서 찾을까요?</h2>
+      <div class="pics" id="pics"></div>
+    </section>
+
+    <section class="step">
+      <h2><i>2</i> 몇 군데를 찾을까요?</h2>
+      <div class="levels" id="levels"></div>
+    </section>
+
+    <button class="big go" id="start">🔍 찾기 시작!</button>
+  </main>
+
+  <!-- 다른 곳 찾기 -->
+  <main class="game" id="game" hidden>
+    <div class="bar">
+      <button class="pill" id="toSetup">🏠 그림 고르기</button>
+      <span class="chip time">⏱️ <b id="time">0:00</b></span>
+      <span class="chip found">🔍 <b id="found">0 / 0</b><span class="dots" id="dots"></span></span>
+      <button class="pill" id="hint">💡 힌트 <b id="hintLeft">3</b></button>
+      <button class="pill" id="giveUp">🏳️ 정답 보기</button>
+    </div>
+    <p class="tip" id="tip">두 그림에서 다른 곳을 찾아 콕! 눌러요. 어느 그림을 눌러도 돼요.</p>
+    <div class="area" id="area">
+      <div class="pair" id="pair">
+        <div class="frame"><svg class="picture" id="picA" viewBox="0 0 800 600" aria-label="왼쪽 그림"></svg></div>
+        <div class="frame"><svg class="picture" id="picB" viewBox="0 0 800 600" aria-label="오른쪽 그림"></svg></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 다 찾았을 때 -->
+  <div class="pop" id="pop" hidden>
+    <div class="popBox" role="dialog" aria-modal="true" aria-labelledby="popTitle">
+      <b class="popFace" id="popStars">⭐⭐⭐</b>
+      <h3 id="popTitle">다 찾았어요!</h3>
+      <p id="popMsg"></p>
+      <div class="acts">
+        <button class="big go" id="again">🔁 한 번 더</button>
+        <button class="big soft" id="other">🖼️ 다른 그림</button>
+      </div>
+    </div>
+  </div>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <script src="/games/spot/scenes.js"></script>
+  <script src="/games/spot/spot.js"></script>
+</body>
+</html>
