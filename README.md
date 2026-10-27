@@ -17,10 +17,10 @@
 | `api/links.js` | 첫 화면용 링크 목록(읽기만) |
 | `api/admin.js` | 관리자용. `ADMIN_PASSWORD`를 확인한 뒤 링크를 바꾼다 |
 | `middleware.js` · `enter.html` · `notes-enter.html` · `api/enter.js` | 입장 비밀번호와 자료실 비밀번호. 입장 비밀번호가 없으면 `/enter`로, 자료실(`/notes`)은 자료실 비밀번호가 없으면 `/notes-enter`로 보낸다(`/admin`은 막지 않음). 통과는 3시간 |
-| `notes/` | 자료실(`/notes`). 강의 자료 페이지(`notes/○○.html`)와 폴더 화면. 새 자료는 `notes/catalog.js`에 한 줄 더한다 |
-| `api/notes.js` | 자료실 폴더 읽기·저장. 저장은 `ADMIN_PASSWORD`가 맞을 때만 |
+| `notes/` | 자료실(`/notes`). 강의 자료 페이지(`notes/○○.html`)와 탐색기 화면(폴더 안 폴더·끌어다 놓기·링크·파일). 새 강의 자료는 `notes/catalog.js`에 한 줄 더한다 |
+| `api/notes.js` | 자료실 폴더 나무 읽기·저장, 파일 올리기·열기. 바꾸기는 `ADMIN_PASSWORD`가 맞을 때만 |
 
-링크는 Supabase `links` 표에, 선생님 모드에서 끌어서 바꾼 위쪽 메뉴 순서(`menu_order`)와 입장 비밀번호(`site_password`, 숫자 4자리), 자료실 비밀번호(`notes_password`, 숫자 4자리), 자료실 폴더(`notes_folders`)는 `settings` 표에 저장돼요. 두 비밀번호는 선생님 모드의 '🔑 입장 비밀번호'·'📚 자료실 비밀번호'나 관리자 화면에서 바꿔요. 키와 비밀번호는 Vercel 환경변수에만 있고, 이 저장소에는 없어요.
+링크는 Supabase `links` 표에, 선생님 모드에서 끌어서 바꾼 위쪽 메뉴 순서(`menu_order`)와 입장 비밀번호(`site_password`, 숫자 4자리), 자료실 비밀번호(`notes_password`, 숫자 4자리), 자료실 폴더 나무(`notes_tree`)는 `settings` 표에 저장돼요. 자료실에 올린 파일은 Supabase Storage의 비공개 버킷 `notes-files`에 있고(첫 파일을 올릴 때 자동으로 만들어져요), 볼 때마다 1분짜리 주소로 열어요. 두 비밀번호는 선생님 모드의 '🔑 입장 비밀번호'·'📚 자료실 비밀번호'나 관리자 화면에서 바꿔요. 키와 비밀번호는 Vercel 환경변수에만 있고, 이 저장소에는 없어요.
 
 ## 배포
 

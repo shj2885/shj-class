@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>자료실 · 에듀깨비</title>
-  <meta name="description" content="강의에서 받은 자료를 폴더별로 모아 둔 곳">
+  <meta name="description" content="강의 자료·링크·파일을 폴더별로 모아 둔 곳">
   <meta name="theme-color" content="#F6F5F0">
   <link rel="icon" href="/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -22,38 +22,40 @@
   </header>
 
   <main>
-    <!-- 첫 화면: 폴더들 + 폴더에 안 넣은 자료 -->
-    <section id="home-view">
-      <div class="intro">
-        <h1><span class="hl">자료실</span></h1>
-        <p>강의에서 받은 자료를 폴더별로 모았어요. 프롬프트 상자는 복사 버튼으로 바로 가져갈 수 있어요.</p>
-      </div>
-      <div class="folders" id="folders"></div>
-      <h2 class="group-title" id="loose-title">폴더에 안 넣은 자료</h2>
-      <ul class="list" id="loose"></ul>
-    </section>
+    <!-- 지금 있는 곳: 자료실 › 폴더 › 폴더. 선생님 모드에서는 여기에 끌어 놓아 위 폴더로 옮긴다 -->
+    <nav class="crumb" id="crumb" aria-label="위치"></nav>
 
-    <!-- 폴더 하나를 열었을 때 -->
-    <section id="folder-view" hidden>
-      <nav class="crumb" aria-label="위치"><a href="#">자료실</a> <span aria-hidden="true">›</span> <b id="folder-name"></b></nav>
-      <div class="folder-head">
-        <h1><span id="folder-emoji"></span> <span class="hl" id="folder-title"></span></h1>
-        <span class="teacher-only folder-tools">
-          <button type="button" class="tool" id="folder-rename">✏️ 이름 바꾸기</button>
-          <button type="button" class="tool danger" id="folder-delete">🗑 폴더 지우기</button>
-        </span>
-      </div>
-      <ul class="list" id="in-folder"></ul>
-    </section>
+    <div class="folder-head">
+      <h1 id="title"><span class="hl">자료실</span></h1>
+      <span class="folder-tools teacher-only" id="folder-tools">
+        <button type="button" class="tool" id="folder-rename">✏️ 이름 바꾸기</button>
+        <button type="button" class="tool" id="folder-move">📁 옮기기</button>
+        <button type="button" class="tool danger" id="folder-delete">🗑 폴더 지우기</button>
+      </span>
+    </div>
+    <p class="intro-text" id="intro">강의 자료와 링크, 파일을 폴더별로 모았어요. 폴더를 누르면 안으로 들어가요.</p>
 
-    <p class="load-error" id="load-error" role="alert" hidden>폴더를 불러오지 못했어요. 지금은 모든 자료를 한곳에 보여 드려요.</p>
+    <div class="toolbar teacher-only" id="toolbar">
+      <button type="button" class="tool solid" id="new-folder">＋ 새 폴더</button>
+      <button type="button" class="tool" id="new-link">🔗 링크 추가</button>
+      <label class="tool" id="upload-btn">⬆ 파일 올리기<input type="file" id="upload-input" multiple hidden></label>
+      <span class="toolbar-hint">카드를 끌어서 폴더에 넣어요 · 내 컴퓨터 파일을 이 화면에 끌어 놓아도 올라가요</span>
+    </div>
+
+    <div class="folders" id="folders"></div>
+    <ul class="list" id="items"></ul>
+    <p class="empty" id="empty" hidden>이 폴더는 비어 있어요.</p>
+    <p class="load-error" id="load-error" role="alert" hidden>자료실을 불러오지 못했어요. 새로고침해 보세요.</p>
   </main>
+
+  <!-- 파일을 끌어 오면 화면 전체에 보이는 안내 -->
+  <div class="drop-cover" id="drop-cover" hidden><p>여기에 놓으면 <b id="drop-where">자료실</b>에 올라가요</p></div>
 
   <!-- 선생님 모드: 비밀번호 확인 (첫 화면 선생님 모드와 같은 비밀번호) -->
   <dialog class="dlg" id="login-dlg" aria-labelledby="login-title">
     <form method="dialog" id="login-form" autocomplete="off">
       <h2 id="login-title">선생님 모드</h2>
-      <p class="dlg-note">비밀번호를 넣으면 폴더를 만들고 자료를 폴더에 넣을 수 있어요.</p>
+      <p class="dlg-note">비밀번호를 넣으면 폴더를 만들고, 자료를 옮기고, 파일과 링크를 더할 수 있어요.</p>
       <label>관리자 비밀번호<input id="login-pw" type="password" required autocomplete="current-password"></label>
       <p class="dlg-msg" id="login-msg" role="alert"></p>
       <div class="dlg-row">
@@ -63,7 +65,7 @@
     </form>
   </dialog>
 
-  <!-- 선생님 모드: 폴더 만들기·이름 바꾸기 -->
+  <!-- 폴더 만들기·이름 바꾸기 -->
   <dialog class="dlg" id="folder-dlg" aria-labelledby="folder-dlg-title">
     <form method="dialog" id="folder-form" autocomplete="off">
       <h2 id="folder-dlg-title">새 폴더</h2>
@@ -80,10 +82,47 @@
     </form>
   </dialog>
 
+  <!-- 링크 더하기·고치기 -->
+  <dialog class="dlg" id="link-dlg" aria-labelledby="link-dlg-title">
+    <form method="dialog" id="link-form" autocomplete="off">
+      <h2 id="link-dlg-title">링크 추가</h2>
+      <label>주소<input name="url" id="link-url" required inputmode="url" placeholder="예: https://www.notion.so/..."></label>
+      <label>이름<input name="title" id="link-title" maxlength="80" placeholder="비우면 주소에서 따와요"></label>
+      <p class="dlg-msg" id="link-msg" role="alert"></p>
+      <div class="dlg-row">
+        <button type="button" class="dlg-ghost" data-close>닫기</button>
+        <button type="submit" class="dlg-solid" id="link-submit">추가하기</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- 파일 이름 바꾸기 -->
+  <dialog class="dlg" id="rename-dlg" aria-labelledby="rename-title">
+    <form method="dialog" id="rename-form" autocomplete="off">
+      <h2 id="rename-title">이름 바꾸기</h2>
+      <label>이름<input name="title" id="rename-input" maxlength="120" required></label>
+      <div class="dlg-row">
+        <button type="button" class="dlg-ghost" data-close>닫기</button>
+        <button type="submit" class="dlg-solid">바꾸기</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- 옮기기: 끌어 놓기가 어려운 휴대폰에서도 쓸 수 있게 -->
+  <dialog class="dlg" id="move-dlg" aria-labelledby="move-title">
+    <form method="dialog" id="move-form" autocomplete="off">
+      <h2 id="move-title">어디로 옮길까요?</h2>
+      <label>옮길 폴더<select id="move-select"></select></label>
+      <div class="dlg-row">
+        <button type="button" class="dlg-ghost" data-close>닫기</button>
+        <button type="submit" class="dlg-solid">옮기기</button>
+      </div>
+    </form>
+  </dialog>
+
   <div class="teacher-bar" id="teacher-bar" hidden>
-    <span>✏️ 선생님 모드 · 폴더를 만들고, 자료 카드 아래에서 폴더를 골라 넣어요</span>
+    <span>✏️ 선생님 모드 · 끌어서 옮기고, 카드 아래 버튼으로 이름 바꾸기·옮기기·지우기</span>
     <span class="teacher-bar-actions">
-      <button type="button" class="solid" id="bar-new">+ 새 폴더</button>
       <button type="button" id="bar-off">끄기</button>
     </span>
   </div>
