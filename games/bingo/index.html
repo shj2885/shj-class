@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>도깨비 빙고 · 에듀깨비</title>
+  <meta name="description" content="뽑힌 그림을 내 빙고판에서 찾아 콕! 가로·세로·대각선 한 줄을 채우는 그림 빙고">
+  <meta name="theme-color" content="#FFF6DE">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="/games/bingo/bingo.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/games/bingo/">
+      <img src="/logo.png" alt="" width="44" height="44">
+      <span>도깨비 빙고</span>
+    </a>
+    <a class="back" href="/">← 에듀깨비로</a>
+  </header>
+
+  <!-- 준비: 주제와 몇 줄 빙고인지 고르기 -->
+  <main class="setup" id="setup">
+    <section class="step">
+      <h2><i>1</i> 어떤 그림으로 할까요?</h2>
+      <div class="themes" id="themes"></div>
+    </section>
+
+    <section class="step">
+      <h2><i>2</i> 몇 줄 빙고를 할까요?</h2>
+      <div class="goals" id="goals"></div>
+    </section>
+
+    <button class="big go" id="start">🎲 시작!</button>
+  </main>
+
+  <!-- 빙고 -->
+  <main class="game" id="game" hidden>
+    <div class="bar">
+      <button class="pill" id="stop">🏠 그만하기</button>
+      <span class="chip drawn">🎁 <b id="drawn">0</b>번 뽑음</span>
+      <span class="chip lines">🏆 빙고 <b id="lines">0</b> / <b id="goal">1</b>줄</span>
+      <button class="pill" id="sound" aria-pressed="true">🔊 소리</button>
+    </div>
+    <div class="field">
+      <div class="board" id="board" role="group" aria-label="5 곱하기 5 빙고판"></div>
+      <aside class="caller">
+        <div class="card" id="card" aria-live="polite" aria-atomic="true">
+          <span class="wait">그림을 뽑아요!</span>
+        </div>
+        <button class="big go" id="draw">🎁 그림 뽑기</button>
+        <div class="history">
+          <h3>지금까지 나온 그림</h3>
+          <div class="chips" id="history"></div>
+        </div>
+      </aside>
+    </div>
+    <p class="tip" id="tip"></p>
+  </main>
+
+  <!-- 끝났을 때 -->
+  <div class="pop" id="pop" hidden>
+    <div class="popBox" role="dialog" aria-modal="true" aria-labelledby="popTitle">
+      <b class="popFace" id="popStars">⭐⭐⭐</b>
+      <h3 id="popTitle">빙고!</h3>
+      <div class="stats" id="stats"></div>
+      <p id="popMsg"></p>
+      <div class="acts">
+        <button class="big go" id="again">🔁 한 번 더</button>
+        <button class="big soft" id="other">🏠 다른 놀이</button>
+      </div>
+    </div>
+  </div>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <script src="/games/bingo/themes.js"></script>
+  <script src="/games/bingo/bingo.js"></script>
+</body>
+</html>

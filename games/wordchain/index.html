@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>도깨비 끝말잇기 · 에듀깨비</title>
+  <meta name="description" content="도깨비가 낸 낱말의 끝 글자로 새 낱말을 이어요! 한글 타자와 낱말 공부를 함께 하는 끝말잇기">
+  <meta name="theme-color" content="#E6F2FF">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="/games/wordchain/wordchain.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/games/wordchain/">
+      <img src="/logo.png" alt="" width="44" height="44">
+      <span>도깨비 끝말잇기</span>
+    </a>
+    <a class="back" href="/">← 에듀깨비로</a>
+  </header>
+
+  <!-- 준비: 단계와 몇 개 이을지 고르기 -->
+  <main class="setup" id="setup">
+    <section class="step">
+      <h2><i>1</i> 도깨비가 얼마나 어렵게 낼까요?</h2>
+      <div class="modes" id="modes"></div>
+    </section>
+
+    <section class="step">
+      <h2><i>2</i> 낱말을 몇 개 이을까요?</h2>
+      <div class="goals" id="goals"></div>
+    </section>
+
+    <button class="big go" id="start">🔤 시작!</button>
+  </main>
+
+  <!-- 끝말잇기 -->
+  <main class="game" id="game" hidden>
+    <div class="bar">
+      <button class="pill" id="stop">🏠 그만하기</button>
+      <span class="chip linked">🔗 <b id="linked">0</b><i id="goalText"> / 5개</i></span>
+      <span class="chip hints">💡 힌트 <b id="hintCount">0</b>번</span>
+      <button class="pill" id="sound" aria-pressed="true">🔊 소리</button>
+    </div>
+
+    <div class="play">
+      <div class="train" id="train" aria-label="지금까지 이은 낱말"></div>
+
+      <div class="card" id="card" aria-live="polite" aria-atomic="true">
+        <div class="who" id="who"><img src="/logo.png" alt="" width="40" height="40"><span>도깨비가 낸 낱말</span></div>
+        <div class="word" id="word"></div>
+      </div>
+
+      <form class="answer" id="answer" autocomplete="off">
+        <div class="need"><b id="need">과</b><span id="needSub">로 시작해요</span></div>
+        <input class="entry" id="entry" type="text" inputmode="text" maxlength="12" placeholder="여기에 써요" aria-label="이어 말할 낱말" lang="ko">
+        <button class="big go" type="submit" id="send">내가 낼게!</button>
+      </form>
+
+      <div class="helpRow">
+        <button class="pill hintBtn" id="hint" type="button">💡 힌트 보기</button>
+        <div class="hintList" id="hintList"></div>
+      </div>
+      <p class="tip" id="tip"></p>
+    </div>
+  </main>
+
+  <!-- 끝났을 때 -->
+  <div class="pop" id="pop" hidden>
+    <div class="popBox" role="dialog" aria-modal="true" aria-labelledby="popTitle">
+      <b class="popFace" id="popStars">⭐⭐⭐</b>
+      <h3 id="popTitle">잘했어요!</h3>
+      <div class="stats" id="stats"></div>
+      <p id="popMsg"></p>
+      <div class="acts">
+        <button class="big go" id="again">🔁 한 번 더</button>
+        <button class="big soft" id="other">🏠 다른 놀이</button>
+      </div>
+    </div>
+  </div>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <script src="/games/wordchain/words.js"></script>
+  <script src="/games/wordchain/wordchain.js"></script>
+</body>
+</html>
