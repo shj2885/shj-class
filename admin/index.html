@@ -32,8 +32,19 @@
           <input name="pw" id="gate-pw" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required placeholder="숫자 4자리" aria-label="새 입장 비밀번호 (숫자 4자리)">
           <button type="submit" class="solid">바꾸기</button>
         </div>
-        <p class="hint">사이트에 들어올 때 넣는 숫자 4자리예요. 바꾸면 모두가 새 비밀번호를 넣어야 들어올 수 있어요. 브라우저를 닫으면 다시 물어요.</p>
+        <p class="hint">사이트에 들어올 때 넣는 숫자 4자리예요. 바꾸면 모두가 새 비밀번호를 넣어야 들어올 수 있어요. 한 번 넣으면 3시간 동안 다시 묻지 않아요.</p>
         <p class="msg" id="gate-msg" role="alert"></p>
+      </form>
+
+      <form class="add gate" id="notespw-form" autocomplete="off">
+        <h2>📚 자료실 비밀번호</h2>
+        <p class="hint" id="notespw-now"></p>
+        <div class="row">
+          <input name="pw" id="notespw-pw" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required placeholder="숫자 4자리" aria-label="새 자료실 비밀번호 (숫자 4자리)">
+          <button type="submit" class="solid">바꾸기</button>
+        </div>
+        <p class="hint">자료실(/notes)에 들어갈 때 입장 비밀번호 다음에 한 번 더 넣는 숫자 4자리예요. 입장 비밀번호와 다르게 정해 주세요.</p>
+        <p class="msg" id="notespw-msg" role="alert"></p>
       </form>
 
       <section class="summary">

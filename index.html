@@ -95,11 +95,26 @@
       <h2 id="gate-title">🔑 입장 비밀번호</h2>
       <p class="dlg-note" id="gate-now"></p>
       <label>새 비밀번호 (숫자 4자리)<input name="pw" id="gate-pw" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required placeholder="예: 1234" autocomplete="off"></label>
-      <p class="dlg-note">바꾸면 이 컴퓨터를 포함해 모두가 새 비밀번호를 넣어야 들어올 수 있어요. 비밀번호는 브라우저를 닫으면 다시 물어요.</p>
+      <p class="dlg-note">바꾸면 이 컴퓨터를 포함해 모두가 새 비밀번호를 넣어야 들어올 수 있어요. 한 번 넣으면 3시간 동안 다시 묻지 않아요.</p>
       <p class="dlg-msg" id="gate-msg" role="alert"></p>
       <div class="dlg-row">
         <button type="button" class="dlg-ghost" data-close>닫기</button>
         <button type="submit" class="dlg-solid" id="gate-submit">저장하기</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- 선생님 모드: 자료실 비밀번호 바꾸기 -->
+  <dialog class="dlg" id="notespw-dlg" aria-labelledby="notespw-title">
+    <form method="dialog" id="notespw-form" autocomplete="off">
+      <h2 id="notespw-title">📚 자료실 비밀번호</h2>
+      <p class="dlg-note" id="notespw-now"></p>
+      <label>새 비밀번호 (숫자 4자리)<input name="pw" id="notespw-pw" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required placeholder="예: 5678" autocomplete="off"></label>
+      <p class="dlg-note">자료실에 들어갈 때 입장 비밀번호 다음에 한 번 더 넣는 비밀번호예요. 입장 비밀번호와 다르게 정해 주세요. 바꾸면 모두가 새 비밀번호를 넣어야 자료실에 들어갈 수 있어요.</p>
+      <p class="dlg-msg" id="notespw-msg" role="alert"></p>
+      <div class="dlg-row">
+        <button type="button" class="dlg-ghost" data-close>닫기</button>
+        <button type="submit" class="dlg-solid" id="notespw-submit">저장하기</button>
       </div>
     </form>
   </dialog>
@@ -110,6 +125,7 @@
     <span class="teacher-bar-actions">
       <button type="button" id="bar-add">+ 사이트 추가</button>
       <button type="button" id="bar-gate">🔑 입장 비밀번호</button>
+      <button type="button" id="bar-notespw">📚 자료실 비밀번호</button>
       <a href="/admin">관리자 화면</a>
       <button type="button" id="bar-off">끄기</button>
     </span>

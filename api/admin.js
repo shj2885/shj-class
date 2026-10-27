@@ -80,30 +80,32 @@ module.exports = async (req, res) => {
   if (req.method === 'GET') {
     const r = await fetch(`${base}?select=*&order=sort.asc,id.asc&limit=500`, { headers: sbHeaders() });
     if (!r.ok) return res.status(500).json({ error: '목록을 불러오지 못했어요.' });
-    const s = await fetch(`${SB_URL}/rest/v1/settings?select=key,value&key=in.(menu_order,site_password)`, { headers: sbHeaders() }).catch(() => null);
+    const s = await fetch(`${SB_URL}/rest/v1/settings?select=key,value&key=in.(menu_order,site_password,notes_password)`, { headers: sbHeaders() }).catch(() => null);
     const rows = s && s.ok ? await s.json() : [];
     const val = (k) => rows.find((x) => x.key === k)?.value;
     return res.status(200).json({
       links: await r.json(),
       menuOrder: Array.isArray(val('menu_order')) ? val('menu_order') : null,
       sitePassword: typeof val('site_password') === 'string' ? val('site_password') : '',
+      notesPassword: typeof val('notes_password') === 'string' ? val('notes_password') : '',
     });
   }
 
   if (req.method === 'PUT') {
     const b = body(req);
 
-    // 입장 비밀번호 바꾸기: { sitePassword: '1234' } — 숫자 4자리만
-    if ('sitePassword' in b) {
-      const pw = String(b.sitePassword ?? '').trim();
-      if (!validGate(pw)) return res.status(400).json({ error: '입장 비밀번호는 숫자 4자리로 넣어 주세요.' });
+    // 입장 비밀번호 바꾸기: { sitePassword: '1234' }, 자료실 비밀번호 바꾸기: { notesPassword: '5678' } — 숫자 4자리만
+    for (const [field, key, label] of [['sitePassword', 'site_password', '입장 비밀번호'], ['notesPassword', 'notes_password', '자료실 비밀번호']]) {
+      if (!(field in b)) continue;
+      const pw = String(b[field] ?? '').trim();
+      if (!validGate(pw)) return res.status(400).json({ error: `${label}는 숫자 4자리로 넣어 주세요.` });
       const r = await fetch(`${SB_URL}/rest/v1/settings?on_conflict=key`, {
         method: 'POST',
         headers: { ...sbHeaders(), Prefer: 'resolution=merge-duplicates,return=minimal' },
-        body: JSON.stringify({ key: 'site_password', value: pw, updated_at: new Date().toISOString() }),
+        body: JSON.stringify({ key, value: pw, updated_at: new Date().toISOString() }),
       });
-      if (!r.ok) return res.status(500).json({ error: '입장 비밀번호를 저장하지 못했어요.' });
-      return res.status(200).json({ ok: true, sitePassword: pw });
+      if (!r.ok) return res.status(500).json({ error: `${label}를 저장하지 못했어요.` });
+      return res.status(200).json({ ok: true, [field]: pw });
     }
 
     // 메뉴 순서 저장: { menuOrder: ['genai', 'block', ...] } — menus.js에 있는 key를 빠짐없이 한 번씩

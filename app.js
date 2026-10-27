@@ -34,6 +34,7 @@ const ALL_MENUS = window.MENUS; // 선생님용 포함 (추가 창의 메뉴 고
 let TEACHER = false;
 let current = []; // 지금 화면에 그린 링크
 let sitePassword = ''; // 입장 비밀번호 (선생님 모드에서만 받아 온다)
+let notesPassword = ''; // 자료실 비밀번호 (선생님 모드에서만 받아 온다)
 
 function getPw() { try { return sessionStorage.getItem(PW_KEY) || ''; } catch { return ''; } }
 function setPw(v) { try { v ? sessionStorage.setItem(PW_KEY, v) : sessionStorage.removeItem(PW_KEY); } catch {} }
@@ -173,7 +174,14 @@ function renderMenubar(links) {
         : [el('li', { class: 'drop-empty', text: '아직 사이트가 없어요' })]),
     ]);
     return el('li', { class: 'menu', 'data-key': menu.key }, [btn, drop]);
-  }));
+  }), notesMenu());
+}
+
+// 자료실은 펼침 메뉴 없이 바로 /notes 로 간다. data-key가 없어서 끌어서 순서 바꾸기에는 끼지 않고 늘 맨 끝에 있다.
+function notesMenu() {
+  return el('li', { class: 'menu' }, [
+    el('a', { class: 'menu-btn', href: '/notes/' }, [el('span', { class: 'menu-emoji', 'aria-hidden': 'true', text: '📚' }), document.createTextNode('자료실')]),
+  ]);
 }
 
 function closeMenus(except) {
@@ -325,6 +333,7 @@ async function load() {
       // 선생님 모드는 관리자 목록을 그대로 쓴다(선생님용은 MENUS에서 빠져 있어 화면에는 안 나온다)
       data = await adminApi('GET');
       sitePassword = data.sitePassword || '';
+      notesPassword = data.notesPassword || '';
     } else {
       const r = await fetch('/api/links', { cache: 'no-store' });
       if (!r.ok) throw new Error(String(r.status));
@@ -363,6 +372,37 @@ function teacherOff() {
   load();
 }
 
+// 비밀번호 바꾸는 창 하나를 연결한다. id는 창 안 요소 이름의 앞부분(○○-dlg, ○○-now, ○○-pw, ○○-msg, ○○-form, ○○-submit)
+function passwordDialog({ id, open, field, label, get, set, none }) {
+  const $ = (s) => document.getElementById(`${id}-${s}`);
+  const dlg = $('dlg');
+  document.getElementById(open).addEventListener('click', () => {
+    $('now').textContent = get() ? `지금 비밀번호는 「${get()}」예요.` : none;
+    $('pw').value = get();
+    $('msg').textContent = '';
+    dlg.showModal();
+    $('pw').select();
+  });
+  $('form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const pw = $('pw').value.trim();
+    if (!/^\d{4}$/.test(pw)) { $('msg').textContent = '숫자 4자리로 넣어 주세요.'; return; }
+    const btn = $('submit');
+    btn.disabled = true;
+    try {
+      await adminApi('PUT', { body: { [field]: pw } });
+      set(pw);
+      dlg.close();
+      toast(`${label}를 「${pw}」(으)로 바꿨어요`);
+    } catch (err) {
+      if (err.message !== '401') $('msg').textContent = err.message;
+      else dlg.close();
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
+
 function setupTeacher() {
   const loginDlg = document.getElementById('login-dlg');
   const editDlg = document.getElementById('edit-dlg');
@@ -392,34 +432,16 @@ function setupTeacher() {
   document.getElementById('bar-add').addEventListener('click', () => openEdit({ category: MENUS[0].key, sub: '' }));
   document.getElementById('hero-add').addEventListener('click', () => openEdit({ category: MENUS[0].key, sub: '', today: true }));
 
-  // 입장 비밀번호: 지금 비밀번호를 보여 주고, 새로 넣고 저장하면 바로 바뀐다
-  const gateDlg = document.getElementById('gate-dlg');
-  document.getElementById('bar-gate').addEventListener('click', () => {
-    document.getElementById('gate-now').textContent = sitePassword
-      ? `지금 비밀번호는 「${sitePassword}」예요.`
-      : '아직 비밀번호가 없어서 아무도 들어올 수 없어요. 숫자 4자리로 정해 주세요.';
-    document.getElementById('gate-pw').value = sitePassword;
-    document.getElementById('gate-msg').textContent = '';
-    gateDlg.showModal();
-    document.getElementById('gate-pw').select();
+  // 입장 비밀번호·자료실 비밀번호: 지금 비밀번호를 보여 주고, 새로 넣고 저장하면 바로 바뀐다
+  passwordDialog({
+    id: 'gate', open: 'bar-gate', field: 'sitePassword', label: '입장 비밀번호',
+    get: () => sitePassword, set: (v) => { sitePassword = v; },
+    none: '아직 비밀번호가 없어서 아무도 들어올 수 없어요. 숫자 4자리로 정해 주세요.',
   });
-  document.getElementById('gate-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const pw = document.getElementById('gate-pw').value.trim();
-    if (!/^\d{4}$/.test(pw)) { document.getElementById('gate-msg').textContent = '숫자 4자리로 넣어 주세요.'; return; }
-    const btn = document.getElementById('gate-submit');
-    btn.disabled = true;
-    try {
-      await adminApi('PUT', { body: { sitePassword: pw } });
-      sitePassword = pw;
-      gateDlg.close();
-      toast(`입장 비밀번호를 「${pw}」(으)로 바꿨어요`);
-    } catch (err) {
-      if (err.message !== '401') document.getElementById('gate-msg').textContent = err.message;
-      else gateDlg.close();
-    } finally {
-      btn.disabled = false;
-    }
+  passwordDialog({
+    id: 'notespw', open: 'bar-notespw', field: 'notesPassword', label: '자료실 비밀번호',
+    get: () => notesPassword, set: (v) => { notesPassword = v; },
+    none: '아직 자료실 비밀번호가 없어서 아무도 자료실에 들어갈 수 없어요. 입장 비밀번호와 다른 숫자 4자리로 정해 주세요.',
   });
 
   // 추가·고치기 창

@@ -220,6 +220,7 @@ async function refresh() {
   links = data.links || [];
   window.sortMenus(MENUS, data.menuOrder); // 첫 화면에서 끌어서 바꾼 메뉴 순서를 여기도 따른다
   showGate(data.sitePassword || '');
+  showNotesPw(data.notesPassword || '');
   render();
 }
 
@@ -329,6 +330,26 @@ $('gate-form').addEventListener('submit', async (e) => {
     toast(`입장 비밀번호를 「${pw}」(으)로 바꿨어요`);
   } catch (err) {
     if (err.message !== '401') $('gate-msg').textContent = err.message;
+  }
+});
+
+/* ---------- 자료실 비밀번호 ---------- */
+function showNotesPw(pw) {
+  $('notespw-now').textContent = pw ? `지금 비밀번호: 「${pw}」` : '아직 비밀번호가 없어서 아무도 자료실에 들어갈 수 없어요. 숫자 4자리로 정해 주세요.';
+  if (document.activeElement !== $('notespw-pw')) $('notespw-pw').value = pw;
+}
+$('notespw-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const pw = $('notespw-pw').value.trim();
+  $('notespw-msg').textContent = '';
+  if (!/^\d{4}$/.test(pw)) { $('notespw-msg').textContent = '숫자 4자리로 넣어 주세요.'; return; }
+  try {
+    await api('PUT', { body: { notesPassword: pw } });
+    $('notespw-pw').blur();
+    showNotesPw(pw);
+    toast(`자료실 비밀번호를 「${pw}」(으)로 바꿨어요`);
+  } catch (err) {
+    if (err.message !== '401') $('notespw-msg').textContent = err.message;
   }
 });
 
