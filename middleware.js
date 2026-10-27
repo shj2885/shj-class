@@ -20,9 +20,10 @@ async function sitePassword() {
   return cache.pw;
 }
 
-// api/_gate.js의 token()과 같은 값
+// api/_gate.js의 token()과 같은 값 (판 번호 VERSION도 같아야 한다)
+const VERSION = 'v2';
 async function token(pw) {
-  const data = new TextEncoder().encode(`${pw}|${process.env.ADMIN_PASSWORD || ''}`);
+  const data = new TextEncoder().encode(`${VERSION}|${pw}|${process.env.ADMIN_PASSWORD || ''}`);
   const d = await crypto.subtle.digest('SHA-256', data);
   return [...new Uint8Array(d)].map((b) => b.toString(16).padStart(2, '0')).join('');
 }
