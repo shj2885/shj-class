@@ -145,9 +145,27 @@
     entry.disabled = lock; sendBtn.disabled = lock; hintBtn.disabled = lock;
   }
 
-  function submit(e) {
+  /* 한글 입력: 글자를 조립하는 중에 Enter를 누르면 브라우저가 Enter를 두 번 보내거나
+     마지막 글자를 나중에 다시 넣기도 한다. 그래서 조립이 끝난 뒤에 한 번만 낸다. */
+  let composing = false, pending = false, lastSend = 0;
+  entry.addEventListener('compositionstart', () => { composing = true; });
+  entry.addEventListener('compositionend', () => {
+    composing = false;
+    if (pending) { pending = false; setTimeout(submit, 0); }
+  });
+  entry.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.keyCode !== 13) return;
     e.preventDefault();
+    if (e.isComposing || e.keyCode === 229 || composing) { pending = true; return; }
+    submit();
+  });
+  // 도깨비 차례에는 입력칸을 잠그는데, 그 사이에 늦게 들어온 글자는 지운다
+  entry.addEventListener('input', () => { if (G && (G.busy || G.done)) entry.value = ''; });
+
+  function submit() {
     if (!G || G.busy || G.done) return;
+    if (Date.now() - lastSend < 400) return; // Enter가 두 번 들어와도 한 번만
+    lastSend = Date.now();
     const w = entry.value.replace(/\s+/g, '').normalize('NFC');
     const prev = G.chain[G.chain.length - 1].word;
     const need = starts(lastChar(prev)).map((c) => `'${c}'`).join(' 또는 ');
@@ -162,9 +180,11 @@
       if (w) G.wrong++;
       snd.bad(); tip('😅 ' + why, true);
       const f = $('#answer'); f.classList.remove('nope'); void f.offsetWidth; f.classList.add('nope');
-      entry.focus(); entry.select();
+      // 쓴 글자는 그대로 두고 커서만 맨 끝에 (고쳐 쓰기 쉽게)
+      entry.focus(); const end = entry.value.length; entry.setSelectionRange(end, end);
       return;
     }
+    entry.blur(); // 조립 중인 글자를 끝낸 다음 지운다
     entry.value = '';
     G.mine++;
     say(w, true);
@@ -261,7 +281,8 @@
   $('#again').onclick = start;
   $('#other').onclick = toSetup;
   $('#stop').onclick = () => { if (G && !G.done && G.mine) finish(false); else toSetup(); };
-  $('#answer').onsubmit = submit;
+  // '내가 낼게!' 버튼: 누르는 순간 한글 조립이 끝나도록 한 박자 뒤에 낸다
+  $('#answer').onsubmit = (e) => { e.preventDefault(); setTimeout(submit, 0); };
   hintBtn.onclick = showHints;
   const soundBtn = $('#sound');
   const paintSound = () => { soundBtn.setAttribute('aria-pressed', soundOn); soundBtn.textContent = soundOn ? '🔊 소리' : '🔇 소리'; };
