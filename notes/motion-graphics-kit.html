@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>모션그래픽 스타터 키트 · 자료실</title>
+  <meta name="description" content="이신영의 무료 AI 강의 8회 · 클로드로 모션그래픽 만들기">
+  <meta name="theme-color" content="#F6F5F0">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="/notes/notes.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/notes/"><img src="/logo.png" alt="" width="46" height="46"><span>자료실</span></a>
+    <a class="back" href="/notes/">← 자료실 목록</a>
+  </header>
+
+  <main class="doc">
+    <div class="doc-head">
+      <div class="emo" aria-hidden="true">🎁</div>
+      <h1>모션그래픽 스타터 키트 · 무료 AI 강의 8회 (10/20)</h1>
+    </div>
+
+    <div class="box lead">
+      <p class="t">🎁 모션그래픽 스타터 키트 · 이신영의 무료 AI 강의 8회</p>
+      <p>「클로드로 모션그래픽 만들기」 · 2026년 10월 20일(화) 19:00–22:00 · 온라인 라이브</p>
+      <p>강사 이신영 · 리더플AI 대표</p>
+    </div>
+
+    <div class="box tip">
+      <p>검은 상자 오른쪽 위 <b>복사</b> 버튼을 누르고 클로드에 붙여 넣으세요. <b>[대괄호]만</b> 내 것으로 바꾸면 됩니다.</p>
+    </div>
+
+    <nav class="toc" aria-label="차례">
+      <b>차례</b>
+      <ul>
+        <li><a href="#level">나의 모션그래픽 레벨 지도</a></li>
+        <li><a href="#s1">1 · 모션그래픽 도구 지도</a></li>
+        <li><a href="#s2">2 · 클로드 모션그래픽 3층 구조</a></li>
+        <li><a href="#s3">3 · 기본 세팅 체크리스트</a></li>
+        <li><a href="#s4">4 · 모션그래픽 용어 21 + 프로 세팅 파일</a></li>
+        <li><a href="#s5">5 · 같은 한 줄, 다른 결과</a></li>
+        <li><a href="#s6">6 · 올리기 전 권리 체크리스트</a></li>
+        <li><a href="#s7">7 · 스킬 링크 모음집</a></li>
+      </ul>
+    </nav>
+
+    <h2 id="level">나의 모션그래픽 레벨 지도</h2>
+    <div class="box lead">
+      <p><b>오늘 한 문장</b> — 클로드에게 맡기면 아마추어, 세팅을 알려 주면 프로가 됩니다.</p>
+    </div>
+
+    <h2 id="s1">1 · 모션그래픽 도구 지도</h2>
+    <p>예전엔 무엇으로 만들었고, 지금은 무엇이 바뀌었나.</p>
+    <div class="table wide">
+      <table>
+        <thead><tr><th>도구</th><th>하던 일</th><th>어려웠던 점</th></tr></thead>
+        <tbody>
+          <tr><td>애프터이펙트 (Adobe)</td><td>모션그래픽 표준. 레이어 + 키프레임</td><td>유료 구독, 방대한 메뉴, 긴 학습</td></tr>
+          <tr><td>시네마 4D · 블렌더</td><td>3D 모션 (블렌더는 무료)</td><td>3D 개념, 긴 렌더</td></tr>
+          <tr><td>프리미어 · 파이널컷 · 다빈치 리졸브</td><td>영상 편집(컷·자막·소리)</td><td>모션 전용은 아님</td></tr>
+          <tr><td>애플 Motion</td><td>맥용 모션 프로그램</td><td>맥 전용</td></tr>
+          <tr><td>로티 · 리브</td><td>움직임을 앱·웹에 넣는 형식</td><td>만들 땐 디자인 툴 필요</td></tr>
+          <tr><td>젯터 · 캔바</td><td>웹 템플릿으로 빠르게</td><td>템플릿 안에서만, 다들 비슷</td></tr>
+          <tr><td>코드 (CSS · GSAP · Three.js) · 리모션</td><td>코드로 움직임·영상</td><td>코딩을 해야 했다</td></tr>
+          <tr><td><b>지금: 클로드 + HyperFrames</b></td><td>코드는 클로드가 쓰고, 녹화기가 영상으로</td><td>세팅값을 정하는 것이 실력</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>프로가 정하는 공통 개념 세 가지 — <b>레이어</b>(겹쳐 쌓기) · <b>키프레임</b>(언제 어디에) · <b>이징</b>(속도의 곡선)</p>
+
+    <h2 id="s2">2 · 클로드 모션그래픽 3층 구조</h2>
+    <div class="box">
+      <p class="t">클로드는 그림을 그리지 않습니다. 움직이는 웹 페이지를 씁니다.</p>
+      <ol>
+        <li><b>쓰는 손</b> — 클로드: 글자·색·움직임을 코드로</li>
+        <li><b>움직임</b> — 웹 페이지 + GSAP·Three.js 같은 움직임 도구: 브라우저가 재생</li>
+        <li><b>녹화기</b> — HyperFrames가 1초에 30장씩 찍고, FFmpeg가 mp4로 묶고 소리를 붙임</li>
+      </ol>
+    </div>
+
+    <h3>프롬프트 1 · 첫 모션 (Lv1)</h3>
+    <div class="box">
+      <p><a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a> 대화창에서 바로. 채울 칸이 없습니다.</p>
+    </div>
+    <div class="prompt"><pre>"11월 원데이 클래스"라는 글자가 한 글자씩 튀어나오는 5초짜리 모션을 웹 페이지로 만들어 줘.
+세로 9:16, 화면에서 바로 재생되게.</pre></div>
+    <div class="box lead">
+      <p>미리보기에서 글자가 움직이면 <b>Lv1 달성</b> · 대화창으로는 mp4 저장·내 글꼴·규칙 저장이 어렵다 → 3으로</p>
+    </div>
+
+    <h2 id="s3">3 · 기본 세팅 체크리스트</h2>
+    <div class="box">
+      <p>"모션그래픽 만들어 줘"만 해도 클로드가 알아서 깔 때가 있어요. 그런데 무엇이 깔렸는지 모르면 결과가 이상할 때 고칠 곳을 모릅니다. 하나씩 알고 갑니다. <b>클로드 코드(유료 플랜)</b>에서 진행합니다.</p>
+    </div>
+    <div class="table wide">
+      <table>
+        <thead><tr><th>순서</th><th>세팅</th><th>하는 일</th><th>확인</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>작업 폴더 motion-class</td><td>영문·띄어쓰기 없이. 클로드 앱 Code 화면에서 연결</td><td>☐</td></tr>
+          <tr><td>1</td><td>Node.js (LTS)</td><td>엔진. HyperFrames를 돌리는 바탕</td><td>☐</td></tr>
+          <tr><td>2</td><td>FFmpeg</td><td>장면을 mp4로 묶고 소리를 붙임</td><td>☐</td></tr>
+          <tr><td>3</td><td>Git (윈도우)</td><td>윈도우에서 클로드 코드가 명령 실행에 사용</td><td>☐</td></tr>
+          <tr><td>4</td><td>HyperFrames 프로젝트</td><td>녹화기 + 도구 규칙 + 버전 고정</td><td>☐</td></tr>
+          <tr><td>5</td><td>스킬</td><td>전문가의 일하는 순서</td><td>☐</td></tr>
+          <tr><td>6</td><td>재료 폴더</td><td>assets/fonts · images · audio · renders</td><td>☐</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>프롬프트 2 · 내 컴퓨터 점검</h3>
+    <div class="prompt"><pre>모션그래픽 영상을 만들 준비를 하려고 해. 아직 아무것도 설치하지 말고,
+이 컴퓨터에 Node.js, FFmpeg, Git이 있는지와 각각 버전을 확인해서 표로 보여 줘.
+없는 것은 무엇에 쓰는 프로그램인지 한 줄씩 설명해 줘.</pre></div>
+
+    <h3>프롬프트 3 · 필요한 것만 설치</h3>
+    <div class="prompt"><pre>방금 표에서 없는 것만 설치해 줘. 설치하기 전에 무엇을 어디서 받는지 한 줄씩 말해 주고,
+끝나면 다시 버전을 확인해서 표로 보여 줘.</pre></div>
+
+    <h3>프롬프트 4 · HyperFrames 프로젝트로 시작 + 3초 영상</h3>
+    <div class="prompt"><pre>이 폴더를 HyperFrames(https://github.com/heygen-com/hyperframes) 프로젝트로 시작해 줘.
+init으로 만들고, 버전을 고정해 줘. 만들어진 파일이 각각 무슨 역할인지 한 줄씩 알려 줘.
+그다음 흰 바탕에 검정 원이 왼쪽에서 오른쪽으로 움직이는 3초짜리 1080×1920 영상을 렌더해 줘.</pre></div>
+
+    <h3>스킬 ① HyperFrames 설치 (공식 안내)</h3>
+    <div class="prompt"><pre>claude plugin marketplace add heygen-com/hyperframes
+claude plugin install hyperframes@hyperframes</pre></div>
+    <p>또는 <code>npx skills add heygen-com/hyperframes</code> → 고르는 화면에서 Core Skills만. 최신화 <code>npx hyperframes skills update</code></p>
+
+    <h2 id="s4">4 · 모션그래픽 용어 21 + 프로 세팅 파일</h2>
+    <h3>모션그래픽 용어 21</h3>
+    <div class="box tip">
+      <p>"좋은 느낌으로" 대신 <b>이름으로</b> 말하세요. 적극 조합해서 "~해 줘"로 끝내면 됩니다.</p>
+    </div>
+    <div class="table">
+      <table>
+        <thead><tr><th>#</th><th>용어</th><th>뜻</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>이징 (Easing)</td><td>부드러운 가감속</td></tr>
+          <tr><td>2</td><td>예비동작 (Anticipation)</td><td>큰 동작 전 준비</td></tr>
+          <tr><td>3</td><td>스쿼시 앤 스트레치 (Squash and Stretch)</td><td>눌리고 늘어나는 탄력</td></tr>
+          <tr><td>4</td><td>아크 (Arc)</td><td>포물선 이동</td></tr>
+          <tr><td>5</td><td>팔로스루 (Follow Through)</td><td>끝부분이 늦게 따라옴</td></tr>
+          <tr><td>6</td><td>오버랩 (Overlapping Action)</td><td>부위별 시간차</td></tr>
+          <tr><td>7</td><td>스태거 (Stagger)</td><td>순차 등장</td></tr>
+          <tr><td>8</td><td>매치컷 (Match Cut)</td><td>형태 이어서 전환</td></tr>
+          <tr><td>9</td><td>패럴랙스 (Parallax)</td><td>거리별 속도차</td></tr>
+          <tr><td>10</td><td>마스크 리빌 (Mask Reveal)</td><td>가려졌다 등장</td></tr>
+          <tr><td>11</td><td>모션 블러 (Motion Blur)</td><td>빠른 움직임 잔상</td></tr>
+          <tr><td>12</td><td>홀드 (Hold)</td><td>잠깐 멈춤</td></tr>
+          <tr><td>13</td><td>세컨더리 액션 (Secondary Action)</td><td>보조 움직임</td></tr>
+          <tr><td>14</td><td>줌 스루 (Zoom Through)</td><td>확대하며 장면 전환</td></tr>
+          <tr><td>15</td><td>휩 팬 (Whip Pan)</td><td>휙 넘기는 전환</td></tr>
+          <tr><td>16</td><td>아이리스 (Iris)</td><td>원형 전환</td></tr>
+          <tr><td>17</td><td>키네틱 타이포 (Kinetic Typography)</td><td>움직이는 글자</td></tr>
+          <tr><td>18</td><td>카운트업 (Count Up)</td><td>숫자 증가 연출</td></tr>
+          <tr><td>19</td><td>푸시 인 (Push In)</td><td>카메라가 천천히 접근</td></tr>
+          <tr><td>20</td><td>비트 싱크 (Beat Sync)</td><td>박자에 맞춰 움직임</td></tr>
+          <tr><td>21</td><td>루프 (Loop)</td><td>끝과 처음 연결</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>프로의 세팅값 10개</h3>
+    <div class="table wide">
+      <table>
+        <thead><tr><th>항목</th><th>릴스 예시</th><th>정하지 않으면</th></tr></thead>
+        <tbody>
+          <tr><td>해상도·비율</td><td>1080×1920</td><td>아무 크기, 업로드 시 잘림</td></tr>
+          <tr><td>프레임</td><td>30fps (부드럽게 60)</td><td>끊기거나 파일만 커짐</td></tr>
+          <tr><td>길이</td><td>12초 · 장면 4~5개</td><td>늘어지거나 너무 빠름</td></tr>
+          <tr><td>글꼴</td><td>assets/fonts의 상업용 무료 글꼴</td><td>기본 글꼴, 저작권 불명</td></tr>
+          <tr><td>색</td><td>배경·글자·강조 3~4색</td><td>보라색 그라데이션</td></tr>
+          <tr><td>이징</td><td>들어올 때 감속, 나갈 때 가속</td><td>기계 같은 같은 속도</td></tr>
+          <tr><td>장면 시간</td><td>글자 최소 1.5초</td><td>못 읽고 지나감</td></tr>
+          <tr><td>안전 영역</td><td>위 15% · 아래 20% 비움</td><td>릴스 UI에 가림</td></tr>
+          <tr><td>움직임 용어</td><td>스태거·마스크 리빌 등</td><td>매번 같은 페이드</td></tr>
+          <tr><td>금지 + 검사</td><td>AI 티 목록 · 렌더 전 check</td><td>AI 티, 깨진 렌더</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>프롬프트 6 · 내 규칙 저장하기</h3>
+    <div class="box">
+      <p>규칙을 한 번 말해 주고, 저장해 달라고 하면 끝. 저장된 규칙은 그 폴더에서 클로드가 매번 먼저 읽는 지침이 됩니다.</p>
+    </div>
+    <div class="prompt"><pre>앞으로 이 폴더에서 만드는 영상은 이 규칙을 지켜 줘.
+
+[세로 릴스 크기], 글자는 크게 1.5초 이상, 색은 지정색이 없는경우 내용에 맞게 선택해
+
+단  보라색 그라데이션은 금지.
+
+이 규칙을 CLAUDE.md에 저장해 줘.</pre></div>
+
+    <p class="label">더 자세한 버전 (심화단계)</p>
+    <div class="prompt"><pre>이 폴더의 CLAUDE.md에 모션그래픽 작업 규칙을 만들어 줘. 앞으로 이 폴더의 모든 영상은 이 규칙을 지켜.
+
+- 해상도 [가로×세로], [프레임]fps, 기본 길이 [초], 장면 [개수]
+- 글꼴: assets/fonts 안의 파일만 사용, 제목은 가장 굵게
+- 색: 배경 [색], 글자 [색], 강조 [색]
+- 이징: 들어올 때 감속, 나갈 때 가속. 같은 속도로 움직이는 것 금지
+- 글자는 최소 1.5초 보이게
+- 안전 영역: 위 15%, 아래 20%에는 글자를 두지 않음
+- 쓸 움직임: [용어 21에서 고르기]
+- 금지: 모든 장면 같은 페이드, 의미 없는 모서리 라벨, 보라색 그라데이션, 반복 효과음, 내가 주지 않은 숫자·후기
+- 렌더: 렌더 전에 꼭 검사(check)를 돌리고 문제가 없을 때만 renders 폴더에 mp4. 버전은 고정된 것만 사용
+
+지금 있는 CLAUDE.md의 HyperFrames 규칙은 지우지 말고, 그 아래에 '내 디자인 규칙'으로 붙여 줘.
+다 쓰면 규칙을 다섯 줄로 요약해 줘.</pre></div>
+
+    <h3>스킬 ② taste-skill (디자인 감각)</h3>
+    <div class="prompt"><pre>npx skills add https://github.com/Leonxlnx/taste-skill --skill "design-taste-frontend"</pre></div>
+    <div class="box lead">
+      <p>규칙이 CLAUDE.md에 저장되면 <b>Lv3 입구</b> · 유튜브·상품 소개용은 해상도만 1920×1080으로 바꾼 세팅 파일을 따로</p>
+    </div>
+
+    <h2 id="s5">5 · 같은 한 줄, 다른 결과</h2>
+    <div class="box">
+      <p>빈 폴더(A)와 세팅한 폴더(B)에 한 글자도 다르지 않은 같은 문장을 넣었습니다. 달라진 건 세팅 하나입니다.</p>
+      <p>비교 영상(A · B · B+ · 효과음 비교)은 강의 중 화면으로 보여 드리고, 강의 후 노션 원본 페이지에 올립니다.</p>
+    </div>
+
+    <h3>프롬프트 8 · 내 릴스</h3>
+    <p class="label">① 빈칸 상자</p>
+    <div class="prompt"><pre>[내 사업·강의] 릴스를 모션그래픽으로 만들어 줘.
+문구: "[문구 1]" / "[문구 2]" / "[문구 3]" / "[행동 문구]"</pre></div>
+    <p class="label">② 채운 상자 — 이대로 복사해서 쓰세요</p>
+    <div class="prompt"><pre>새싹 공방 11월 원데이 클래스 모집 릴스를 모션그래픽으로 만들어 줘.
+문구: "11월 원데이 클래스" / "도자기 머그 · 소이 캔들 · 미니 화분" / "한 반 6명" / "문의는 DM"</pre></div>
+
+    <h3>다듬기 상자 (필요한 것만)</h3>
+    <div class="prompt"><pre>세 번째 장면만 마스크 리빌로 바꿔 줘. 나머지는 그대로.</pre></div>
+    <div class="prompt"><pre>글자마다 0.5초씩 더 머물게 해 줘.</pre></div>
+    <div class="prompt"><pre>움직임은 그대로 두고 색만 [색]으로 바꿔 줘.</pre></div>
+
+    <h3>프롬프트 10·11 · 음악과 비트</h3>
+    <div class="prompt"><pre>이 영상에 어울리는, 상업적으로 써도 되는 무료 음악을 3개 찾아 줘. 라이선스 조건도 같이 알려 줘.</pre></div>
+    <div class="prompt"><pre>고른 음악 파일([파일 이름])을 넣고, 비트에 맞춰 장면 전환을 다시 맞춰서 렌더해 줘.</pre></div>
+
+    <p class="label">음악을 직접 만들고 싶다면</p>
+    <div class="box">
+      <p>클로드 코드가 코드로 소리를 계산해서 배경음 파일을 만들어요. 직접 만든 소리라 저작권 걱정이 없고, 장면 전환에 박자를 정확히 맞출 수 있어요. 오늘 본 인트로 · 3층 구조 영상의 배경음도 이렇게 만들었어요.</p>
+    </div>
+    <div class="prompt"><pre>이 영상에 어울리는 배경음을 코드로 직접 만들어 줘.
+밝고 가벼운 분위기, 100BPM, 영상 길이에 맞춰서.
+장면이 바뀌는 시점에 맞춰 악기가 하나씩 더해지게 하고, 끝은 서서히 작아지게.</pre></div>
+    <div class="box tip">
+      <p>마림바 · 패드 · 킥처럼 단순하고 깔끔한 배경음까지가 잘 되는 범위예요. 노래(보컬)는 어려워요. 들어 보고 "더 밝게", "더 차분하게", "피아노 느낌으로"처럼 고쳐 달라고 하세요.</p>
+    </div>
+
+    <h3>스킬 ③ motionmaxxing (AI 티 빼기)</h3>
+    <div class="prompt"><pre>git clone https://github.com/Tejashmakwana/motionmaxxing ~/.claude/skills/motionmaxxing
+bash ~/.claude/skills/motionmaxxing/install.sh</pre></div>
+    <p>필요: Node 22 이상 · Python 3 · FFmpeg · Chrome. install.sh는 요구 사항만 확인합니다.</p>
+
+    <h3>스킬 ④ motion-graphics · sound-effects (진짜 효과음)</h3>
+    <div class="prompt"><pre>npx skills add Barty-Bart/motion-graphics</pre></div>
+    <p>고르는 화면에서 sound-effects 선택 → "이 영상에 효과음 넣어 줘". 필요: FFmpeg · Python 3.10 이상.</p>
+    <div class="box warn">
+      <p>카운트업·후기 숫자는 내가 준 것만 · "나머지는 그대로"를 붙여 다듬기 · 음악 라이선스 원문은 직접 열어 보기</p>
+    </div>
+
+    <h2 id="s6">6 · 올리기 전 권리 체크리스트</h2>
+    <ul class="checks">
+      <li><label><input type="checkbox"> 글꼴 — 상업용 무료인지 라이선스 확인, assets/fonts에만</label></li>
+      <li><label><input type="checkbox"> 음악·효과음 — 출처와 라이선스 원문 확인, 모르는 음악은 쓰지 않기</label></li>
+      <li><label><input type="checkbox"> 남의 영상·로고·캐릭터 — 베끼지 않기. 참고는 색과 리듬만</label></li>
+      <li><label><input type="checkbox"> 숫자·후기 — 내가 확인한 사실만</label></li>
+      <li><label><input type="checkbox"> 고객 얼굴·연락처가 보이는 사진 — 올리지 않기</label></li>
+      <li><label><input type="checkbox"> 클로드 코드 "허용할까요" — 작업 폴더 안의 일만</label></li>
+    </ul>
+    <div class="box warn">
+      <p>AI는 없는 숫자도 자신 있게 만듭니다. 카운트업 숫자는 반드시 내가 줍니다.</p>
+    </div>
+
+    <h2 id="s7">7 · 스킬 링크 모음집</h2>
+    <div class="box tip">
+      <p>다 지금 할 필요 없어요. 지금 → 다음 → 언젠가 순서로. 별 수·라이선스는 2026-10-19 기준입니다. 설치 전에는 클로드에게 먼저 읽게 하세요.</p>
+    </div>
+    <h3>지금 (오늘 만난 스킬)</h3>
+    <div class="table wide">
+      <table>
+        <thead><tr><th>#</th><th>스킬</th><th>하는 일</th><th>설치</th></tr></thead>
+        <tbody>
+          <tr><td>①</td><td>HyperFrames ★6.7만 · Apache-2.0</td><td>웹 페이지 → mp4, /hyperframes</td><td><code>npx skills add heygen-com/hyperframes</code></td></tr>
+          <tr><td>②</td><td>taste-skill ★9.9만 · MIT</td><td>디자인 감각</td><td><code>npx skills add https://github.com/Leonxlnx/taste-skill --skill "design-taste-frontend"</code></td></tr>
+          <tr><td>③</td><td>motionmaxxing ★875 · Apache-2.0</td><td>AI 티 빼기</td><td>git clone + install.sh (위 5)</td></tr>
+          <tr><td>④</td><td>motion-graphics ★742</td><td>효과음·홍보 영상·B롤 등 6종</td><td><code>npx skills add Barty-Bart/motion-graphics</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>영감·자료실</h3>
+    <div class="table">
+      <table>
+        <thead><tr><th>사이트</th><th>쓰는 법</th></tr></thead>
+        <tbody>
+          <tr><td><a href="https://prompt-motion.com" target="_blank" rel="noopener">Prompt Motion</a></td><td>클로드로 만든 모션 영상 + 프롬프트</td></tr>
+          <tr><td><a href="https://skillry.dev/ai-videos/opus-5-5" target="_blank" rel="noopener">Skillry</a></td><td>화제 영상과 실제 프롬프트</td></tr>
+          <tr><td><a href="https://motionsites.ai" target="_blank" rel="noopener">motionsites</a></td><td>움직이는 홈페이지 프롬프트</td></tr>
+          <tr><td><a href="https://jitter.video" target="_blank" rel="noopener">Jitter</a></td><td>참고 스타일 찾기</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>강사 소개</h2>
+    <div class="box tip">
+      <p>오늘 만든 것, 받은 키트 캡처를 스레드 @leaderpl.ai에 후기로 남겨 주세요. 다음 강의를 만드는 데 가장 큰 힘이 됩니다.</p>
+    </div>
+    <div class="box">
+      <p class="t">이신영 · 리더플AI 대표</p>
+      <p>문의 leaderpl@naver.com</p>
+      <ul class="links">
+        <li><a href="https://leaderpl.liveklass.com" target="_blank" rel="noopener">리더플 클래스</a></li>
+        <li><a href="https://www.youtube.com/@이신영의AI" target="_blank" rel="noopener">유튜브 이신영의 AI</a></li>
+        <li><a href="https://open.kakao.com/o/gg7HIsJi" target="_blank" rel="noopener">카카오톡 오픈채팅 AI 공부방</a></li>
+        <li><a href="https://www.threads.net/@leaderpl.ai" target="_blank" rel="noopener">인스타그램·스레드 @leaderpl.ai</a></li>
+        <li><a href="https://leaderpl-ai100.netlify.app" target="_blank" rel="noopener">AI 질문 100선</a></li>
+      </ul>
+    </div>
+
+    <p class="source">출처: 이신영의 무료 AI 강의 8회 자료 (리더플AI) — 강사님의 허락을 받아 옮겼어요. <a href="https://leather-dollar-973.notion.site/AI-8-10-20-3feda2d9b7eb812b938dd38d6629f54d" target="_blank" rel="noopener">노션 원본 보기 ↗</a></p>
+    <p class="copyright">Copyright · 본 자료는 리더플AI에서 제작한 강의 자료이며, 저작권자의 사전 서면 허가 없이 전부 또는 일부를 무단 복제, 재배포, 재판매, 2차 가공, 상업적 활용하는 것을 금합니다. All Rights Reserved.</p>
+  </main>
+
+  <script src="/notes/notes.js"></script>
+</body>
+</html>

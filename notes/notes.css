@@ -259,3 +259,21 @@ body.teacher { padding-bottom: 90px; }
   .folders { grid-template-columns: 1fr 1fr; }
   .top-actions .back { min-height: 40px; padding: 0 12px; font-size: 14px; }
 }
+
+/* 체크리스트·명령어 */
+.checks { list-style: none; margin: 12px 0; padding: 0; display: grid; gap: 8px; }
+.checks label { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; border: 1.5px solid var(--line); border-radius: 14px; background: var(--card); cursor: pointer; }
+.checks input { flex: none; width: 20px; height: 20px; margin-top: 4px; accent-color: var(--lime-deep); }
+.checks input:checked + * , .checks label:has(input:checked) { color: var(--ink-soft); }
+.doc code { padding: 1px 6px; border-radius: 6px; background: var(--gray); font-family: var(--mono); font-size: .88em; word-break: break-all; }
+
+/* 나란히 비교하는 두 상자, 글머리 목록, 자주 묻는 질문 */
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+.pair .box { margin: 0; }
+.bul { margin: 10px 0; padding-left: 1.3em; }
+.bul li { margin: 6px 0; }
+.faq { margin: 14px 0; }
+.faq dt { margin-top: 18px; font-weight: 800; }
+.faq dt::before { content: "Q. "; color: var(--lime-deep); }
+.faq dd { margin: 4px 0 0; padding-left: 1.6em; }
+@media (max-width: 560px) { .pair { grid-template-columns: 1fr; } }
