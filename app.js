@@ -83,6 +83,12 @@ const menuOf = (key) => MENUS.find((m) => m.key === key);
 const subIndex = (menu, sub) => (menu && sub ? menu.subs.indexOf(sub) : -1);
 const anchor = (menu, i) => (i >= 0 ? `${menu.key}-s${i}` : `${menu.key}-etc`);
 
+// 오늘의 카드 제목: '도깨비 시장놀이'처럼 도깨비로 시작하면 도깨비 다음에 줄을 바꾼다
+function cardName(name) {
+  const m = name.trim().match(/^(\S*도깨비)\s+(.+)$/);
+  return m ? [m[1], el('br'), m[2]] : [name];
+}
+
 function linkNode(item, cls) {
   const u = safeUrl(item.url);
   if (!u) return null;
@@ -99,7 +105,7 @@ function linkNode(item, cls) {
       el('span', { class: 'panel' }, [
         el('span', {}, [
           el('span', { class: 'tag', text: tag }),
-          el('span', { class: 'name' }, [el('span', { text: item.name })]),
+          el('span', { class: 'name' }, [el('span', {}, cardName(item.name))]),
           el('span', { class: 'meta', text: host }),
         ]),
         el('span', { class: 'badge', 'aria-hidden': 'true', text: initial(item.name) }, [
