@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>도깨비 미로찾기 · 에듀깨비</title>
+  <meta name="description" content="동물 친구가 좋아하는 간식까지 길을 찾아가요! 화살표 키나 버튼으로 움직이는 미로찾기">
+  <meta name="theme-color" content="#EFF9E3">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="/games/maze/maze.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/games/maze/">
+      <img src="/logo.png" alt="" width="44" height="44">
+      <span>도깨비 미로찾기</span>
+    </a>
+    <a class="back" href="/">← 에듀깨비로</a>
+  </header>
+
+  <!-- 준비: 누구랑 갈지, 미로 크기 고르기 -->
+  <main class="setup" id="setup">
+    <section class="step">
+      <h2><i>1</i> 누구랑 길을 찾을까요?</h2>
+      <div class="friends" id="friends"></div>
+    </section>
+
+    <section class="step">
+      <h2><i>2</i> 미로 크기를 골라요</h2>
+      <div class="sizes" id="sizes"></div>
+    </section>
+
+    <button class="big go" id="start">🧭 출발!</button>
+  </main>
+
+  <!-- 미로 -->
+  <main class="game" id="game" hidden>
+    <div class="bar">
+      <button class="pill" id="stop">🏠 그만하기</button>
+      <span class="chip time">⏱️ <b id="time">0:00</b></span>
+      <span class="chip stars">⭐ <b id="got">0</b> / 3</span>
+      <button class="pill" id="hint">💡 길 힌트 <b id="hints">3</b></button>
+      <button class="pill" id="sound" aria-pressed="true">🔊 소리</button>
+    </div>
+    <div class="field">
+      <div class="mazeBox">
+        <svg class="maze" id="maze" role="img" aria-label="미로"></svg>
+      </div>
+      <aside class="pad" aria-label="움직이기">
+        <button class="key up" data-dir="0" aria-label="위로">▲</button>
+        <button class="key left" data-dir="3" aria-label="왼쪽으로">◀</button>
+        <span class="padFace" id="padFace"></span>
+        <button class="key right" data-dir="1" aria-label="오른쪽으로">▶</button>
+        <button class="key down" data-dir="2" aria-label="아래로">▼</button>
+      </aside>
+    </div>
+    <p class="tip" id="tip"></p>
+  </main>
+
+  <!-- 끝났을 때 -->
+  <div class="pop" id="pop" hidden>
+    <div class="popBox" role="dialog" aria-modal="true" aria-labelledby="popTitle">
+      <b class="popFace" id="popStars">⭐⭐⭐</b>
+      <h3 id="popTitle">도착!</h3>
+      <div class="stats" id="stats"></div>
+      <p id="popMsg"></p>
+      <div class="acts">
+        <button class="big go" id="again">🔁 새 미로</button>
+        <button class="big soft" id="other">🏠 다른 놀이</button>
+      </div>
+    </div>
+  </div>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <script src="/games/maze/maze.js"></script>
+</body>
+</html>
