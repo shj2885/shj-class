@@ -117,6 +117,7 @@ td.n { text-align: right; white-space: nowrap; }
   min-height: 34px; padding: 0 14px; border: 0; border-radius: 999px;
   background: var(--lime); color: var(--ink); font: inherit; font-size: 14px; font-weight: 800; cursor: pointer;
 }
+.prompt.long pre { max-height: 460px; overflow-y: auto; } /* 아주 긴 프롬프트는 상자 안에서 스크롤 */
 .copy:hover { filter: brightness(.95); }
 .copy.done { background: #fff; }
 
