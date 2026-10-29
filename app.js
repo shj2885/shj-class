@@ -329,7 +329,24 @@ function render(links) {
       ...body,
     ]);
   }));
+  fitNames();
 }
+
+// 사이트 이름은 절대 두 줄로 꺾지 않는다: 칸보다 길면 글자를 한 줄에 들어갈 때까지 줄인다
+function fitNames() {
+  document.querySelectorAll('.today-card .name, .link-item .name').forEach((n) => {
+    n.style.fontSize = '';
+    let size = parseFloat(getComputedStyle(n).fontSize);
+    const min = Math.max(10, size * 0.4);
+    while (n.scrollWidth > n.clientWidth + 0.5 && size > min) {
+      size -= 0.5;
+      n.style.fontSize = size + 'px';
+    }
+  });
+}
+let fitT = 0;
+window.addEventListener('resize', () => { clearTimeout(fitT); fitT = setTimeout(fitNames, 120); });
+document.fonts?.ready.then(fitNames);
 
 async function load() {
   document.getElementById('load-error').hidden = true;

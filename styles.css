@@ -147,7 +147,7 @@ a { color: inherit; }
 .today-card:active { transform: translateY(-1px); transition-duration: .08s; }
 .panel {
   position: relative; overflow: hidden;
-  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 16px;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 16px;
   min-height: 210px; padding: clamp(24px, 2.6vw, 34px);
   background: #FAFAF7; border-radius: 22px;
 }
@@ -158,9 +158,10 @@ a { color: inherit; }
   background: var(--ink); color: var(--lime); font-size: 14px; font-weight: 800; letter-spacing: -0.01em;
 }
 .today-list li:nth-child(3n+2) .tag { background: var(--lime); color: var(--ink); }
+/* 제목은 꺾지 않고 한 줄로(도깨비 다음 줄바꿈만 허용). 넘치면 app.js의 fitNames가 글자를 줄인다 */
 .today-card .name {
   display: block; font-weight: 900; font-size: clamp(28px, 2.8vw, 38px); line-height: 1.12; letter-spacing: -0.05em;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
 }
 .today-card .name span { background: linear-gradient(transparent 60%, var(--lime) 60% 92%, transparent 92%); }
 .today-list li:nth-child(3n+2) .name span { background: none; }
@@ -210,7 +211,7 @@ a { color: inherit; }
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
 }
 .link-item {
-  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px;
   min-height: 80px; padding: 14px 18px;
   background: var(--card); border: 1.5px solid var(--line); border-radius: 22px;
   text-decoration: none; color: var(--ink);
@@ -223,7 +224,7 @@ a { color: inherit; }
   font-weight: 900; font-size: 20px;
 }
 .link-item:hover .mark { background: var(--lime); }
-.link-item .name { display: block; font-weight: 800; font-size: 19px; letter-spacing: -0.03em; line-height: 1.25; overflow-wrap: anywhere; }
+.link-item .name { display: block; font-weight: 800; font-size: 19px; letter-spacing: -0.03em; line-height: 1.25; white-space: nowrap; }
 .link-item .meta { display: block; font-size: 13px; color: var(--ink-soft); overflow-wrap: anywhere; }
 .link-item .go { width: 20px; height: 20px; opacity: .35; transition: opacity .2s, transform .25s var(--ease); }
 .link-item:hover .go { opacity: 1; transform: translate(2px, -2px); }
@@ -353,7 +354,7 @@ body.teacher { padding-bottom: 76px; } /* 아래 띠에 가리지 않게 */
 .cat[data-density="mini"] .link-grid { --card: 160px; gap: 6px; }
 .cat[data-density="mini"] .link-item { grid-template-columns: auto 1fr; min-height: 44px; padding: 6px 12px 6px 6px; gap: 8px; border-radius: 999px; }
 .cat[data-density="mini"] .link-item .mark { width: 30px; height: 30px; font-size: 13px; }
-.cat[data-density="mini"] .link-item .name { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cat[data-density="mini"] .link-item .name { font-size: 15px; }
 .cat[data-density="mini"] .link-item .meta,
 .cat[data-density="mini"] .link-item .go { display: none; }
 
