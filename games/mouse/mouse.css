@@ -1,0 +1,271 @@
+/* 크림색 탐험 지도 느낌 + 저학년도 잘 보이는 큰 글자·큰 버튼 */
+:root {
+  --bg: #FFF8E9;
+  --card: #FFFFFF;
+  --ink: #26314A;
+  --soft: #738097;
+  --pink: #FF8FB1;
+  --yellow: #FFD45C;
+  --mint: #5FD0B0;
+  --mintD: #3BAE8E;
+  --sky: #7CC4FF;
+    --line: #F0E2C4;
+  --sans: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --gut: clamp(10px, 2vw, 28px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0; color: var(--ink);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at 20px 20px, #FFE9B8 6px, transparent 7px),
+    radial-gradient(circle at 60px 60px, #E3F1FF 6px, transparent 7px);
+  background-size: 80px 80px;
+  font-family: var(--sans); font-size: 19px; line-height: 1.4;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  -webkit-user-select: none; user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+:focus-visible { outline: 4px solid var(--sky); outline-offset: 3px; }
+button { font: inherit; color: var(--ink); cursor: pointer; }
+
+/* ---------- 맨 위 ---------- */
+.top {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px var(--gut) 6px;
+}
+.brand {
+  display: inline-flex; align-items: center; gap: 10px;
+  color: inherit; text-decoration: none;
+  font-size: 26px; font-weight: 900; letter-spacing: -0.03em;
+}
+.brand img { width: 50px; height: 50px; padding: 4px; border-radius: 50%; background: #fff; box-shadow: 0 3px 0 var(--line); }
+.back {
+  display: inline-flex; align-items: center; min-height: 46px; padding: 0 18px;
+  border-radius: 999px; background: #fff; box-shadow: 0 4px 0 var(--line);
+  text-decoration: none; color: var(--ink); font-size: 17px; font-weight: 800; white-space: nowrap;
+}
+.back:hover { background: #FFFBF2; }
+
+/* ---------- 큰 버튼 ---------- */
+.big {
+  min-height: 64px; padding: 0 30px; border: 0; border-radius: 999px;
+  font-size: 24px; font-weight: 900; letter-spacing: -0.02em;
+  transition: transform .08s, box-shadow .08s;
+}
+.big:active { transform: translateY(4px); }
+.go { background: var(--mint); color: #fff; box-shadow: 0 6px 0 var(--mintD); }
+.go:active { box-shadow: 0 2px 0 var(--mintD); }
+.soft { background: #fff; box-shadow: 0 6px 0 var(--line); }
+.soft:active { box-shadow: 0 2px 0 var(--line); }
+
+/* ---------- 준비 화면 ---------- */
+.setup { max-width: 1080px; margin: 0 auto; padding: 8px var(--gut) 48px; display: grid; gap: 22px; }
+.step {
+  background: var(--card); border-radius: 32px; padding: 22px clamp(14px, 2.4vw, 28px) 24px;
+  box-shadow: 0 6px 0 var(--line);
+}
+.step h2 {
+  display: flex; align-items: center; gap: 12px;
+  margin: 0 0 16px; font-size: clamp(24px, 3.4vw, 30px); font-weight: 900; letter-spacing: -0.03em;
+}
+.step h2 i {
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  font-style: normal; color: #fff; background: var(--pink); flex: none;
+}
+.step:nth-of-type(2) h2 i { background: var(--sky); }
+
+.modes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.mode, .tm {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 14px 6px 12px; border: 0; border-radius: 26px; text-align: center;
+  background: var(--c); box-shadow: 0 6px 0 var(--cd);
+  transition: transform .08s, box-shadow .08s;
+}
+.mode:active, .tm:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--cd); }
+.mode b { font-size: 56px; line-height: 1.15; font-weight: 400; }
+.mode strong { font-size: 22px; font-weight: 900; letter-spacing: -0.03em; }
+.mode span { font-size: 17px; font-weight: 800; opacity: .85; white-space: nowrap; }
+.mode.on, .tm.on { outline: 5px solid var(--ink); outline-offset: 3px; }
+
+.sizes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.tm b { font-size: 38px; line-height: 1.1; }
+.tm strong { font-size: 26px; font-weight: 900; letter-spacing: -0.03em; }
+.tm span { font-size: 16px; font-weight: 800; opacity: .8; }
+.tm .best {
+  margin-top: 6px; padding: 2px 12px; border-radius: 999px;
+  background: rgba(255, 255, 255, .7); font-size: 15px; opacity: 1;
+}
+
+#start { justify-self: center; min-width: min(420px, 100%); min-height: 76px; font-size: 30px; }
+
+/* ---------- 게임 화면 ---------- */
+body.playing { height: 100vh; height: 100dvh; overflow: hidden; display: flex; flex-direction: column; }
+.game { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 0 var(--gut) var(--gut); }
+.bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  margin: 4px 0 10px; padding: 8px;
+  background: #fff; border-radius: 26px; box-shadow: 0 5px 0 var(--line);
+}
+.pill {
+  min-height: 52px; padding: 0 18px; border: 0; border-radius: 999px;
+  background: #FFF3D6; box-shadow: 0 4px 0 var(--line);
+  font-size: 18px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap;
+}
+.pill:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
+#sound { background: #E3F3FF; margin-left: auto; }
+#sound[aria-pressed="false"] { opacity: .6; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 52px; padding: 0 18px;
+  border-radius: 999px; font-size: 20px; font-weight: 800; white-space: nowrap;
+}
+.chip b { font-size: 26px; font-weight: 900; font-variant-numeric: tabular-nums; }
+.chip i { font-style: normal; }
+.chip.done { background: #FFE9F0; }
+.chip.done.up { animation: boing .5s cubic-bezier(.3, 1.6, .5, 1); }
+.chip.time { background: #E2F8F1; }
+
+/* 놀이터: 그림이 여기저기 나타난다 */
+.stage {
+  position: relative; flex: 1; min-height: 300px; overflow: hidden;
+  border-radius: 32px; border: 4px dashed #D5E5F2;
+  background: linear-gradient(150deg, #F1FAFF, #FBF9FF);
+  touch-action: none; cursor: default;
+}
+.prompt {
+  position: absolute; top: 14px; left: 50%; translate: -50% 0; z-index: 3;
+  padding: 8px 22px; border-radius: 999px; background: rgba(255, 255, 255, .9);
+  font-size: clamp(19px, 2.6vw, 26px); font-weight: 900; letter-spacing: -0.03em; white-space: nowrap;
+  box-shadow: 0 4px 0 #E3ECF5; pointer-events: none;
+}
+.target {
+  position: absolute; z-index: 2; translate: -50% -50%;
+  display: grid; place-items: center; width: var(--t); height: var(--t);
+  border: 0; padding: 0; background: none; cursor: pointer;
+  font-size: calc(var(--t) * .78); line-height: 1;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  touch-action: none; filter: drop-shadow(0 6px 4px rgba(70, 81, 106, .18));
+  animation: appear .35s cubic-bezier(.3, 1.6, .5, 1);
+  transition: scale .12s;
+}
+.target:hover { scale: 1.08; }
+.target:active { scale: .94; }
+.target::before {
+  content: ""; position: absolute; inset: -6%; border-radius: 50%; z-index: -1;
+  background: rgba(255, 255, 255, .75); box-shadow: 0 0 0 4px rgba(255, 214, 93, .55);
+}
+.target.balloon::before { box-shadow: 0 0 0 4px rgba(255, 142, 167, .55); }
+.target.half::before { box-shadow: 0 0 0 7px #FF8EA7; }
+.target.fruit { cursor: grab; }
+.target.fruit::before { border-radius: 30%; box-shadow: 0 0 0 4px rgba(116, 201, 149, .6); }
+.target.dragging { cursor: grabbing; scale: 1.12; transition: none; animation: none; z-index: 5; }
+.target.bye { animation: bye .3s forwards; pointer-events: none; }
+@keyframes appear { from { scale: .3; opacity: 0; } to { scale: 1; opacity: 1; } }
+@keyframes bye { to { scale: 1.6; opacity: 0; } }
+
+.basket {
+  position: absolute; z-index: 1; translate: -50% -50%;
+  display: grid; place-items: center; width: calc(var(--t) * 1.7); height: calc(var(--t) * 1.5);
+  border: 5px dashed #C78B55; border-radius: 30px; background: rgba(248, 198, 142, .35);
+  font-size: calc(var(--t) * .9); line-height: 1;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  transition: scale .15s, background .15s;
+}
+.basket.ready { background: rgba(116, 201, 149, .35); border-color: #5FB37A; scale: 1.08; }
+
+.spark { position: absolute; z-index: 4; pointer-events: none; translate: -50% -50%; font-size: 34px; animation: spark .7s ease-out forwards; }
+@keyframes spark { from { opacity: 0; scale: .4; } 30% { opacity: 1; } to { opacity: 0; scale: 1.4; transform: translateY(-60px); } }
+
+/* 왼쪽 위 마우스 그림: 누른 버튼이 분홍으로 */
+.mouseCard {
+  position: absolute; left: 14px; top: 14px; z-index: 3;
+  display: flex; align-items: center; gap: 12px; padding: 10px 20px 10px 14px;
+  border-radius: 20px; background: #fff; box-shadow: 0 4px 0 #E3ECF5; pointer-events: none;
+}
+.mouseCard svg { width: 62px; height: 96px; overflow: visible; }
+.mouseCard span { font-size: 22px; font-weight: 900; color: var(--ink); }
+.mCable { fill: none; stroke: #111; stroke-width: 3.5; stroke-linecap: round; }
+.mBody { fill: #DDE3EE; stroke: #111; stroke-width: 4; }
+.mLeft { fill: #FFD66E; stroke: #111; stroke-width: 3; stroke-linejoin: round; transition: fill .1s; }
+.mRight { fill: #fff; stroke: #111; stroke-width: 3; stroke-linejoin: round; transition: fill .1s; }
+.mSplit { stroke: #111; stroke-width: 3.5; stroke-linecap: round; }
+.mWheel { fill: #5A6478; stroke: #111; stroke-width: 3; }
+.mShine { fill: #fff; opacity: .7; }
+.mouseCard.left .mLeft { fill: #FF5C80; }
+.mouseCard.right .mRight { fill: #FF5C80; }
+/* 안내 글은 마우스 그림과 겹치지 않게 오른쪽으로 */
+@media (max-width: 1300px) and (min-width: 761px) {
+  .prompt { left: auto; right: 16px; translate: none; }
+}
+
+.toast {
+  position: absolute; top: 70px; left: 50%; translate: -50% -10px; z-index: 6;
+  padding: 10px 20px; border-radius: 999px; background: #27344E; color: #fff;
+  font-size: 19px; font-weight: 900; white-space: nowrap; opacity: 0; pointer-events: none;
+  transition: opacity .2s, translate .2s;
+}
+.toast.show { opacity: 1; translate: -50% 0; }
+
+/* ---------- 끝났을 때 ---------- */
+.pop {
+  position: fixed; inset: 0; z-index: 9000; display: grid; place-items: center; padding: 16px;
+  background: rgba(38, 49, 74, .3);
+}
+.popBox {
+  width: min(560px, 100%); padding: 20px 22px 24px; border-radius: 36px; text-align: center;
+  background: #fff; box-shadow: 0 10px 0 var(--line);
+  animation: boing .5s cubic-bezier(.3, 1.6, .5, 1);
+}
+.popFace { display: block; font-size: 56px; line-height: 1.1; letter-spacing: .05em; }
+.popBox h3 { margin: 6px 0 12px; font-size: 34px; font-weight: 900; letter-spacing: -0.03em; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 0 0 14px; }
+.stats div { padding: 10px 4px; border-radius: 20px; background: #FFF5DD; }
+.stats b { display: block; font-size: 32px; font-weight: 900; font-variant-numeric: tabular-nums; }
+.stats span { font-size: 16px; font-weight: 800; color: var(--soft); }
+.popBox p { margin: 0 0 20px; font-size: 21px; font-weight: 800; color: var(--soft); }
+.acts { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+@keyframes boing { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9500; overflow: hidden; }
+.confetti i {
+  position: absolute; top: -20px; width: 12px; height: 18px; border-radius: 3px;
+  animation: fall linear forwards;
+}
+@keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
+
+
+/* ---------- 태블릿·휴대폰 ---------- */
+@media (max-width: 860px) {
+  .modes { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 760px) {
+  body { font-size: 17px; }
+  .brand { font-size: 21px; }
+  .brand img { width: 42px; height: 42px; }
+  .back { min-height: 42px; padding: 0 14px; font-size: 15px; }
+  .modes { gap: 10px; }
+  .mode b { font-size: 44px; }
+  .mode strong { font-size: 19px; }
+  .sizes { gap: 10px; }
+  .tm strong { font-size: 22px; }
+  #start { width: 100%; font-size: 26px; }
+  .bar { gap: 6px; padding: 6px; border-radius: 20px; }
+  .pill { min-height: 44px; padding: 0 12px; font-size: 15px; }
+  .chip { min-height: 44px; padding: 0 12px; font-size: 16px; }
+  .chip b { font-size: 20px; }
+  .stage { border-radius: 22px; }
+  .prompt { font-size: 17px; padding: 6px 14px; }
+  .mouseCard { left: 8px; top: 8px; scale: .8; transform-origin: left top; }
+  .prompt { top: auto; bottom: 12px; white-space: normal; text-align: center; width: max-content; max-width: calc(100% - 24px); }
+  .toast { font-size: 16px; top: 56px; }
+}
+@media (max-width: 480px) {
+  .mouseCard { scale: .7; }
+}
+@media (max-width: 400px) {
+  .top { padding-top: 6px; }
+  .brand span { font-size: 17px; }
+}

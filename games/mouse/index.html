@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>도깨비 마우스 탐험대 · 에듀깨비</title>
+  <meta name="description" content="톡 클릭, 톡톡 더블클릭, 쭉 끌어서 놓기! 저학년을 위한 마우스 연습 놀이">
+  <meta name="theme-color" content="#FFF8E9">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="/games/mouse/mouse.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/games/mouse/">
+      <img src="/logo.png" alt="" width="44" height="44">
+      <span>도깨비 마우스 탐험대</span>
+    </a>
+    <a class="back" href="/">← 에듀깨비로</a>
+  </header>
+
+  <!-- 준비: 무엇을 연습할지, 그림 크기 고르기 -->
+  <main class="setup" id="setup">
+    <section class="step">
+      <h2><i>1</i> 무엇을 연습할까요?</h2>
+      <div class="modes" id="modes"></div>
+    </section>
+
+    <section class="step">
+      <h2><i>2</i> 그림 크기를 골라요</h2>
+      <div class="sizes" id="sizes"></div>
+    </section>
+
+    <button class="big go" id="start">🖱️ 탐험 시작!</button>
+  </main>
+
+  <!-- 연습 -->
+  <main class="game" id="game" hidden>
+    <div class="bar">
+      <button class="pill" id="stop">🏠 그만하기</button>
+      <span class="chip done">🎯 <b id="done">0</b><i id="goal"> / 10</i></span>
+      <span class="chip time">⏱️ <b id="time">0:00</b></span>
+      <button class="pill" id="sound" aria-pressed="true">🔊 소리</button>
+    </div>
+    <div class="stage" id="stage" aria-label="연습 놀이터">
+      <div class="prompt" id="prompt" aria-live="polite"></div>
+      <div class="mouseCard" id="mouseCard" aria-hidden="true">
+        <svg viewBox="0 0 80 124">
+          <path class="mCable" d="M40 26 C40 12 50 6 58 10 C66 14 70 6 72 2"/>
+          <path class="mBody" d="M40 24 C20 24 10 40 10 62 V84 C10 106 24 120 40 120 C56 120 70 106 70 84 V62 C70 40 60 24 40 24Z"/>
+          <path class="mLeft" d="M40 26 C22 26 12 40 12 60 V64 H40Z"/>
+          <path class="mRight" d="M40 26 C58 26 68 40 68 60 V64 H40Z"/>
+          <path class="mSplit" d="M40 26 V64 M12 64 H68"/>
+          <rect class="mWheel" x="34.5" y="34" width="11" height="20" rx="5.5"/>
+          <ellipse class="mShine" cx="25" cy="88" rx="5" ry="12"/>
+        </svg>
+        <span id="mouseText">왼쪽 버튼</span>
+      </div>
+      <div class="toast" id="toast" role="status"></div>
+    </div>
+  </main>
+
+  <!-- 끝났을 때 -->
+  <div class="pop" id="pop" hidden>
+    <div class="popBox" role="dialog" aria-modal="true" aria-labelledby="popTitle">
+      <b class="popFace" id="popStars">⭐⭐⭐</b>
+      <h3 id="popTitle">탐험 성공!</h3>
+      <div class="stats" id="stats"></div>
+      <p id="popMsg"></p>
+      <div class="acts">
+        <button class="big go" id="again">🔁 한 번 더</button>
+        <button class="big soft" id="other">🏠 다른 놀이</button>
+      </div>
+    </div>
+  </div>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <script src="/games/mouse/mouse.js"></script>
+</body>
+</html>
