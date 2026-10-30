@@ -170,10 +170,12 @@ function renderMenubar(links) {
       el('li', {}, [el('a', { href: `#${menu.key}`, class: 'drop-all', text: `${menu.ko} 전체 보기` })]),
       ...(groups.length
         ? groups.flatMap((g) => {
-          // 사이트가 하나뿐이고 이름이 펼침 메뉴와 같으면(예: 엔트리 > 엔트리) 제목은 생략
+          // 사이트가 하나뿐이고 이름이 펼침 메뉴와 같으면(예: 엔트리 > 엔트리) 제목은 생략.
+          // 펼침 메뉴를 고르지 않은 사이트 묶음('그 밖의 사이트')도 제목 없이 보여 준다.
           const same = g.items.length === 1 && g.items[0].name.trim() === g.title;
+          const etc = g.id === anchor(menu, -1);
           return [
-            same ? null : el('li', { class: 'drop-head', text: g.title }),
+            same || etc ? null : el('li', { class: 'drop-head', text: g.title }),
             ...g.items.map(dropSite),
           ].filter(Boolean);
         })
