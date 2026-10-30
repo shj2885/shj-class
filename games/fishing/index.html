@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>도깨비 보물 낚시 · 에듀깨비</title>
+  <meta name="description" content="휠을 굴려 낚싯줄을 내리고, 왼쪽 클릭으로 보물을, 오른쪽 클릭으로 쓰레기를! 저학년을 위한 마우스 연습 놀이">
+  <meta name="theme-color" content="#FFF8E9">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="/games/fishing/fishing.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/games/fishing/">
+      <img src="/logo.png" alt="" width="44" height="44">
+      <span>도깨비 보물 낚시</span>
+    </a>
+    <a class="back" href="/">← 에듀깨비로</a>
+  </header>
+
+  <!-- 준비: 하는 방법 보기, 바다 고르기 -->
+  <main class="setup" id="setup">
+    <section class="step">
+      <h2><i>1</i> 이렇게 해요</h2>
+      <div class="hows" id="hows"></div>
+      <p class="touchNote" id="touchNote" hidden>🖱️ 이 놀이는 마우스가 있는 컴퓨터에서 해요.</p>
+    </section>
+
+    <section class="step">
+      <h2><i>2</i> 바다를 골라요</h2>
+      <div class="seas" id="seas"></div>
+    </section>
+
+    <button class="big go" id="start">🎣 낚시 시작!</button>
+  </main>
+
+  <!-- 낚시 -->
+  <main class="game" id="game" hidden>
+    <div class="bar">
+      <button class="pill" id="stop">🏠 그만하기</button>
+      <span class="mission" id="mission" aria-label="낚을 보물"></span>
+      <span class="chip trashChip">🗑️ <b id="cleaned">0</b></span>
+      <span class="chip time">⏱️ <b id="time">0:00</b></span>
+      <button class="pill" id="sound" aria-pressed="true">🔊 소리</button>
+    </div>
+    <div class="guide">
+      <div class="mouseCard" id="mouseCard" aria-hidden="true"></div>
+      <span class="prompt" id="prompt" aria-live="polite"></span>
+    </div>
+    <div class="stage" id="stage" aria-label="바다 낚시터">
+      <div class="sky"></div>
+      <div class="sea" id="sea"></div>
+      <div class="sand" id="sand"><span>🌿</span><span>🪸</span><span>🌿</span><span>🦀</span><span>🪸</span><span>🌿</span></div>
+      <div class="line" id="line"></div>
+      <div class="hook" id="hook">
+        <svg viewBox="0 0 30 44"><path d="M15 2 V28 C15 36 6 38 4 31 M4 31 L1 34"/></svg>
+      </div>
+      <div class="boat" id="boat">
+        <img src="/logo.png" alt="">
+        <i class="rod"></i>
+        <b class="hull"></b>
+      </div>
+      <div class="toast" id="toast" role="status"></div>
+    </div>
+  </main>
+
+  <!-- 끝났을 때 -->
+  <div class="pop" id="pop" hidden>
+    <div class="popBox" role="dialog" aria-modal="true" aria-labelledby="popTitle">
+      <b class="popFace" id="popStars">⭐⭐⭐</b>
+      <h3 id="popTitle">보물을 다 낚았어요!</h3>
+      <div class="stats" id="stats"></div>
+      <p id="popMsg"></p>
+      <div class="acts">
+        <button class="big go" id="again">🔁 한 번 더</button>
+        <button class="big soft" id="other">🏠 다른 바다</button>
+      </div>
+    </div>
+  </div>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <script src="/games/fishing/fishing.js"></script>
+</body>
+</html>

@@ -1,0 +1,307 @@
+/* 크림색 바탕 + 파란 바다 낚시터, 저학년도 잘 보이는 큰 글자·큰 버튼 */
+:root {
+  --bg: #FFF8E9;
+  --card: #FFFFFF;
+  --ink: #26314A;
+  --soft: #738097;
+  --pink: #FF8FB1;
+  --yellow: #FFD45C;
+  --mint: #5FD0B0;
+  --mintD: #3BAE8E;
+  --sky: #7CC4FF;
+  --line: #F0E2C4;
+  --emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  --sans: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --gut: clamp(10px, 2vw, 28px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0; color: var(--ink);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at 20px 20px, #FFE9B8 6px, transparent 7px),
+    radial-gradient(circle at 60px 60px, #E3F1FF 6px, transparent 7px);
+  background-size: 80px 80px;
+  font-family: var(--sans); font-size: 19px; line-height: 1.4;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  -webkit-user-select: none; user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+:focus-visible { outline: 4px solid var(--sky); outline-offset: 3px; }
+button { font: inherit; color: var(--ink); cursor: pointer; }
+
+/* ---------- 맨 위 ---------- */
+.top {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px var(--gut) 6px;
+}
+.brand {
+  display: inline-flex; align-items: center; gap: 10px;
+  color: inherit; text-decoration: none;
+  font-size: 26px; font-weight: 900; letter-spacing: -0.03em; white-space: nowrap;
+}
+.brand img { width: 50px; height: 50px; padding: 4px; border-radius: 50%; background: #fff; box-shadow: 0 3px 0 var(--line); }
+.back {
+  display: inline-flex; align-items: center; min-height: 46px; padding: 0 18px;
+  border-radius: 999px; background: #fff; box-shadow: 0 4px 0 var(--line);
+  text-decoration: none; color: var(--ink); font-size: 17px; font-weight: 800; white-space: nowrap;
+}
+.back:hover { background: #FFFBF2; }
+
+/* ---------- 큰 버튼 ---------- */
+.big {
+  min-height: 64px; padding: 0 30px; border: 0; border-radius: 999px;
+  font-size: 24px; font-weight: 900; letter-spacing: -0.02em;
+  transition: transform .08s, box-shadow .08s;
+}
+.big:active { transform: translateY(4px); }
+.go { background: var(--mint); color: #fff; box-shadow: 0 6px 0 var(--mintD); }
+.go:active { box-shadow: 0 2px 0 var(--mintD); }
+.soft { background: #fff; box-shadow: 0 6px 0 var(--line); }
+.soft:active { box-shadow: 0 2px 0 var(--line); }
+
+/* ---------- 준비 화면 ---------- */
+.setup { max-width: 1080px; margin: 0 auto; padding: 8px var(--gut) 48px; display: grid; gap: 22px; }
+.step {
+  background: var(--card); border-radius: 32px; padding: 22px clamp(14px, 2.4vw, 28px) 24px;
+  box-shadow: 0 6px 0 var(--line);
+}
+.step h2 {
+  display: flex; align-items: center; gap: 12px;
+  margin: 0 0 16px; font-size: clamp(24px, 3.4vw, 30px); font-weight: 900; letter-spacing: -0.03em;
+}
+.step h2 i {
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  font-style: normal; color: #fff; background: var(--pink); flex: none;
+}
+.step:nth-of-type(2) h2 i { background: var(--sky); }
+
+/* 하는 방법: 마우스 그림 + 설명 3장 */
+.hows { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.how {
+  display: flex; align-items: center; gap: 14px; padding: 14px 16px;
+  border-radius: 26px; background: var(--c);
+}
+.how .mouseCard { flex: none; }
+.how strong { display: block; font-size: 22px; font-weight: 900; letter-spacing: -0.03em; }
+.how span { display: block; font-size: 17px; font-weight: 700; color: #4B566C; }
+.touchNote { margin: 14px 0 0; padding: 10px 16px; border-radius: 18px; background: #FFF1C2; font-weight: 800; }
+
+.seas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.tm {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 14px 6px 12px; border: 0; border-radius: 26px; text-align: center;
+  background: var(--c); box-shadow: 0 6px 0 var(--cd);
+  transition: transform .08s, box-shadow .08s;
+}
+.tm:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--cd); }
+.tm.on { outline: 5px solid var(--ink); outline-offset: 3px; }
+.tm b { font-size: 46px; line-height: 1.1; font-weight: 400; font-family: var(--emoji); }
+.tm strong { font-size: 26px; font-weight: 900; letter-spacing: -0.03em; white-space: nowrap; }
+.tm span { font-size: 16px; font-weight: 800; opacity: .8; }
+.tm .best {
+  margin-top: 6px; padding: 2px 12px; border-radius: 999px;
+  background: rgba(255, 255, 255, .7); font-size: 15px; opacity: 1;
+}
+
+#start { justify-self: center; min-width: min(420px, 100%); min-height: 76px; font-size: 30px; }
+
+/* ---------- 마우스 그림: 써야 할 곳은 노랑으로 깜빡, 누른 곳은 분홍 ---------- */
+.mouseCard svg { width: 46px; height: 72px; overflow: visible; display: block; }
+.mCable { fill: none; stroke: #111; stroke-width: 3.5; stroke-linecap: round; }
+.mBody { fill: #DDE3EE; stroke: #111; stroke-width: 4; }
+.mLeft, .mRight { fill: #fff; stroke: #111; stroke-width: 3; stroke-linejoin: round; transition: fill .1s; }
+.mSplit { stroke: #111; stroke-width: 3.5; stroke-linecap: round; }
+.mWheel { fill: #5A6478; stroke: #111; stroke-width: 3; transition: fill .1s; }
+.mShine { fill: #fff; opacity: .7; }
+.mouseCard.want-left .mLeft,
+.mouseCard.want-right .mRight,
+.mouseCard.want-wheel .mWheel { fill: #FFD45C; animation: want 1s ease-in-out infinite; }
+.mouseCard.press-left .mLeft,
+.mouseCard.press-right .mRight,
+.mouseCard.press-wheel .mWheel { fill: #FF5C80; animation: none; }
+@keyframes want { 50% { fill: #FFF3C4; } }
+
+/* ---------- 게임 화면 ---------- */
+body.playing { height: 100vh; height: 100dvh; overflow: hidden; display: flex; flex-direction: column; }
+.game { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 0 var(--gut) var(--gut); }
+.bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  margin: 4px 0 8px; padding: 8px;
+  background: #fff; border-radius: 26px; box-shadow: 0 5px 0 var(--line);
+}
+.pill {
+  min-height: 52px; padding: 0 18px; border: 0; border-radius: 999px;
+  background: #FFF3D6; box-shadow: 0 4px 0 var(--line);
+  font-size: 18px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap;
+}
+.pill:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
+#sound { background: #E3F3FF; margin-left: auto; }
+#sound[aria-pressed="false"] { opacity: .6; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 52px; padding: 0 16px;
+  border-radius: 999px; font-size: 20px; font-weight: 800; white-space: nowrap;
+}
+.chip b { font-size: 26px; font-weight: 900; font-variant-numeric: tabular-nums; }
+.chip.time { background: #E2F8F1; }
+.trashChip { background: #EEF1F6; }
+.mission { display: inline-flex; flex-wrap: wrap; gap: 8px; }
+.need {
+  display: inline-flex; align-items: center; gap: 4px; min-height: 52px; padding: 0 16px;
+  border-radius: 999px; background: #FFE9F0; font-size: 20px; font-weight: 900; white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.need em { font-style: normal; font-size: 30px; font-family: var(--emoji); }
+.need.full { background: #D6F5E7; }
+.need.full::after { content: "✔"; color: var(--mintD); margin-left: 2px; }
+.need.up { animation: boing .5s cubic-bezier(.3, 1.6, .5, 1); }
+
+.guide {
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  margin: 0 0 8px; padding: 6px 18px;
+  background: #fff; border-radius: 22px; box-shadow: 0 4px 0 var(--line);
+}
+.guide .mouseCard svg { width: 34px; height: 52px; }
+.prompt { font-size: clamp(19px, 2.6vw, 26px); font-weight: 900; letter-spacing: -0.03em; }
+
+/* 바다: 하늘·바다·모래 높이는 fishing.js가 놀이터 크기에 맞춰 정한다 */
+.stage {
+  position: relative; flex: 1; min-height: 300px; overflow: hidden;
+  border-radius: 32px; border: 4px solid #CFE6F7;
+  background: linear-gradient(#BFE7FF, #E8F7FF);
+  touch-action: none; cursor: crosshair;
+}
+.sky { position: absolute; inset: 0; }
+.sea {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse 34px 10px at 34px 0, #E8F7FF 98%, transparent) 0 0 / 68px 14px repeat-x,
+    linear-gradient(#5CC6EE, #2E8FD0 45%, #1C5FA6);
+}
+.sand {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  display: flex; justify-content: space-around; align-items: flex-end;
+  background: linear-gradient(#F3D99B, #E3BE72);
+  border-radius: 50% 50% 0 0 / 18px 18px 0 0;
+  font-family: var(--emoji); font-size: 34px; line-height: 1;
+}
+.sand span { translate: 0 -40%; }
+
+.boat {
+  position: absolute; z-index: 3; width: 150px; height: 84px; translate: -50% -100%;
+  pointer-events: none;
+}
+.boat img { position: absolute; left: 34px; top: 0; width: 60px; height: 60px; }
+.hull {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 34px;
+  background: #C9773F; border: 4px solid #8C4B22; border-radius: 6px 6px 60px 60px;
+}
+.hull::before { content: ""; position: absolute; left: 10px; right: 10px; top: 6px; height: 5px; border-radius: 3px; background: #E59A5E; }
+/* 낚싯대: 배 가운데에서 오른쪽 위로, 끝이 낚싯줄 자리(배 가운데 +62px) */
+.rod {
+  position: absolute; left: 70px; top: 30px; width: 80px; height: 5px; border-radius: 3px;
+  background: #5B3A1E; transform-origin: 0 50%; rotate: -42deg;
+}
+.line { position: absolute; z-index: 2; width: 2px; margin-left: -1px; background: rgba(255, 255, 255, .9); pointer-events: none; }
+.hook { position: absolute; z-index: 4; width: 30px; height: 44px; translate: -15px -4px; pointer-events: none; }
+.hook svg { width: 100%; height: 100%; overflow: visible; }
+.hook path { fill: none; stroke: #39424F; stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+
+.item {
+  position: absolute; z-index: 1; translate: -50% -50%;
+  display: grid; place-items: center; width: var(--t); height: var(--t);
+  font-family: var(--emoji); font-size: calc(var(--t) * .72); line-height: 1;
+  pointer-events: none; transition: scale .15s;
+}
+.item span { animation: bob 2.4s ease-in-out infinite; animation-delay: var(--d, 0s); }
+.item::before {
+  content: ""; position: absolute; inset: 4%; border-radius: 50%; z-index: -1;
+  background: rgba(255, 255, 255, .28);
+}
+.item.trash::before { background: rgba(60, 70, 80, .22); border-radius: 30%; }
+.item.glow { scale: 1.2; }
+.item.glow::before { background: rgba(255, 236, 140, .75); box-shadow: 0 0 0 5px #FFD45C, 0 0 24px 8px rgba(255, 228, 120, .8); }
+.item.caught, .item.snag { z-index: 5; }
+.item.caught span, .item.snag span { animation: wiggle .4s ease-in-out infinite; }
+.item.snag::before { box-shadow: 0 0 0 5px #FF5C80; background: rgba(255, 220, 228, .6); }
+.item.toss { transition: left .5s cubic-bezier(.4, 0, .6, 1), top .5s cubic-bezier(.3, -0.6, .6, 1), scale .5s, opacity .5s; scale: .3; opacity: 0; }
+@keyframes bob { 50% { transform: translateY(-6px); } }
+@keyframes wiggle { 50% { transform: rotate(14deg); } }
+
+.fish {
+  position: absolute; z-index: 0; font-family: var(--emoji); font-size: 30px; opacity: .7;
+  pointer-events: none; animation: swim linear forwards;
+}
+@keyframes swim { from { left: 105%; } to { left: -8%; } }
+.bubble {
+  position: absolute; z-index: 0; width: 12px; height: 12px; border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .7); pointer-events: none; animation: rise 3s ease-in forwards;
+}
+@keyframes rise { to { transform: translateY(-160px); opacity: 0; } }
+
+.spark { position: absolute; z-index: 6; pointer-events: none; translate: -50% -50%; font-size: 34px; animation: spark .8s ease-out forwards; }
+@keyframes spark { from { opacity: 0; scale: .4; } 30% { opacity: 1; } to { opacity: 0; scale: 1.4; transform: translateY(-60px); } }
+
+.toast {
+  position: absolute; top: 14px; left: 50%; translate: -50% -10px; z-index: 7;
+  padding: 10px 20px; border-radius: 999px; background: #27344E; color: #fff;
+  font-size: 19px; font-weight: 900; white-space: nowrap; opacity: 0; pointer-events: none;
+  transition: opacity .2s, translate .2s;
+}
+.toast.show { opacity: 1; translate: -50% 0; }
+
+/* ---------- 끝났을 때 ---------- */
+.pop {
+  position: fixed; inset: 0; z-index: 9000; display: grid; place-items: center; padding: 16px;
+  background: rgba(38, 49, 74, .3);
+}
+.popBox {
+  width: min(560px, 100%); padding: 20px 22px 24px; border-radius: 36px; text-align: center;
+  background: #fff; box-shadow: 0 10px 0 var(--line);
+  animation: boing .5s cubic-bezier(.3, 1.6, .5, 1);
+}
+.popFace { display: block; font-size: 56px; line-height: 1.1; letter-spacing: .05em; }
+.popBox h3 { margin: 6px 0 12px; font-size: clamp(22px, 6vw, 34px); white-space: nowrap; font-weight: 900; letter-spacing: -0.03em; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 0 0 14px; }
+.stats div { padding: 10px 4px; border-radius: 20px; background: #FFF5DD; }
+.stats b { display: block; font-size: 32px; font-weight: 900; font-variant-numeric: tabular-nums; }
+.stats span { font-size: 16px; font-weight: 800; color: var(--soft); }
+.popBox p { margin: 0 0 20px; font-size: 21px; font-weight: 800; color: var(--soft); }
+.acts { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+@keyframes boing { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.confetti { position: fixed; inset: 0; pointer-events: none; z-index: 9500; overflow: hidden; }
+.confetti i {
+  position: absolute; top: -20px; width: 12px; height: 18px; border-radius: 3px;
+  animation: fall linear forwards;
+}
+@keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
+
+/* ---------- 태블릿·휴대폰 ---------- */
+@media (max-width: 860px) {
+  .hows { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  body { font-size: 17px; }
+  .brand { font-size: 21px; }
+  .brand img { width: 42px; height: 42px; }
+  .back { min-height: 42px; padding: 0 14px; font-size: 15px; }
+  .seas { gap: 10px; }
+  .tm strong { font-size: 20px; }
+  #start { width: 100%; font-size: 26px; }
+  .bar { gap: 6px; padding: 6px; border-radius: 20px; }
+  .pill { min-height: 44px; padding: 0 12px; font-size: 15px; }
+  .chip, .need { min-height: 44px; padding: 0 12px; font-size: 16px; }
+  .chip b { font-size: 20px; }
+  .need em { font-size: 24px; }
+  .stage { border-radius: 22px; }
+  .prompt { font-size: 17px; }
+  .toast { font-size: 16px; }
+}
+@media (max-width: 400px) {
+  .top { padding-top: 6px; }
+  .brand span { font-size: 17px; }
+}
